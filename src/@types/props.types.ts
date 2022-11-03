@@ -1,0 +1,1 @@
+export type GeneralFuctionType = (index: number) => void;
