@@ -1,14 +1,38 @@
+
 import ApplePayLogo from '../../assets/images/Apple-Pay-Logo.png';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { GeneralFuctionType } from '../../@types/props.types';
 import useAuth from '../../hooks/useAuth';
 import authService from '../../services/auth.service';
 import userService from '../../services/user.service';
 import PaymentForm from '../payment';
+import { Elements } from '@stripe/react-stripe-js';
+import { Appearance, loadStripe } from '@stripe/stripe-js';
+import stripeService from '../../services/stripe.service';
+import PaymentStatus from '../../pages/PaymentStatus';
 
+console.log(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY)
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || '');
 
-const SignupThree = ({ handleActiveSectionChange }: { handleActiveSectionChange: GeneralFuctionType }) => {
+const SignupThree = ({ handleActiveSectionChange, option }: { handleActiveSectionChange: GeneralFuctionType, option: string }) => {
 
+  const appearance = {
+    theme: 'stripe'
+  } as Appearance;
+
+  const [clientSecret, setClientSecret] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const options = {
+    // passing the client secret obtained in step 3
+    clientSecret,
+    // Fully customizable with appearance API.
+    appearance,
+    layout: {
+      type: 'tabs',
+      defaultCollapsed: false,
+    }
+  };
   const [formData, setFormData] = useState({
     subscriptionPlan: 'anual',
     subscriptionStart: 'today',
@@ -16,6 +40,22 @@ const SignupThree = ({ handleActiveSectionChange }: { handleActiveSectionChange:
 
   const [paymentSelected, setPaymentSelected] = useState(false);
   const { userSignupData, setUserSignupData } = useAuth();
+  const childRef = useRef<HTMLFormElement>(null);
+
+  /** Getting secret */
+  useEffect(() => {
+    const costData = {
+      cost: userSignupData.subscriptionPlan === 'anual' ? 109.99 : 12.99
+    }
+    const response = async () => {
+      setLoading(true);
+      const res = await stripeService.getSecretKey(costData);
+      console.log(res);
+      setClientSecret(res.data.client_secret);
+      setLoading(false);
+    };
+    response();
+  }, [userSignupData])
 
   const handleChange = (event: any) => {
     const name = event.target.name;
@@ -33,6 +73,7 @@ const SignupThree = ({ handleActiveSectionChange }: { handleActiveSectionChange:
         alert(res.data.error.message);
       } else {
         alert('Success');
+        childRef?.current?.callSubmit();
       }
     }).catch((err) => {
       alert('Something is wrong')
@@ -71,8 +112,16 @@ const SignupThree = ({ handleActiveSectionChange }: { handleActiveSectionChange:
               </div>
               {paymentSelected &&
                 <>
-                  <br />
-                  <PaymentForm />
+                  {!loading &&
+                    <Elements stripe={stripePromise} options={options}>
+                      {option === 'payment-status' ? (
+                        <PaymentStatus />
+                      ) : (
+                        <PaymentForm ref={childRef} />
+                      )
+                      }
+                    </Elements>
+                  }
                   <br />
                   <br />
                 </>

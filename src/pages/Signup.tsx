@@ -8,14 +8,12 @@ import { UserContext } from '../contexts/UserContext';
 import { UserContextType } from '../@types/user';
 
 
-const Signup = () => {
+const Signup = ({option}: {option: string}) => {
   const [activeSection, setActiveSection] = useState(1);
 
   const changeActiveSection = (index: number) => {
     setActiveSection(index);
   }
-
-
 
   const [userSignupData, setUserSignupData] = useState<UserContextType | null>(null);
 
@@ -34,7 +32,7 @@ const Signup = () => {
           <SignupTwo handleActiveSectionChange={changeActiveSection} />
         }
         {activeSection === 3 &&
-          <SignupThree handleActiveSectionChange={changeActiveSection} />
+          <SignupThree handleActiveSectionChange={changeActiveSection} option={option}/>
         }
       </UserContext.Provider>
 

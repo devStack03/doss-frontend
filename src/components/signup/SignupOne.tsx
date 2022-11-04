@@ -1,8 +1,9 @@
 import { useState, useContext } from 'react';
 import { GeneralFuctionType } from '../../@types/props.types';
 import useAuth from '../../hooks/useAuth';
+import couponService from '../../services/coupon.service';
 
-const SignupOne = ({ handleActiveSectionChange } : { handleActiveSectionChange: GeneralFuctionType}) => {
+const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: GeneralFuctionType }) => {
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -11,20 +12,45 @@ const SignupOne = ({ handleActiveSectionChange } : { handleActiveSectionChange: 
     email: ''
   });
 
-  const { userSignupData, setUserSignupData } =  useAuth();
+  const { userSignupData, setUserSignupData } = useAuth();
 
   const handleChange = (event: any) => {
     const name = event.target.name;
     const value = event.target.value;
-    setFormData(values => ({...values, [name]: value}))
+    setFormData(values => ({ ...values, [name]: value }))
   }
 
   const handleSubmit = () => {
+    if (
+      !formData.fullName.length ||
+      !formData.phoneNumber.length ||
+      !formData.invitationCode.length ||
+      !formData.email.length
+    ) {
+      alert('Please fill all fields');
+      return;
+    }
+      
     setUserSignupData({
       ...userSignupData,
       ...formData
     });
-    handleActiveSectionChange(2);
+
+    couponService.validate({
+      code: formData.invitationCode
+    }).then((res) => {
+      console.log(res.data);
+      if (res.data.status === -1) {
+        alert(res.data.error.message);
+      } else {
+        alert('Coupon code validation succeed');
+        handleActiveSectionChange(2);
+      }
+
+    }).catch((err) => {
+      console.log(err);
+      alert(err.response.data.message);
+    });
   }
 
   return (
@@ -45,19 +71,19 @@ const SignupOne = ({ handleActiveSectionChange } : { handleActiveSectionChange: 
                   <div className="form-field-label--name">Nombre</div>
                 </div>
                 <label htmlFor="your-name" className="field-label hide">Teléfono</label>
-                <input type="text" className="form-field--field w-input" autoFocus maxLength={256} name="fullName" data-name="your-name" placeholder="Nombre Completo" id="your-name" data-ms-member="Nombre" required value={formData.fullName} onChange={handleChange}/>
+                <input type="text" className="form-field--field w-input" autoFocus maxLength={256} name="fullName" data-name="your-name" placeholder="Nombre Completo" id="your-name" data-ms-member="Nombre" required value={formData.fullName} onChange={handleChange} />
               </div>
               <div className="form-custom-field-block">
                 <div className="form-field-label--custom">
                   <div className="form-field-label--name">Correo electrónico</div>
                 </div><label htmlFor="your-email" className="field-label hide">Teléfono</label>
-                <input type="email" className="form-field--field w-input" maxLength={256} name="email" data-name="your-email" placeholder="Tu correo electrónico" id="your-email" data-ms-member="email" required value={formData.email} onChange={handleChange}/>
+                <input type="email" className="form-field--field w-input" maxLength={256} name="email" data-name="your-email" placeholder="Tu correo electrónico" id="your-email" data-ms-member="email" required value={formData.email} onChange={handleChange} />
               </div>
               <div className="form-custom-field-block">
                 <div className="form-field-label--custom">
                   <div className="form-field-label--name">Tu número</div>
                 </div><label htmlFor="your-telephone" className="field-label hide">Teléfono</label>
-                <input type="tel" className="form-field--field w-input" maxLength={256} name="phoneNumber" data-name="your-telephone" placeholder="Tu número" id="your-telephone" data-ms-member="telefono" required value={formData.phoneNumber} onChange={handleChange}/>
+                <input type="tel" className="form-field--field w-input" maxLength={256} name="phoneNumber" data-name="your-telephone" placeholder="Tu número" id="your-telephone" data-ms-member="telefono" required value={formData.phoneNumber} onChange={handleChange} />
               </div>
               <div className="form-custom-field-block">
                 <div className="form-field-label--custom">
@@ -65,7 +91,7 @@ const SignupOne = ({ handleActiveSectionChange } : { handleActiveSectionChange: 
                 </div><label htmlFor="your-invite-code" className="field-label hide">Teléfono</label>
                 <input type="text" className="form-field--field w-input" maxLength={256} name="invitationCode" data-name="your-invite-code" placeholder="Código" id="your-invite-code" data-ms-member="cupón" required value={formData.invitationCode} onChange={handleChange} />
               </div>
-              <input type="button" data-wait="Cargando..." value="Siguiente" className="submit-button w-button" onClick={handleSubmit}/>
+              <input type="button" data-wait="Cargando..." value="Siguiente" className="submit-button w-button" onClick={handleSubmit} />
             </form>
             <div className="w-form-done">
               <div>Thank you! Your submission has been received!</div>
