@@ -14,6 +14,10 @@ class UserService {
     getById(id: any) {
         return Http.get<any>(this.apiUrl + `/${id}`);
     }
+
+    get(data: any) {
+      return Http.post<any>('/', data)
+    }
 }
 
 export default new UserService();

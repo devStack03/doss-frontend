@@ -38,7 +38,7 @@ const SignupTwo = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
         </div>
         <div className="telephone-form">
           <div className="w-form">
-            <form id="wf-form-" name="wf-form-" data-name="" data-ms-form="signup" className="form">
+            <form id="wf-form-2" name="wf-form-" data-name="" data-ms-form="signup" className="form">
               <div className="form-field-label--custom form-name--custom">
                 <div className="form-field-label--name">Paso 2/3</div>
               </div>

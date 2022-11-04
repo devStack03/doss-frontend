@@ -36,7 +36,7 @@ const SignupOne = ({ handleActiveSectionChange } : { handleActiveSectionChange: 
         </div>
         <div className="telephone-form">
           <div className="w-form">
-            <form id="wf-form-" name="wf-form-" data-name="" data-ms-form="signup">
+            <form id="wf-form-1" name="wf-form-" data-name="" data-ms-form="signup">
               <div className="form-field-label--custom form-name--custom">
                 <div className="form-field-label--name">Paso 1/3</div>
               </div>

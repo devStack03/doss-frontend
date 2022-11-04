@@ -8,7 +8,7 @@ class AuthService {
     }
 
     create(data: any) {
-        return Http.post<any>(this.apiUrl + '/signup', data);
+        return Http.post<any>(this.apiUrl + '/register', data);
     }
 }
 
