@@ -96,7 +96,7 @@ const SignupThree = ({ handleActiveSectionChange }: { handleActiveSectionChange:
             </div>
             <div className="back">
               <div className="link--prev w-embed">
-                <a href="#"> Volver </a>
+                <a href="#" onClick={() => handleActiveSectionChange(1)}> Volver </a>
               </div>
             </div>
           </div>

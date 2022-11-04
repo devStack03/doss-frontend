@@ -43,7 +43,7 @@ const SignupTwo = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
                 <div className="form-field-label--name">Paso 2/3</div>
               </div>
               <div className="plan-proposal-block">
-                <label className="radio-button-field plan-radio w-radio"  onClick={() => {setSelectedPlan('anual');}}>
+                <label className="radio-button-field plan-radio w-radio" onClick={() => { setSelectedPlan('anual'); }}>
                   <div id="plan-choice--anual" className={selectedPlan === 'anual' ? `plan-anual-block plan-anual-block--custom plan-choice` : `plan-anual-block plan-anual-block--custom`}>
                     <div className="plan-anual-head">
                       <div className="plan-anual-name">Anual</div>
@@ -104,7 +104,7 @@ const SignupTwo = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
             </div>
             <div className="back">
               <div className="link--prev w-embed">
-                <a href="#" onClick={() => { }}> Volver </a>
+                <a href="#" onClick={() => handleActiveSectionChange(1)}> Volver </a>
               </div>
             </div>
           </div>
