@@ -1,9 +1,16 @@
 import axios from 'axios';
 
-export default axios.create({
+const axiosInstance = axios.create({
     // baseURL: "http://localhost:5000/api",
-    baseURL: "https://api.doss.es/api",
+    baseURL: process.env.REACT_APP_API_URL,
     headers: {
         "Content-type": "application/json"
     }
 });
+
+axiosInstance.interceptors.response.use(
+    (response) => response,
+    (error) => Promise.reject((error.response && error.response.data) || 'Something went wrong')
+);
+
+export default axiosInstance;

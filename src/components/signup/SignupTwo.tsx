@@ -1,18 +1,53 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { GeneralFuctionType } from '../../@types/props.types';
 import useAuth from '../../hooks/useAuth';
+import userService from '../../services/user.service';
+import { fetchStarted, resultLoaded } from '../../store/slices/api.slice';
+import { useDispatch } from '../../store/store';
 
 const SignupTwo = ({ handleActiveSectionChange }: { handleActiveSectionChange: GeneralFuctionType }) => {
 
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
-    subscriptionPlan: 'anual',
+    subscriptionPlan: 'year',
     subscriptionStart: 'today',
   });
 
-  const [selectedPlan, setSelectedPlan] = useState('anual');
+  const [selectedPlan, setSelectedPlan] = useState('year');
   const [selectedStart, setSelectedStart] = useState('today');
 
-  const { userSignupData, setUserSignupData } = useAuth();
+  const { userSignupData, setUserSignupData, stripeCumtomerInfo, setStripeInfo } = useAuth();
+
+  /** Stripe Data */
+  const [prices, setPrices] = useState(stripeCumtomerInfo?.prices);
+  const [selectedPriceId, setSelectedPriceId] = useState<string | null>(null);
+  // const [subscriptionData, setSubscriptionData] = useState(null);
+
+  const createSubscription = async (priceId: string) => {
+    dispatch(fetchStarted());
+    try {
+      const { subscriptionId, invoiceData } = await userService.createSubscription({
+        customerId: stripeCumtomerInfo?.customer.id,
+        priceId
+      }).then((r) => (r.data));
+      console.log({ subscriptionId, invoiceData });
+      setUserSignupData({
+        ...userSignupData,
+        subscriptionPlan: selectedPlan,
+        subscriptionStart: selectedStart,
+        priceId,
+        stripeSubscriptionId: subscriptionId,
+        stripeClientSecret: invoiceData.payment_intent.client_secret
+      });
+      handleActiveSectionChange(3);
+    } catch (error) {
+      console.log(error);      
+    } finally {
+      dispatch(resultLoaded());
+    }    
+  }
+
+  /** */
 
   const handleChange = (event: any) => {
     const name = event.target.name;
@@ -21,12 +56,15 @@ const SignupTwo = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
   }
 
   const handleSubmit = () => {
-    setUserSignupData({
-      ...userSignupData,
-      subscriptionPlan: selectedPlan,
-      subscriptionStart: selectedStart
-    });
-    handleActiveSectionChange(3);
+    let priceId = null;
+    for (let index = 0; index < prices.data.length; index++) {
+      const element = prices.data[index];
+      if (selectedPlan === element.recurring.interval) {
+        priceId = element.id;
+        setSelectedPriceId(element.id);
+      }
+    }
+    createSubscription(priceId);
   }
 
   return (
@@ -43,8 +81,8 @@ const SignupTwo = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
                 <div className="form-field-label--name">Paso 2/3</div>
               </div>
               <div className="plan-proposal-block">
-                <label className="radio-button-field plan-radio w-radio" onClick={() => { setSelectedPlan('anual'); }}>
-                  <div id="plan-choice--anual" className={selectedPlan === 'anual' ? `plan-anual-block plan-anual-block--custom plan-choice` : `plan-anual-block plan-anual-block--custom`}>
+                <label className="radio-button-field plan-radio w-radio" onClick={() => { setSelectedPlan('year'); }}>
+                  <div id="plan-choice--anual" className={selectedPlan === 'year' ? `plan-anual-block plan-anual-block--custom plan-choice` : `plan-anual-block plan-anual-block--custom`}>
                     <div className="plan-anual-head">
                       <div className="plan-anual-name">Anual</div>
                       <div className="plan-anual-count-block">
@@ -56,7 +94,7 @@ const SignupTwo = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
                       <div className="block-anual-subhead--subtitle">Ahorra un 30%!</div>
                     </div>
                   </div>
-                  <input type="radio" id="anual" name="subscriptionPlan" value="anual" data-name="plan" required plan-name="Anual" className="w-form-formradioinput radio-button hide--opasity w-radio-input" onChange={handleChange} checked={selectedPlan === 'anual'} />
+                  <input type="radio" id="anual" name="subscriptionPlan" value="year" data-name="plan" required plan-name="Anual" className="w-form-formradioinput radio-button hide--opasity w-radio-input" onChange={handleChange} checked={selectedPlan === 'year'} />
                   <span className="hide--opasity w-form-label">Radio 3</span>
                 </label>
                 <label className="radio-button-field-2 w-radio" onClick={() => setSelectedPlan('month')}>

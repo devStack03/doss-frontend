@@ -14,5 +14,7 @@ export type ActionMap<M extends { [index: string]: any }> = {
 
 export type UserContextType = {
   userSignupData: any,
+  stripeCumtomerInfo?: { prices: any, customer: any},
+  setStripeInfo?: (data: any) => void, 
   setUserSignupData: (data: any) => void
 }

@@ -1830,3 +1830,8 @@ textarea.w-select {
 .wf-layout-cell {
   display: flex !important;
 }
+
+.wf-error-msg {
+  color: #ea384c;
+}
+ 

@@ -2,11 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider as ReduxProvider } from 'react-redux';
 import { store } from './store/store';
-// import './index.css';
+import './index.css';
 import './assets/css/normalize.css';
 import './assets/css/webflow.css';
 import './assets/css/doss-gastro-club.webflow.css';
-
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 

@@ -1,31 +1,32 @@
-
-import ApplePayLogo from '../../assets/images/Apple-Pay-Logo.png';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
+import { Navigate, useNavigate, useNavigation } from 'react-router-dom'
+import { BallTriangle } from 'react-loader-spinner'
 import { GeneralFuctionType } from '../../@types/props.types';
 import useAuth from '../../hooks/useAuth';
 import authService from '../../services/auth.service';
-import userService from '../../services/user.service';
 import PaymentForm from '../payment';
 import { Elements } from '@stripe/react-stripe-js';
 import { Appearance, loadStripe } from '@stripe/stripe-js';
-import stripeService from '../../services/stripe.service';
-import PaymentStatus from '../../pages/PaymentStatus';
+import { fetchStarted, resultLoaded } from '../../store/slices/api.slice';
+import { useDispatch } from '../../store/store';
+import Alert from '@mui/material/Alert';
 
-console.log(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY)
+
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || '');
 
 const SignupThree = ({ handleActiveSectionChange, option }: { handleActiveSectionChange: GeneralFuctionType, option: string }) => {
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { userSignupData, setUserSignupData } = useAuth();
+  const [cardError, setCardError] = useState(false);
   const appearance = {
     theme: 'stripe'
   } as Appearance;
 
-  const [clientSecret, setClientSecret] = useState('');
-  const [loading, setLoading] = useState(false);
-
   const options = {
     // passing the client secret obtained in step 3
-    clientSecret,
+    clientSecret: userSignupData.stripeClientSecret,
     // Fully customizable with appearance API.
     appearance,
     layout: {
@@ -33,57 +34,53 @@ const SignupThree = ({ handleActiveSectionChange, option }: { handleActiveSectio
       defaultCollapsed: false,
     }
   };
-  const [formData, setFormData] = useState({
-    subscriptionPlan: 'anual',
-    subscriptionStart: 'today',
-  });
 
-  const [paymentSelected, setPaymentSelected] = useState(false);
-  const { userSignupData, setUserSignupData } = useAuth();
+  const [paymentSelected, setPaymentSelected] = useState(true);
+
   const childRef = useRef<HTMLFormElement>(null);
-
-  /** Getting secret */
-  useEffect(() => {
-    const costData = {
-      cost: userSignupData.subscriptionPlan === 'anual' ? 109.99 : 12.99
-    }
-    const response = async () => {
-      setLoading(true);
-      const res = await stripeService.getSecretKey(costData);
-      console.log(res);
-      setClientSecret(res.data.client_secret);
-      setLoading(false);
-    };
-    response();
-  }, [userSignupData])
-
-  const handleChange = (event: any) => {
-    const name = event.target.name;
-    const value = event.target.value;
-    setFormData(values => ({ ...values, [name]: value }))
-  }
 
   const handleSubmit = () => {
     // setUserSignupData({
     //   ...userSignupData,
     // });
-    authService.create(userSignupData).then((res) => {
-      console.log(res.data);
-      if (res.data.status === -1) {
-        alert(res.data.error.message);
-      } else {
-        alert('Success');
-        childRef?.current?.callSubmit();
-      }
-    }).catch((err) => {
-      alert('Something is wrong')
-      console.log(err);
-    })
+    setCardError(false);
+    dispatch(fetchStarted());
+    childRef?.current?.callSubmit();
+  }
+
+  const handlePaymentCallback = (paymentIntent: any, error: boolean) => {
+    console.log(error);
+    if (error) {
+      setCardError(true);
+      dispatch(resultLoaded());
+    } else {
+      authService.create({
+        ...userSignupData,
+        lastPaymentStatus: paymentIntent.status
+      }).then((res) => {
+        console.log(res.data);
+        if (res.data.status === -1) {
+          alert(res.data.error.message);
+        } else {
+          navigate('/payment-success');
+        }
+      }).catch((err) => {
+        alert('Something is wrong')
+        console.log(err);
+      }).finally(() => {
+        dispatch(resultLoaded());
+      })
+    }
 
   }
 
   return (
     <div className="section-fullscreen wf-section">
+      {cardError &&
+        <div className="tw-mx-auto">
+          <Alert severity="error" className="tw-flex tw-justify-center">Your card details are wrong!</Alert>
+        </div>
+      }
       <div className="section-fullscreen-container">
         <div className="section-fullscreen-text-block">
           <div className="fullscreen--title">Selecciona tu forma de pago</div>
@@ -102,26 +99,11 @@ const SignupThree = ({ handleActiveSectionChange, option }: { handleActiveSectio
                   <div className="plan-placeholder--currency">€</div>
                 </div>
               </div>
-              <div className="payment-method">
-                <div data-w-id="761696f8-89d2-a04a-6d65-0221837132db" className="payment-method--creditcart" onClick={() => setPaymentSelected(!paymentSelected)}>
-                  <div>Tarjeta</div>
-                </div>
-                <div className="payment-method--applepay">
-                  <img sizes="(max-width: 1279px) 65px, (max-width: 1439px) 5vw, 65px" loading="lazy" src={ApplePayLogo} alt="" className="image-2" />
-                </div>
-              </div>
               {paymentSelected &&
                 <>
-                  {!loading &&
-                    <Elements stripe={stripePromise} options={options}>
-                      {option === 'payment-status' ? (
-                        <PaymentStatus />
-                      ) : (
-                        <PaymentForm ref={childRef} />
-                      )
-                      }
-                    </Elements>
-                  }
+                  <Elements stripe={stripePromise} options={options}>
+                    <PaymentForm ref={childRef} callback={handlePaymentCallback} />
+                  </Elements>
                   <br />
                   <br />
                 </>

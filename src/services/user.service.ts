@@ -18,6 +18,10 @@ class UserService {
     get(data: any) {
       return Http.post<any>('/', data)
     }
+
+    createSubscription(data: any) {
+        return Http.post<any>(this.apiUrl + '/create-subscription', data);
+    }
 }
 
 export default new UserService();

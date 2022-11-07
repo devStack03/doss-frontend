@@ -1,10 +1,13 @@
 import { useState, useContext } from 'react';
+
 import { GeneralFuctionType } from '../../@types/props.types';
 import useAuth from '../../hooks/useAuth';
 import couponService from '../../services/coupon.service';
-
+import { fetchStarted, resultLoaded } from '../../store/slices/api.slice';
+import { useDispatch } from '../../store/store';
 const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: GeneralFuctionType }) => {
 
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     fullName: '',
     phoneNumber: '',
@@ -12,7 +15,9 @@ const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
     email: ''
   });
 
-  const { userSignupData, setUserSignupData } = useAuth();
+  const [couponCodeValid, setCouponCodeValid] = useState(true);
+
+  const { userSignupData, setUserSignupData, stripeCumtomerInfo, setStripeInfo } = useAuth();
 
   const handleChange = (event: any) => {
     const name = event.target.name;
@@ -30,26 +35,34 @@ const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
       alert('Please fill all fields');
       return;
     }
-      
-    setUserSignupData({
-      ...userSignupData,
-      ...formData
-    });
-
+    dispatch(fetchStarted());
     couponService.validate({
-      code: formData.invitationCode
+      code: formData.invitationCode,
+      email: formData.email,
+      name: formData.fullName
     }).then((res) => {
       console.log(res.data);
       if (res.data.status === -1) {
         alert(res.data.error.message);
       } else {
-        alert('Coupon code validation succeed');
+        // alert('Coupon code validation succeed');
+        if (setStripeInfo)
+          setStripeInfo(res.data);
+        setUserSignupData({
+          ...userSignupData,
+          ...formData,
+          stripeCustomerId: res.data.customer.id
+        });
+        setCouponCodeValid(true);
         handleActiveSectionChange(2);
       }
 
     }).catch((err) => {
       console.log(err);
-      alert(err.response.data.message);
+      alert(err.message);
+      setCouponCodeValid(false);
+    }).finally(() => {
+      dispatch(resultLoaded());
     });
   }
 
@@ -90,6 +103,9 @@ const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
                   <div className="form-field-label--name">Código de invitacíon</div>
                 </div><label htmlFor="your-invite-code" className="field-label hide">Teléfono</label>
                 <input type="text" className="form-field--field w-input" maxLength={256} name="invitationCode" data-name="your-invite-code" placeholder="Código" id="your-invite-code" data-ms-member="cupón" required value={formData.invitationCode} onChange={handleChange} />
+                {!couponCodeValid &&
+                  <span className='wf-error-msg'>Invalid code</span>
+                }
               </div>
               <input type="button" data-wait="Cargando..." value="Siguiente" className="submit-button w-button" onClick={handleSubmit} />
             </form>

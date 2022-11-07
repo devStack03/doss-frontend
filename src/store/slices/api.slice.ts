@@ -56,7 +56,12 @@ export const apiSlice = createSlice({
   name: 'apiSlice',
   initialState,
   reducers: {
-
+    resultLoaded: (state) => {
+      state.isLoading = false;
+    },
+    fetchStarted: (state) => {
+      state.isLoading = true;
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(getDataListAsync.pending, (state) => {
@@ -82,5 +87,7 @@ export const apiSlice = createSlice({
       })
   },
 });
+
+export const { resultLoaded, fetchStarted } = apiSlice.actions
 
 export default apiSlice.reducer;

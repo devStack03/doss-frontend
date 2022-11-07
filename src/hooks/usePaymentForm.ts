@@ -1,12 +1,11 @@
-import { CardElement, useStripe, useElements, PaymentRequestButtonElement, PaymentElement } from '@stripe/react-stripe-js';
+import { useStripe, useElements } from '@stripe/react-stripe-js';
 
 import { FormEvent, useState, useEffect } from 'react';
 
-function usePaymentForm() {
+function usePaymentForm({callback} : {callback: (paymentIntent: any, error: boolean) => void}) {
   const stripe = useStripe();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const elements = useElements();
-
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     if (!stripe || !elements) {
@@ -21,6 +20,7 @@ function usePaymentForm() {
       confirmParams: {
         return_url: `${window.location}payment-status`,
       },
+      redirect: 'if_required'
     });
 
     if (result.error) {
@@ -28,46 +28,14 @@ function usePaymentForm() {
       // confirming the payment. Show error to your customer (for example, payment
       // details incomplete)
       setErrorMessage(result.error.message as string);
+      callback(null, true);
     } else {
       // Your customer will be redirected to your `return_url`. For some payment
       // methods like iDEAL, your customer will be redirected to an intermediate
       // site first to authorize the payment, then redirected to the `return_url`.
+      
+      callback(result.paymentIntent, false);
     }
-    console.log(result);
-
-    // const amountToCharge = 100;
-
-    // const paymentElement = elements?.getElement(PaymentElement);
-
-    // if (!stripe || !elements || !paymentElement) {
-    //   return;
-    // }
-
-    // const stripeResponse = await stripe.createPaymentMethod({
-    //   type: 'card',
-    //   card: cardElement
-    // });
-
-    // const { error, paymentMethod } = stripeResponse;
-
-    // if (error || !paymentMethod) {
-    //   return;
-    // }
-
-    // const paymentMethodId = paymentMethod.id;
-
-    // fetch(`${process.env.REACT_APP_API_URL}/charge`, {
-    //   method: 'POST',
-    //   body: JSON.stringify(({
-    //     paymentMethodId,
-    //     amount: amountToCharge
-    //   })),
-    //   credentials: 'include',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    // })
-
   };
 
   return {

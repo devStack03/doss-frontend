@@ -1,15 +1,16 @@
 
-import React, { forwardRef, useImperativeHandle, useRef, ReactNode } from 'react';
-import { CardElement, PaymentElement } from '@stripe/react-stripe-js';
+import { forwardRef, useImperativeHandle, useRef, ReactNode } from 'react';
+import { PaymentElement, useElements } from '@stripe/react-stripe-js';
 import usePaymentForm from '../../hooks/usePaymentForm';
+import { StripePaymentElementChangeEvent } from '@stripe/stripe-js';
 interface Props {
   children?: ReactNode;
   type: "submit" | "button";
 }
 export type Ref = HTMLFormElement;
 
-const PaymentForm = forwardRef((props, ref) => {
-  const { handleSubmit } = usePaymentForm();
+const PaymentForm = forwardRef((props: any, ref) => {
+  const { handleSubmit } = usePaymentForm(props);
   const form = useRef<HTMLFormElement | null>(null);
   useImperativeHandle(ref, () => ({
     callSubmit() {
@@ -20,11 +21,14 @@ const PaymentForm = forwardRef((props, ref) => {
     }
   }));
 
+  const handleElementChange = (e: StripePaymentElementChangeEvent) => {
+    console.log(e);
+  }
+
   return (
     <form onSubmit={handleSubmit} ref={form}>
-      <PaymentElement />
+      <PaymentElement onChange={handleElementChange} />
       <br />
-      <button>Pay</button>
     </form>
   );
 });
