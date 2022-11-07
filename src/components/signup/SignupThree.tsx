@@ -95,7 +95,7 @@ const SignupThree = ({ handleActiveSectionChange, option }: { handleActiveSectio
               <div className="plan-header">
                 <div className="plan-placeholder--name">Plan</div>
                 <div className="plan-placeholder--cost-and-currency">
-                  <div className="plan-placeholder--cost">{userSignupData.subscriptionPlan === 'anual' ? `109,99` : `12,99`}</div>
+                  <div className="plan-placeholder--cost">{userSignupData.subscriptionPlan === 'year' ? `109,99` : `12,99`}</div>
                   <div className="plan-placeholder--currency">€</div>
                 </div>
               </div>
@@ -111,7 +111,7 @@ const SignupThree = ({ handleActiveSectionChange, option }: { handleActiveSectio
 
               <div className="payment-summary">
                 <div className="payment-summary--title">Se le cobrarán </div>
-                <div id="plan-placeholder" className="plan-placeholder--cost plan-placeholder--cost-custom">{userSignupData.subscriptionPlan === 'anual' ? `109,99` : `12,99`}</div>
+                <div id="plan-placeholder" className="plan-placeholder--cost plan-placeholder--cost-custom">{userSignupData.subscriptionPlan === 'year' ? `109,99` : `12,99`}</div>
                 <div className="payment-summary--title">€</div>
               </div>
               <div className="w-embed w-script">

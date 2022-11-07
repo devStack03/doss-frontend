@@ -59,7 +59,7 @@ const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
 
     }).catch((err) => {
       console.log(err);
-      alert(err.message);
+      // alert(err.message);
       setCouponCodeValid(false);
     }).finally(() => {
       dispatch(resultLoaded());
