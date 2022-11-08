@@ -1,6 +1,5 @@
 import { useState, useRef } from 'react';
-import { Navigate, useNavigate, useNavigation } from 'react-router-dom'
-import { BallTriangle } from 'react-loader-spinner'
+import { useNavigate } from 'react-router-dom'
 import { GeneralFuctionType } from '../../@types/props.types';
 import useAuth from '../../hooks/useAuth';
 import authService from '../../services/auth.service';
@@ -9,8 +8,6 @@ import { Elements } from '@stripe/react-stripe-js';
 import { Appearance, loadStripe } from '@stripe/stripe-js';
 import { fetchStarted, resultLoaded, userRegistered } from '../../store/slices/api.slice';
 import { useDispatch } from '../../store/store';
-import Alert from '@mui/material/Alert';
-
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || '');
 
@@ -18,8 +15,7 @@ const SignupThree = ({ handleActiveSectionChange, option }: { handleActiveSectio
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { userSignupData, setUserSignupData } = useAuth();
-  const [cardError, setCardError] = useState(false);
+  const { userSignupData } = useAuth();
   const [errorMessage, setErrorMessage] = useState('');
   const appearance = {
     theme: 'stripe'
@@ -36,7 +32,7 @@ const SignupThree = ({ handleActiveSectionChange, option }: { handleActiveSectio
     }
   };
 
-  const [paymentSelected, setPaymentSelected] = useState(true);
+  const paymentSelected = true; // use state later
 
   const childRef = useRef<HTMLFormElement>(null);
 
@@ -44,7 +40,6 @@ const SignupThree = ({ handleActiveSectionChange, option }: { handleActiveSectio
     // setUserSignupData({
     //   ...userSignupData,
     // });
-    setCardError(false);
     setErrorMessage('');
     dispatch(fetchStarted());
     childRef?.current?.callSubmit();
@@ -53,7 +48,6 @@ const SignupThree = ({ handleActiveSectionChange, option }: { handleActiveSectio
   const handlePaymentCallback = (paymentIntent: any, error: boolean) => {
     console.log(error);
     if (error) {
-      setCardError(true);
       setErrorMessage('Wrong Card!')
       dispatch(resultLoaded());
     } else {
@@ -126,7 +120,7 @@ const SignupThree = ({ handleActiveSectionChange, option }: { handleActiveSectio
             </div>
             <div className="back">
               <div className="link--prev w-embed">
-                <a href="#" onClick={() => handleActiveSectionChange(2)}> Volver </a>
+                <a href="#xxx" onClick={() => handleActiveSectionChange(2)}> Volver </a>
               </div>
             </div>
           </div>

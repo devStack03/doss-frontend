@@ -1648,7 +1648,7 @@ h1 {
 .form-field--field {
   height: 48px;
   margin-top: -10px;
-  margin-bottom: 22px;
+  /* margin-bottom: 22px; */
   border: 1px solid #d9d9d9;
   border-radius: 8px;
   background-color: #fff;
@@ -1656,6 +1656,10 @@ h1 {
   color: #000;
   line-height: 17px;
   cursor: pointer;
+}
+
+.form-custom-field-block {
+  padding-bottom: 8px;
 }
 
 .form-field--field:focus {

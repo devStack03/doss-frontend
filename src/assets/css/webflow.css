@@ -312,7 +312,7 @@ button,
   background-color: #dddddd;
 }
 .w-form-fail {
-  /* display: none; */
+  display: none;
   margin-top: 10px;
   /* padding: 10px; */
   background-color: #ffdede;
@@ -1833,5 +1833,6 @@ textarea.w-select {
 
 .wf-error-msg {
   color: #ea384c;
+  font-size: 14px;
 }
  

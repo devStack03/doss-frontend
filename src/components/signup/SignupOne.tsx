@@ -5,6 +5,7 @@ import useAuth from '../../hooks/useAuth';
 import couponService from '../../services/coupon.service';
 import { fetchStarted, resultLoaded } from '../../store/slices/api.slice';
 import { useDispatch } from '../../store/store';
+import { isValidEmail } from '../../utils/validation';
 const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: GeneralFuctionType }) => {
 
   const dispatch = useDispatch();
@@ -27,6 +28,21 @@ const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
   const handleChange = (event: any) => {
     const name = event.target.name;
     const value = event.target.value;
+    if (name === 'email') {
+      if (isValidEmail(value)) {
+        setEmailFieldValid(true);
+      } else {
+        setEmailFieldValid(false);
+      }
+    } else if (name === 'fullName') {
+      setNameFieldValid(true);
+    }
+    else if (name === 'phoneNumber') {
+      setPhoneNumberFieldValid(true);
+    }
+    else if (name === 'invitationCode') {
+      setCouponCodeValid(true);
+    }
     setFormData(values => ({ ...values, [name]: value }))
   }
 
@@ -44,22 +60,24 @@ const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
     setErrorMessage('');
     if (!formData.fullName.length) {
       setNameFieldValid(false);
-      return;
     }
     if (!formData.email.length) {
       setEmailFieldValid(false);
-      return;
     }
 
     if (!formData.phoneNumber.length) {
       setPhoneNumberFieldValid(false);
-      return;
     }
 
     if (!formData.invitationCode.length) {
       setCouponCodeValid(false);
-      return;
     }
+
+    if (!formData.fullName.length ||
+      !formData.email.length ||
+      !formData.phoneNumber.length ||
+      !formData.invitationCode.length
+    ) return;
 
     dispatch(fetchStarted());
     couponService.validate({
@@ -70,6 +88,8 @@ const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
       console.log(res.data);
       if (res.data.status === -1) {
         setErrorMessage(res.data.error.message)
+      } else if (res.data.status === -3) {
+        setCouponCodeValid(false);
       } else {
         if (setStripeInfo)
           setStripeInfo(res.data);
@@ -93,7 +113,7 @@ const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
 
   return (
     <div className="section-fullscreen wf-section">
-      <div className="section-fullscreen-container">
+      <div className="section-fullscreen-container tw-container tw-mx-auto">
         <div className="section-fullscreen-text-block">
           <div className="fullscreen--title">Bienvenid@ a Doss</div>
           <div className="fullscreen--subtitle">Estas a solo tres pasos de hacerte miembro del gastro club que esta arransando en Madriz.</div>
@@ -155,7 +175,14 @@ const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
                   <span className='wf-error-msg'>Invalid Coupon code</span>
                 }
               </div>
-              <input type="button" data-wait="Cargando..." value="Siguiente" className="submit-button w-button" onClick={handleSubmit} />
+              <input 
+                type="button" 
+                data-wait="Cargando..." 
+                value="Siguiente" 
+                className="submit-button w-button"
+                disabled={!emailFieldValid || !nameFieldValid || !phoneNumberFieldValid || !couponCodeValid}
+                onClick={handleSubmit} 
+              />
             </form>
             <div className="w-form-done">
               <div>Thank you! Your submission has been received!</div>

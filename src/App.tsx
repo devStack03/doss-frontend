@@ -3,7 +3,6 @@ import {
   BrowserRouter,
   Routes,
   Route,
-  useNavigate,
   useLocation,
   Navigate
 } from 'react-router-dom';
@@ -11,9 +10,7 @@ import {
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import PaymentStatus from './pages/PaymentStatus';
 import PaymentSuccess from './pages/PaymentSuccess';
-import useAuth from './hooks/useAuth';
 import { useTypedSelector } from './store/store';
 
 export const RequireAuth = ({ children, redirectTo }: { children: JSX.Element, redirectTo?: string }) => {
@@ -32,6 +29,11 @@ function App() {
         <Routes>
           <Route path='/' element={<Signup option='' />} />
           <Route path='login' element={<Login />} />
+          <Route path='dashboard' element={
+            <RequireAuth>
+              <Home />
+            </RequireAuth>
+          } />
           <Route path='signup' element={<Signup option='' />} />
 
           <Route path='payment-success' element={
