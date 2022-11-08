@@ -286,14 +286,14 @@ h1 {
 
 .section-main {
   height: 724px;
-  background-image: url('../images/Template.svg');
+  background-image: url("../images/Template.svg");
   background-position: 50% 50%;
   background-size: auto;
 }
 
 .section-cover-main {
   height: 588px;
-  background-image: url('../images/Rectangle-1283-min.png');
+  background-image: url("../images/Rectangle-1283-min.png");
   background-position: 50% 50%;
   background-size: cover;
 }
@@ -336,7 +336,7 @@ h1 {
 
 .section-social {
   height: 496px;
-  background-image: url('../images/Template-2.svg');
+  background-image: url("../images/Template-2.svg");
   background-position: 50% 50%;
   background-size: auto;
 }
@@ -379,7 +379,7 @@ h1 {
 
 .section-cover-telephone {
   height: 565px;
-  background-image: url('../images/main-cover.jpg');
+  background-image: url("../images/main-cover.jpg");
   background-position: 50% 50%;
   background-size: auto;
 }
@@ -997,7 +997,7 @@ h1 {
   padding-top: 121px;
   padding-bottom: 175px;
   background-color: #000;
-  background-image: url('../images/blog-cover-full.svg');
+  background-image: url("../images/blog-cover-full.svg");
   background-position: 50% 50%;
   background-size: contain;
   background-repeat: repeat;
@@ -1058,7 +1058,7 @@ h1 {
 
 .section-cover-table {
   height: 679px;
-  background-image: url('../images/table-cover.jpg');
+  background-image: url("../images/table-cover.jpg");
   background-position: 50% 50%;
   background-size: cover;
 }
@@ -1585,7 +1585,7 @@ h1 {
 .section-fullscreen {
   height: 100vh;
   padding-top: 110px;
-  background-image: url('../images/Template.svg');
+  background-image: url("../images/Template.svg");
   background-position: 50% 0%;
   background-size: cover;
 }
@@ -1631,6 +1631,18 @@ h1 {
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.no-spin::-webkit-inner-spin-button,
+.no-spin::-webkit-outer-spin-button {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  margin: 0 !important;
+}
+
+.no-spin {
+  -moz-appearance: textfield !important;
+  appearance: none !important;
 }
 
 .form-field--field {
@@ -2653,7 +2665,7 @@ h1 {
   -ms-flex: 0 auto;
   flex: 0 auto;
   border-radius: 22px;
-  background-image: url('https://d3e54v103j8qbb.cloudfront.net/img/background-image.svg');
+  background-image: url("https://d3e54v103j8qbb.cloudfront.net/img/background-image.svg");
   background-position: 0px 0px;
   background-size: auto;
 }
@@ -3779,36 +3791,36 @@ h1 {
 }
 
 @font-face {
-  font-family: 'Matter';
-  src: url('../fonts/Matter-Bold.otf') format('opentype');
+  font-family: "Matter";
+  src: url("../fonts/Matter-Bold.otf") format("opentype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'Matter';
-  src: url('../fonts/Matter-Regular.otf') format('opentype');
+  font-family: "Matter";
+  src: url("../fonts/Matter-Regular.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'Matter';
-  src: url('../fonts/Matter-SemiBold.otf') format('opentype');
+  font-family: "Matter";
+  src: url("../fonts/Matter-SemiBold.otf") format("opentype");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'Matter';
-  src: url('../fonts/Matter-Medium.otf') format('opentype');
+  font-family: "Matter";
+  src: url("../fonts/Matter-Medium.otf") format("opentype");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'Matter';
-  src: url('../fonts/Matter-RegularItalic.otf') format('opentype');
+  font-family: "Matter";
+  src: url("../fonts/Matter-RegularItalic.otf") format("opentype");
   font-weight: 400;
   font-style: italic;
   font-display: swap;

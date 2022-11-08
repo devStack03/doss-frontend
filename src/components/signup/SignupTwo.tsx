@@ -15,7 +15,7 @@ const SignupTwo = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
 
   const [selectedPlan, setSelectedPlan] = useState('year');
   const [selectedStart, setSelectedStart] = useState('today');
-
+  const [errorMessage, setErrorMessage] = useState('');
   const { userSignupData, setUserSignupData, stripeCumtomerInfo, setStripeInfo } = useAuth();
 
   /** Stripe Data */
@@ -24,6 +24,7 @@ const SignupTwo = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
   // const [subscriptionData, setSubscriptionData] = useState(null);
 
   const createSubscription = async (priceId: string) => {
+    setErrorMessage('');
     dispatch(fetchStarted());
     try {
       const { subscriptionId, invoiceData } = await userService.createSubscription({
@@ -40,11 +41,12 @@ const SignupTwo = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
         stripeClientSecret: invoiceData.payment_intent.client_secret
       });
       handleActiveSectionChange(3);
-    } catch (error) {
-      console.log(error);      
+    } catch (error: any) {
+      console.log(error);
+      setErrorMessage(error.message)
     } finally {
       dispatch(resultLoaded());
-    }    
+    }
   }
 
   /** */
@@ -81,8 +83,8 @@ const SignupTwo = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
                 <div className="form-field-label--name">Paso 2/3</div>
               </div>
               <div className="plan-proposal-block">
-                <label className="radio-button-field plan-radio w-radio" onClick={() => { setSelectedPlan('year'); }}>
-                  <div id="plan-choice--anual" className={selectedPlan === 'year' ? `plan-anual-block plan-anual-block--custom plan-choice` : `plan-anual-block plan-anual-block--custom`}>
+                <div id="radio-anual" className="radio-button-field plan-radio w-radio tw-w-1/2 tw-mr-3" onClick={() => { setSelectedPlan('year'); }}>
+                  <div id="plan-choice--anual" className={selectedPlan === 'year' ? `plan-anual-block plan-anual-block--custom plan-choice tw-w-full` : `plan-anual-block plan-anual-block--custom tw-w-full`}>
                     <div className="plan-anual-head">
                       <div className="plan-anual-name">Anual</div>
                       <div className="plan-anual-count-block">
@@ -96,9 +98,9 @@ const SignupTwo = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
                   </div>
                   <input type="radio" id="anual" name="subscriptionPlan" value="year" data-name="plan" required plan-name="Anual" className="w-form-formradioinput radio-button hide--opasity w-radio-input" onChange={handleChange} checked={selectedPlan === 'year'} />
                   <span className="hide--opasity w-form-label">Radio 3</span>
-                </label>
-                <label className="radio-button-field-2 w-radio" onClick={() => setSelectedPlan('month')}>
-                  <div id="plan-choice--mensual" className={selectedPlan === 'month' ? `plan-anual-block plan-mensual-block--custom plan-choice` : `plan-anual-block plan-mensual-block--custom`}>
+                </div>
+                <div id="radio-month" className="radio-button-field-2 w-radio tw-w-1/2" onClick={() => setSelectedPlan('month')}>
+                  <div id="plan-choice--mensual" className={selectedPlan === 'month' ? `plan-anual-block plan-mensual-block--custom plan-choice  tw-w-full` : `plan-anual-block plan-mensual-block--custom  tw-w-full`}>
                     <div className="plan-anual-head plan-mensual-block--title">
                       <div className="plan-mensual-block--title">Mensual</div>
                     </div>
@@ -108,7 +110,7 @@ const SignupTwo = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
                   <input type="radio" id="mensual" name="subscriptionPlan" value="month" data-name="plan" required
                     plan-name="Mensual" className="w-form-formradioinput radio-button-2 hide--opasity w-radio-input" onChange={handleChange} checked={selectedPlan === 'month'} />
                   <span className="hide--opasity w-form-label">Radio 3</span>
-                </label>
+                </div>
               </div>
               <div className="cuando-quieres--block">
                 <div className="cuando-quieres--title">¿Cuando quieres que empiece tu suscripción?</div>
@@ -138,7 +140,7 @@ const SignupTwo = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
               <div>Thank you! Your submission has been received!</div>
             </div>
             <div className="w-form-fail">
-              <div>Oops! Something went wrong while submitting the form.</div>
+              <div>{errorMessage}</div>
             </div>
             <div className="back">
               <div className="link--prev w-embed">

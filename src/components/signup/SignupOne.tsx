@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 
 import { GeneralFuctionType } from '../../@types/props.types';
 import useAuth from '../../hooks/useAuth';
@@ -15,9 +15,14 @@ const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
     email: ''
   });
 
-  const [couponCodeValid, setCouponCodeValid] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const { userSignupData, setUserSignupData, stripeCumtomerInfo, setStripeInfo } = useAuth();
+  const [couponCodeValid, setCouponCodeValid] = useState(true);
+  const [emailFieldValid, setEmailFieldValid] = useState(true);
+  const [phoneNumberFieldValid, setPhoneNumberFieldValid] = useState(true);
+  const [nameFieldValid, setNameFieldValid] = useState(true);
+
+  const { userSignupData, setUserSignupData, setStripeInfo } = useAuth();
 
   const handleChange = (event: any) => {
     const name = event.target.name;
@@ -25,16 +30,37 @@ const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
     setFormData(values => ({ ...values, [name]: value }))
   }
 
+  const validatePhoneField = (e: any) => {
+    if (e.target.value.length > e.target.maxLength) {
+      e.target.value = e.target.value.slice(0, e.target.maxLength);
+    }
+  }
+
   const handleSubmit = () => {
-    if (
-      !formData.fullName.length ||
-      !formData.phoneNumber.length ||
-      !formData.invitationCode.length ||
-      !formData.email.length
-    ) {
-      alert('Please fill all fields');
+    setNameFieldValid(true);
+    setCouponCodeValid(true);
+    setPhoneNumberFieldValid(true);
+    setEmailFieldValid(true);
+    setErrorMessage('');
+    if (!formData.fullName.length) {
+      setNameFieldValid(false);
       return;
     }
+    if (!formData.email.length) {
+      setEmailFieldValid(false);
+      return;
+    }
+
+    if (!formData.phoneNumber.length) {
+      setPhoneNumberFieldValid(false);
+      return;
+    }
+
+    if (!formData.invitationCode.length) {
+      setCouponCodeValid(false);
+      return;
+    }
+
     dispatch(fetchStarted());
     couponService.validate({
       code: formData.invitationCode,
@@ -43,9 +69,8 @@ const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
     }).then((res) => {
       console.log(res.data);
       if (res.data.status === -1) {
-        alert(res.data.error.message);
+        setErrorMessage(res.data.error.message)
       } else {
-        // alert('Coupon code validation succeed');
         if (setStripeInfo)
           setStripeInfo(res.data);
         setUserSignupData({
@@ -59,8 +84,8 @@ const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
 
     }).catch((err) => {
       console.log(err);
+      setErrorMessage(err.message);
       // alert(err.message);
-      setCouponCodeValid(false);
     }).finally(() => {
       dispatch(resultLoaded());
     });
@@ -85,18 +110,41 @@ const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
                 </div>
                 <label htmlFor="your-name" className="field-label hide">Teléfono</label>
                 <input type="text" className="form-field--field w-input" autoFocus maxLength={256} name="fullName" data-name="your-name" placeholder="Nombre Completo" id="your-name" data-ms-member="Nombre" required value={formData.fullName} onChange={handleChange} />
+                {!nameFieldValid &&
+                  <span className='wf-error-msg'>Name is invalid</span>
+                }
               </div>
               <div className="form-custom-field-block">
                 <div className="form-field-label--custom">
                   <div className="form-field-label--name">Correo electrónico</div>
                 </div><label htmlFor="your-email" className="field-label hide">Teléfono</label>
                 <input type="email" className="form-field--field w-input" maxLength={256} name="email" data-name="your-email" placeholder="Tu correo electrónico" id="your-email" data-ms-member="email" required value={formData.email} onChange={handleChange} />
+                {!emailFieldValid &&
+                  <span className='wf-error-msg'>Email is invalid</span>
+                }
               </div>
               <div className="form-custom-field-block">
                 <div className="form-field-label--custom">
                   <div className="form-field-label--name">Tu número</div>
                 </div><label htmlFor="your-telephone" className="field-label hide">Teléfono</label>
-                <input type="tel" className="form-field--field w-input" maxLength={256} name="phoneNumber" data-name="your-telephone" placeholder="Tu número" id="your-telephone" data-ms-member="telefono" required value={formData.phoneNumber} onChange={handleChange} />
+                <input
+                  type="number"
+                  className="form-field--field w-input no-spin"
+                  maxLength={9}
+                  name="phoneNumber"
+                  data-name="your-telephone"
+                  placeholder="Tu número"
+                  id="your-telephone"
+                  data-ms-member="telefono"
+                  required
+                  value={formData.phoneNumber}
+                  onInput={validatePhoneField}
+                  onChange={handleChange}
+                  autoComplete={"do-not-autofill"}
+                />
+                {!phoneNumberFieldValid &&
+                  <span className='wf-error-msg'>Phone number is invalid</span>
+                }
               </div>
               <div className="form-custom-field-block">
                 <div className="form-field-label--custom">
@@ -104,7 +152,7 @@ const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
                 </div><label htmlFor="your-invite-code" className="field-label hide">Teléfono</label>
                 <input type="text" className="form-field--field w-input" maxLength={256} name="invitationCode" data-name="your-invite-code" placeholder="Código" id="your-invite-code" data-ms-member="cupón" required value={formData.invitationCode} onChange={handleChange} />
                 {!couponCodeValid &&
-                  <span className='wf-error-msg'>Invalid code</span>
+                  <span className='wf-error-msg'>Invalid Coupon code</span>
                 }
               </div>
               <input type="button" data-wait="Cargando..." value="Siguiente" className="submit-button w-button" onClick={handleSubmit} />
@@ -113,7 +161,7 @@ const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
               <div>Thank you! Your submission has been received!</div>
             </div>
             <div className="w-form-fail">
-              <div>Oops! Something went wrong while submitting the form.</div>
+              <div><span className='wf-error-msg'>{errorMessage}</span></div>
             </div>
           </div>
         </div>

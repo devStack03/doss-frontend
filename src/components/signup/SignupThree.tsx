@@ -7,7 +7,7 @@ import authService from '../../services/auth.service';
 import PaymentForm from '../payment';
 import { Elements } from '@stripe/react-stripe-js';
 import { Appearance, loadStripe } from '@stripe/stripe-js';
-import { fetchStarted, resultLoaded } from '../../store/slices/api.slice';
+import { fetchStarted, resultLoaded, userRegistered } from '../../store/slices/api.slice';
 import { useDispatch } from '../../store/store';
 import Alert from '@mui/material/Alert';
 
@@ -20,6 +20,7 @@ const SignupThree = ({ handleActiveSectionChange, option }: { handleActiveSectio
   const navigate = useNavigate();
   const { userSignupData, setUserSignupData } = useAuth();
   const [cardError, setCardError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const appearance = {
     theme: 'stripe'
   } as Appearance;
@@ -44,6 +45,7 @@ const SignupThree = ({ handleActiveSectionChange, option }: { handleActiveSectio
     //   ...userSignupData,
     // });
     setCardError(false);
+    setErrorMessage('');
     dispatch(fetchStarted());
     childRef?.current?.callSubmit();
   }
@@ -52,6 +54,7 @@ const SignupThree = ({ handleActiveSectionChange, option }: { handleActiveSectio
     console.log(error);
     if (error) {
       setCardError(true);
+      setErrorMessage('Wrong Card!')
       dispatch(resultLoaded());
     } else {
       authService.create({
@@ -60,12 +63,13 @@ const SignupThree = ({ handleActiveSectionChange, option }: { handleActiveSectio
       }).then((res) => {
         console.log(res.data);
         if (res.data.status === -1) {
-          alert(res.data.error.message);
+          setErrorMessage(res.data.error.message);
         } else {
+          dispatch(userRegistered());
           navigate('/payment-success');
         }
       }).catch((err) => {
-        alert('Something is wrong')
+        setErrorMessage(err.message);
         console.log(err);
       }).finally(() => {
         dispatch(resultLoaded());
@@ -76,12 +80,7 @@ const SignupThree = ({ handleActiveSectionChange, option }: { handleActiveSectio
 
   return (
     <div className="section-fullscreen wf-section">
-      {cardError &&
-        <div className="tw-mx-auto">
-          <Alert severity="error" className="tw-flex tw-justify-center">Your card details are wrong!</Alert>
-        </div>
-      }
-      <div className="section-fullscreen-container">
+      <div className="section-fullscreen-container tw-container tw-mx-auto">
         <div className="section-fullscreen-text-block">
           <div className="fullscreen--title">Selecciona tu forma de pago</div>
           <div className="fullscreen--subtitle">Haz click en una de las opciones</div>
@@ -123,11 +122,11 @@ const SignupThree = ({ handleActiveSectionChange, option }: { handleActiveSectio
               <div>Thank you! Your submission has been received!</div>
             </div>
             <div className="w-form-fail">
-              <div>Oops! Something went wrong while submitting the form.</div>
+              <div>{errorMessage}</div>
             </div>
             <div className="back">
               <div className="link--prev w-embed">
-                <a href="#" onClick={() => handleActiveSectionChange(1)}> Volver </a>
+                <a href="#" onClick={() => handleActiveSectionChange(2)}> Volver </a>
               </div>
             </div>
           </div>

@@ -20,10 +20,12 @@ const blankData = [{
 
 interface AuthSliceState {
   isLoading: boolean,
+  registered: boolean,
   data: Array<any>,
 }
 const initialState: AuthSliceState = {
   isLoading: false,
+  registered: false,
   data: blankData
 }
 
@@ -61,6 +63,9 @@ export const apiSlice = createSlice({
     },
     fetchStarted: (state) => {
       state.isLoading = true;
+    },
+    userRegistered: (state) => {
+      state.registered = true;
     }
   },
   extraReducers: (builder) => {
@@ -88,6 +93,6 @@ export const apiSlice = createSlice({
   },
 });
 
-export const { resultLoaded, fetchStarted } = apiSlice.actions
+export const { resultLoaded, fetchStarted, userRegistered } = apiSlice.actions
 
 export default apiSlice.reducer;
