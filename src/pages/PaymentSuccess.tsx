@@ -21,16 +21,30 @@ const PaymentSuccess = () => {
             </div>
 
             <div className="tw-flex tw-justify-center tw-mt-14">
-              <button className="
+              {/* <button className="
                 tw-w-[196px]
                 tw-h-[48px]
                 tw-bg-[#D9D9D9]
                 tw-rounded-[8px] 
                 tw-font-semibold 
-                tw-text-sm"
+                tw-text-sm
+                submit-button w-button"
                 onClick={() => navigate('/dashboard')}>
                 Iniciar sesión
-              </button>
+              </button> */}
+              <input
+                type="button"
+                data-wait="Cargando..."
+                value="Iniciar sesión"
+                className="
+                  submit-button 
+                  w-button 
+                  tw-w-[196px]
+                  tw-h-[48px]
+                  tw-rounded-[8px] 
+                "
+                onClick={() => navigate('/dashboard')}
+              />
             </div>
           </div>
         </div>

@@ -14,10 +14,10 @@ import PaymentSuccess from './pages/PaymentSuccess';
 import { useTypedSelector } from './store/store';
 
 export const RequireAuth = ({ children, redirectTo }: { children: JSX.Element, redirectTo?: string }) => {
-  let registered = useTypedSelector(state => state.api.registered);
+  let { registered, loggedin } = useTypedSelector(state => state.api);
   let location = useLocation();
-  if (!registered) {
-    return <Navigate to="/signup" state={{ from: location }} replace />;
+  if (!loggedin) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
   return children;
 };
@@ -27,7 +27,7 @@ function App() {
     <React.Suspense fallback={<div>loading...</div>}>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<Signup option='' />} />
+          <Route path='/' element={<Navigate to="/login" replace />} />
           <Route path='login' element={<Login />} />
           <Route path='dashboard' element={
             <RequireAuth>
@@ -37,9 +37,9 @@ function App() {
           <Route path='signup' element={<Signup option='' />} />
 
           <Route path='payment-success' element={
-            <RequireAuth>
-              <PaymentSuccess />
-            </RequireAuth>
+            // <RequireAuth>
+            <PaymentSuccess />
+            // </RequireAuth>
           } />
           <Route
             path="*"

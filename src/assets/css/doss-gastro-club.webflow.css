@@ -3834,3 +3834,38 @@ h1 {
   background-color: #ffc700;
   border: 1px solid transparent;
 }
+
+.custom-styles {
+  --ReactInputVerificationCode-itemWidth: 2.5rem;
+  --ReactInputVerificationCode-itemHeight: 3.5rem;
+}
+
+.custom-styles .ReactInputVerificationCode__item {
+  width: 50px;
+  height: 68px;
+  margin-bottom: 0px;
+  border: 1px none #000;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+  font-family: Matter, sans-serif;
+  color: #000;
+  font-weight: 600;
+  text-align: center;
+  display: block;
+  padding: 8px 12px;
+  font-size: 14px;
+  vertical-align: middle;
+  box-shadow: none;
+}
+.custom-styles .ReactInputVerificationCode__item.is-active {
+  border-style: solid;
+  border-color: #ffc700;
+  box-shadow: none;
+}
+
+.custom-styles .ReactInputVerificationCode__container {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}

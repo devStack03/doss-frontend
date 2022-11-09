@@ -10,6 +10,10 @@ class AuthService {
     create(data: any) {
         return Http.post<any>(this.apiUrl + '/register', data);
     }
+
+    sendVerificationCode(data: any) {
+        return Http.post(this.apiUrl + `/send_login_code`, data);
+    }
 }
 
 export default new AuthService();

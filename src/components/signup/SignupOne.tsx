@@ -5,7 +5,7 @@ import useAuth from '../../hooks/useAuth';
 import couponService from '../../services/coupon.service';
 import { fetchStarted, resultLoaded } from '../../store/slices/api.slice';
 import { useDispatch } from '../../store/store';
-import { isValidEmail } from '../../utils/validation';
+import { isValidEmail, validatePhoneField } from '../../utils/validation';
 const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: GeneralFuctionType }) => {
 
   const dispatch = useDispatch();
@@ -16,7 +16,28 @@ const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
     email: ''
   });
 
+  const emailErrorMessages = {
+    empty: 'Por favor introduce un correo electrónico.',
+    invalid: 'Por favor introduce un correo electrónico valido.',
+    used: 'Este correo electrónico ya esta en uso.'
+  };
+
+  const phoneErrorMessages = {
+    empty: 'Por favor introduce tu número de teléfono.',
+    invalid: 'Por favor introduce un número de teléfono valido.',
+    used: 'Este número de teléfono ya esta en uso.'
+  };
+
+  const couponErrorMessages = {
+    empty: 'No has introducido ningún código de invitación.',
+    invalid: 'Tu código de invitación no es valido 😞',
+  };
+
   const [errorMessage, setErrorMessage] = useState('');
+  const [emailErrorMessage, setEmailErrorMessage] = useState('');
+  const [phoneErrorMessage, setPhoneErrorMessage] = useState('');
+  const [couponErrorMessage, setCouponErrorMessage] = useState('');
+  const [nameErrorMessage, setNameErrorMessge] = useState('');
 
   const [couponCodeValid, setCouponCodeValid] = useState(true);
   const [emailFieldValid, setEmailFieldValid] = useState(true);
@@ -29,11 +50,18 @@ const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
     const name = event.target.name;
     const value = event.target.value;
     if (name === 'email') {
+      // if (!value.length) {
+      //   setEmailFieldValid(false);
+      //   setEmailErrorMessage(emailErrorMessages.empty);
+      // } else {
       if (isValidEmail(value)) {
         setEmailFieldValid(true);
       } else {
         setEmailFieldValid(false);
+        setEmailErrorMessage(emailErrorMessages.invalid);
       }
+      // }
+
     } else if (name === 'fullName') {
       setNameFieldValid(true);
     }
@@ -46,12 +74,6 @@ const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
     setFormData(values => ({ ...values, [name]: value }))
   }
 
-  const validatePhoneField = (e: any) => {
-    if (e.target.value.length > e.target.maxLength) {
-      e.target.value = e.target.value.slice(0, e.target.maxLength);
-    }
-  }
-
   const handleSubmit = () => {
     setNameFieldValid(true);
     setCouponCodeValid(true);
@@ -59,17 +81,21 @@ const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
     setEmailFieldValid(true);
     setErrorMessage('');
     if (!formData.fullName.length) {
+      setNameErrorMessge('Por favor introduce tu nombre.');
       setNameFieldValid(false);
     }
     if (!formData.email.length) {
+      setEmailErrorMessage(emailErrorMessages.empty);
       setEmailFieldValid(false);
     }
 
     if (!formData.phoneNumber.length) {
+      setPhoneErrorMessage(phoneErrorMessages.empty);
       setPhoneNumberFieldValid(false);
     }
 
     if (!formData.invitationCode.length) {
+      setCouponErrorMessage(couponErrorMessages.empty);
       setCouponCodeValid(false);
     }
 
@@ -79,18 +105,35 @@ const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
       !formData.invitationCode.length
     ) return;
 
+    if (formData.phoneNumber.length < 9) {
+      setPhoneErrorMessage(phoneErrorMessages.invalid);
+      setPhoneNumberFieldValid(false);
+      return;
+    }
+
     dispatch(fetchStarted());
     couponService.validate({
       code: formData.invitationCode,
       email: formData.email,
-      name: formData.fullName
+      name: formData.fullName,
+      phoneNumber: formData.phoneNumber
     }).then((res) => {
       console.log(res.data);
-      if (res.data.status === -1) {
-        setErrorMessage(res.data.error.message)
-      } else if (res.data.status === -3) {
-        setCouponCodeValid(false);
-      } else {
+      if (res.data.status < 0) {
+        if (res.data.status === -1) {
+          setErrorMessage(res.data.error.message)
+        } else if (res.data.status === -3) {
+          setCouponCodeValid(false);
+          setCouponErrorMessage(couponErrorMessages.invalid);
+        } else if (res.data.status === -4) {
+          setEmailErrorMessage(emailErrorMessages.used);
+          setEmailFieldValid(false);
+        } else if (res.data.status === -5) {
+          setPhoneErrorMessage(phoneErrorMessages.used);
+          setPhoneNumberFieldValid(false);
+        }
+      }
+      else {
         if (setStripeInfo)
           setStripeInfo(res.data);
         setUserSignupData({
@@ -131,7 +174,7 @@ const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
                 <label htmlFor="your-name" className="field-label hide">Teléfono</label>
                 <input type="text" className="form-field--field w-input" autoFocus maxLength={256} name="fullName" data-name="your-name" placeholder="Nombre Completo" id="your-name" data-ms-member="Nombre" required value={formData.fullName} onChange={handleChange} />
                 {!nameFieldValid &&
-                  <span className='wf-error-msg'>Name is invalid</span>
+                  <span className='wf-error-msg'>{nameErrorMessage}</span>
                 }
               </div>
               <div className="form-custom-field-block">
@@ -140,12 +183,12 @@ const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
                 </div><label htmlFor="your-email" className="field-label hide">Teléfono</label>
                 <input type="email" className="form-field--field w-input" maxLength={256} name="email" data-name="your-email" placeholder="Tu correo electrónico" id="your-email" data-ms-member="email" required value={formData.email} onChange={handleChange} />
                 {!emailFieldValid &&
-                  <span className='wf-error-msg'>Email is invalid</span>
+                  <span className='wf-error-msg'>{emailErrorMessage}</span>
                 }
               </div>
               <div className="form-custom-field-block">
                 <div className="form-field-label--custom">
-                  <div className="form-field-label--name">Tu número</div>
+                  <div className="form-field-label--name">Tu teléfono</div>
                 </div><label htmlFor="your-telephone" className="field-label hide">Teléfono</label>
                 <input
                   type="number"
@@ -153,7 +196,7 @@ const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
                   maxLength={9}
                   name="phoneNumber"
                   data-name="your-telephone"
-                  placeholder="Tu número"
+                  placeholder="Tu teléfono"
                   id="your-telephone"
                   data-ms-member="telefono"
                   required
@@ -163,7 +206,7 @@ const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
                   autoComplete={"do-not-autofill"}
                 />
                 {!phoneNumberFieldValid &&
-                  <span className='wf-error-msg'>Phone number is invalid</span>
+                  <span className='wf-error-msg'>{phoneErrorMessage}</span>
                 }
               </div>
               <div className="form-custom-field-block">
@@ -172,16 +215,16 @@ const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
                 </div><label htmlFor="your-invite-code" className="field-label hide">Teléfono</label>
                 <input type="text" className="form-field--field w-input" maxLength={256} name="invitationCode" data-name="your-invite-code" placeholder="Código" id="your-invite-code" data-ms-member="cupón" required value={formData.invitationCode} onChange={handleChange} />
                 {!couponCodeValid &&
-                  <span className='wf-error-msg'>Invalid Coupon code</span>
+                  <span className='wf-error-msg'>{couponErrorMessage}</span>
                 }
               </div>
-              <input 
-                type="button" 
-                data-wait="Cargando..." 
-                value="Siguiente" 
+              <input
+                type="button"
+                data-wait="Cargando..."
+                value="Siguiente"
                 className="submit-button w-button"
                 disabled={!emailFieldValid || !nameFieldValid || !phoneNumberFieldValid || !couponCodeValid}
-                onClick={handleSubmit} 
+                onClick={handleSubmit}
               />
             </form>
             <div className="w-form-done">

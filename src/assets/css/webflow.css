@@ -1834,5 +1834,6 @@ textarea.w-select {
 .wf-error-msg {
   color: #ea384c;
   font-size: 14px;
+  margin-bottom: 10px;
 }
  
