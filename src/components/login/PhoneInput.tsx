@@ -81,7 +81,7 @@ const PhoneInput = ({ handleAfterSubmit }: { handleAfterSubmit: (bool: boolean, 
               <input
                 type="number"
                 className="form-field--field w-input no-spin"
-                maxLength={30}
+                maxLength={9}
                 name="phoneNumber"
                 data-name="your-telephone"
                 placeholder="666 123 456"
