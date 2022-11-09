@@ -1747,6 +1747,18 @@ h1 {
   font-weight: 600;
 }
 
+.submit-button-3 {
+  width: 100%;
+  padding-top: 15px;
+  padding-bottom: 16px;
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.1);
+  font-family: Matter, sans-serif;
+  color: #000;
+  line-height: 17px;
+  font-weight: 600;
+}
+
 .submit-button:hover {
   background-color: #ffc700;
 }

@@ -96,7 +96,7 @@ const VerificationCodeInput = (
                   onCompleted={handleVerifyCode}
                 />
               </div>
-              <input type="submit" data-wait="Cargando" value={ count > 0 ? `Reenviar en ${count} segundos`: `Reenviar SMS`} disabled={count > 0 ? true : false} className="submit-button w-button" />
+              <input type="submit" data-wait="Cargando" value={ count > 0 ? `Reenviar en ${count} segundos`: `Reenviar SMS`} disabled={count > 0 ? true : false} className={count === 0 ? "submit-button-3 w-button tw-bg-[#ffc700]" : "submit-button-3 w-button"} />
               {codeInValid &&
                 <span className='wf-error-msg'>{`Invalid code`}</span>
               }

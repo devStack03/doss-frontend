@@ -9,7 +9,7 @@ const PhoneInput = ({ handleAfterSubmit }: { handleAfterSubmit: (bool: boolean, 
     empty: 'Por favor introduce tu número de teléfono.',
     invalid: 'Por favor introduce un número de teléfono valido.',
     used: 'Este número de teléfono ya esta en uso.',
-    notFound: 'User not exist'
+    notFound: 'Por favor introduce un teléfono valido.'
   };
   const dispatch = useDispatch();
   const [phoneNumber, setPhoneNumber] = useState('');
