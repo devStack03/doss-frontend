@@ -1,21 +1,80 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { validatePhoneField } from "../../utils/validation";
 import ReactCodeInput from 'react-verification-code-input';
 import ReactInputVerificationCode from "react-input-verification-code";
 import { Link } from "react-router-dom";
+import authService from "../../services/auth.service";
 
 const VerificationCodeInput = (
-  { handleAfterSubmit, codeInValid }: {
+  { handleAfterSubmit, codeInValid, phoneNumber }: {
     handleAfterSubmit: (bool: boolean, number: string, code: string) => void,
-    codeInValid: boolean
+    codeInValid: boolean,
+    phoneNumber: string
   }) => {
 
   const [value, setValue] = useState("");
+  const [count, setCount] = useState(15);
+
+  useEffect(() => {
+    const element: HTMLInputElement = document.querySelector('#one-time-code') as HTMLInputElement;
+    console.log(element);
+    element?.focus();
+  }, [])
+
+  useEffect(() => {
+    let timer = setInterval(() => {
+      if (count > 0)
+        setCount((count) => count - 1);
+    }, 1000);
+
+    return () => clearTimeout(timer)
+  });
+
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    console.log(value);
-    handleAfterSubmit(true, '', value);
+    if (count === 0) {
+      handleResend();
+      setCount(15);
+    }
   }
+
+  const handleVerifyCode = (code: string) => {
+    console.log(code);
+    handleAfterSubmit(true, '', code);
+  }
+
+  const handleResend = () => {
+    if (phoneNumber.length) {
+      authService.sendVerificationCode({
+        phoneNumber
+      }).then((res) => {
+        console.log(res);
+        if (res.data.status < 0) {
+          if (res.data.status === -1) {
+          } else if (res.data.status === -3) {
+          } else if (res.data.status === -4) {
+          } else if (res.data.status === -5) {
+            // setPhoneErrorMessage(phoneErrorMessages.used);
+            // setPhoneNumberFieldValid(false);
+          }
+        }
+        else {
+        }
+      }).catch((err) => {
+        console.log(err)
+      }).finally(() => {
+      });
+    }
+  }
+
+  const countDown = () => {
+    let timer = setInterval(() => {
+      if (count)
+        setCount((count) => count - 1);
+    }, 1000);
+  }
+  
 
   return (
     <div className="section-fullscreen wf-section">
@@ -34,10 +93,10 @@ const VerificationCodeInput = (
                   length={6}
                   value={value}
                   onChange={setValue}
-                  onCompleted={console.log}
+                  onCompleted={handleVerifyCode}
                 />
               </div>
-              <input type="submit" data-wait="Cargando" value="Iniciar sesión" className="submit-button w-button" />
+              <input type="submit" data-wait="Cargando" value={ count > 0 ? `Reenviar en ${count} segundos`: `Reenviar SMS`} disabled={count > 0 ? true : false} className="submit-button w-button" />
               {codeInValid &&
                 <span className='wf-error-msg'>{`Invalid code`}</span>
               }

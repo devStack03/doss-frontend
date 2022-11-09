@@ -31,7 +31,7 @@ const PhoneInput = ({ handleAfterSubmit }: { handleAfterSubmit: (bool: boolean, 
       setPhoneNumberFieldValid(false);
       return;
     }
-    
+
     dispatch(fetchStarted());
 
     authService.sendVerificationCode({
@@ -82,6 +82,7 @@ const PhoneInput = ({ handleAfterSubmit }: { handleAfterSubmit: (bool: boolean, 
                 type="number"
                 className="form-field--field w-input no-spin"
                 maxLength={9}
+                pattern="\d*"
                 name="phoneNumber"
                 data-name="your-telephone"
                 placeholder="666 123 456"

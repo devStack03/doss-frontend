@@ -22,6 +22,15 @@ export const RequireAuth = ({ children, redirectTo }: { children: JSX.Element, r
   return children;
 };
 
+export const RequireSignup = ({ children, redirectTo }: { children: JSX.Element, redirectTo?: string }) => {
+  let { registered } = useTypedSelector(state => state.api);
+  let location = useLocation();
+  if (!registered) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+  return children;
+};
+
 function App() {
   return (
     <React.Suspense fallback={<div>loading...</div>}>
@@ -37,9 +46,9 @@ function App() {
           <Route path='signup' element={<Signup option='' />} />
 
           <Route path='payment-success' element={
-            // <RequireAuth>
-            <PaymentSuccess />
-            // </RequireAuth>
+            <RequireSignup>
+              <PaymentSuccess />
+            </RequireSignup>
           } />
           <Route
             path="*"

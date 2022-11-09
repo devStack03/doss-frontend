@@ -21,7 +21,10 @@ const Login = () => {
       setPhoneNumber(number);
       setPhoneNumberSubmitted(bool);
     }
-    if (_code && phoneNumber.length) {
+    if (!_code?.length && phoneNumber.length) {
+
+    }
+    if (_code?.length && phoneNumber.length) {
       dispatch(fetchStarted());
       setCode(_code);
       authService.login({
@@ -29,9 +32,9 @@ const Login = () => {
         code: _code
       }).then((res) => {
         if (res.data.status < 1) {
-        // } else if (res.data.status === -3) {
-        // } else if (res.data.status === -4) {
-        // } else if (res.data.status === -5) {
+          // } else if (res.data.status === -3) {
+          // } else if (res.data.status === -4) {
+          // } else if (res.data.status === -5) {
           setCodeInvalid(true);
         } else {
           dispatch(userLoggedin());
@@ -45,17 +48,18 @@ const Login = () => {
       })
     }
   }
+
   return (
     <>
       <NavHeader />
       {!phoneNumberSubmitted ? (
         <PhoneInput handleAfterSubmit={handleSubmit} />
       ) : (
-        <VerificationCodeInput handleAfterSubmit={handleSubmit} codeInValid={codeInvalid} />
+        <VerificationCodeInput handleAfterSubmit={handleSubmit} codeInValid={codeInvalid} phoneNumber={phoneNumber} />
       )}
       {isLoading &&
-          <LoadingScreen />
-        }
+        <LoadingScreen />
+      }
     </>
   )
 }
