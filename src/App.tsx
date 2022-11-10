@@ -7,11 +7,12 @@ import {
   Navigate
 } from 'react-router-dom';
 
-import Home from './pages/Home';
+import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import PaymentSuccess from './pages/PaymentSuccess';
 import { useTypedSelector } from './store/store';
+import Landing from './pages/Landing';
 
 export const RequireAuth = ({ children, redirectTo }: { children: JSX.Element, redirectTo?: string }) => {
   let { registered, loggedin } = useTypedSelector(state => state.api);
@@ -36,11 +37,12 @@ function App() {
     <React.Suspense fallback={<div>loading...</div>}>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<Navigate to="/login" replace />} />
+          {/* <Route path='/' element={<Navigate to="/login" replace />} /> */}
+          <Route path='/' element={<Landing />} />
           <Route path='login' element={<Login />} />
           <Route path='dashboard' element={
             <RequireAuth>
-              <Home />
+              <Dashboard />
             </RequireAuth>
           } />
           <Route path='signup' element={<Signup option='' />} />
