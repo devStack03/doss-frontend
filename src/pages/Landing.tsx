@@ -8,23 +8,174 @@ import {
   useNavigate,
   Link
 } from 'react-router-dom';
+import { useEffect } from 'react';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+// Default theme
+// import '@splidejs/react-splide/css';
+
+// or other themes
+// import '@splidejs/react-splide/css/skyblue';
+// import '@splidejs/react-splide/css/sea-green';
+
+import { Splide, SplideSlide, SplideTrack } from '@splidejs/react-splide';
+import Slider from "react-slick";
+
+import LogoBlack from '../assets/images/logo-black.svg';
+import Union1 from '../assets/images/Union-1.png';
+import Union2 from '../assets/images/Union-2.png';
+import ImgQuote from '../assets/images/quote.png';
+import ImgLable from '../assets/images/lable.png';
+import ImgSuffolkPunchFull from '../assets/images/suffolk-punch-FULL-p-500.png';
+import ImgSplideOne from '../assets/images/635132af0c9e8e141b8db4e4_2a1f1649ea15fec3ca9c52d3da69d91e.png';
+import ImgSplideTwo from '../assets/images/634e80e11c2d3c43e986b207_a245b1fb535200c4dad10e7baccc9975.png';
+import ImgSplideThree from '../assets/images/6351329d6de2a5c9c782e52a_dac68f2397d62fdb22114ea36ecdda27.png';
+import ImgAva from '../assets/images/ava.jpg';
+import LogoWhite from '../assets/images/logo-white.svg';
+import UnaEnUnRestaurante from '../assets/images/una-mujer-en-un-restaurante.png';
+import OfferCarouselItem from '../components/landing/OfferCarouselItem';
 
 const Landing = () => {
   const navigate = useNavigate();
+  const offerImgList = [
+    ImgSuffolkPunchFull,
+    ImgSuffolkPunchFull,
+    ImgSuffolkPunchFull,
+    ImgSuffolkPunchFull,
+    ImgSuffolkPunchFull,
+    ImgSuffolkPunchFull,
+    ImgSuffolkPunchFull,
+    ImgSuffolkPunchFull,
+    ImgSuffolkPunchFull,
+    ImgSuffolkPunchFull,
+    ImgSuffolkPunchFull,
+    ImgSuffolkPunchFull,
+    ImgSuffolkPunchFull,
+    ImgSuffolkPunchFull,
+    ImgSuffolkPunchFull,
+    ImgSuffolkPunchFull,
+    ImgSuffolkPunchFull,
+  ]
+  const settings0 = {
+    arrows: false,
+    infinite: false,
+    autoplay: false,
+    autoplaySpeed: 8000,
+    speed: 300,
+    slidesToShow: 3,
+    slidesToScroll: 3,
+    responsive: [{
+      breakpoint: 1200,
+      settings: {
+        variableWidth: true,
+      }
+    },
+    {
+      breakpoint: 480,
+      settings: {
+        variableWidth: true,
+      }
+    }
+    ]
+  };
+  const settings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 2,
+    initialSlide: 0,
+    mobileFirst: true,
+    responsive: [
+      {
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          infinite: true,
+
+        }
+      },
+      {
+        breakpoint: 800,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          initialSlide: 1,
+        }
+      },
+      {
+        breakpoint: 400,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          initialSlide: 1,
+        }
+      }
+    ]
+  };
+
+  const option1 = {
+    type: 'loop',
+    pagination: false,
+    perPage: 3,
+    fixedWidth: '327px',
+    gap: '22px',
+    breakpoints: {
+      1250: {
+        arrows: false,
+        fixedWidth: '311px',
+        gap: '22px',
+      },
+      400: {
+        arrows: false,
+        fixedWidth: '240px',
+        gap: '22px',
+      },
+    }
+  };
+
+  const option2 = {
+    type: 'loop',
+    pagination: false,
+    perPage: 3,
+    fixedWidth: '327px',
+    gap: '22px',
+    breakpoints: {
+      1250: {
+        arrows: false,
+        fixedWidth: '311px',
+        gap: '22px',
+      },
+      400: {
+        arrows: false,
+        fixedWidth: '240px',
+        gap: '22px',
+      },
+    }
+  }
+
+  useEffect(() => {
+    var arrowPrevElements = document.getElementsByClassName("splide__arrow--prev");
+    arrowPrevElements[1]?.classList.add("splide__arrow--prev-custom");
+    var arrowNextElements = document.getElementsByClassName("splide__arrow--next");
+    arrowNextElements[1]?.classList.add("splide__arrow--next-custom");
+  })
+
   return (
     <>
       <div id="home-menu__block" className="homepage-menu__main wf-section">
         <div className="menu-main__container">
           <div className="menu-main__logo">
-            <img src="images/logo-black.svg" loading="lazy" alt="" />
+            <img src={LogoBlack} loading="lazy" alt="" />
           </div>
           <div id="home-menu-list--mobile" className="menu-home__menu-list">
             <Link to="/signup" className="menu-list__button--dark w-button">Tengo Un Código</Link>
             <Link to="/login" className="menu-list__button--light w-button">Iniciar Sesión</Link>
           </div>
           <div id="home-menu-icon--mobile" className="home-nav-mobile--icon-block">
-            <img src="images/Union-1.png" loading="lazy" id="home-menu-icon--mobile__open" alt="" />
-            <img src="images/Union-2.png" loading="lazy" id="home-menu-icon--mobile__close" alt="" className="image-7" />
+            <img src={Union1} loading="lazy" id="home-menu-icon--mobile__open" alt="" />
+            <img src={Union2} loading="lazy" id="home-menu-icon--mobile__close" alt="" className="image-7" />
           </div>
         </div>
       </div>
@@ -32,7 +183,7 @@ const Landing = () => {
         <div data-w-id="22adec4b-42aa-64b1-612e-23065a88637c" data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" className="navbar-container w-nav">
           <div className="container-regular">
             <div className="navbar-wrapper navbar--homepage">
-              <a href="index.html" aria-current="page" className="navbar-brand w-nav-brand w--current"><img src="images/logo-black.svg" loading="lazy" alt="" className="doss-logo-black" /></a>
+              <a href="index.html" aria-current="page" className="navbar-brand w-nav-brand w--current"><img src={LogoBlack} loading="lazy" alt="" className="doss-logo-black" /></a>
               <nav role="navigation" className="nav-menu-wrapper w-nav-menu">
                 <ul data-w-id="22adec4b-42aa-64b1-612e-23065a886382" role="list" className="nav-menu w-list-unstyled">
                   <li className="list-item">
@@ -72,7 +223,7 @@ const Landing = () => {
                   </li>
                 </ul>
               </nav>
-              <div data-w-id="22adec4b-42aa-64b1-612e-23065a8863a0" className="menu-button w-nav-button"><img src="images/Union-1.png" loading="lazy" data-w-id="b271a3de-fdef-f1c8-b019-f91cb59d9bba" alt="" className="menu-image--open" /><img src="images/Union-2.png" loading="lazy" alt="" className="menu-image--close" />
+              <div data-w-id="22adec4b-42aa-64b1-612e-23065a8863a0" className="menu-button w-nav-button"><img src={Union1} loading="lazy" data-w-id="b271a3de-fdef-f1c8-b019-f91cb59d9bba" alt="" className="menu-image--open" /><img src={Union2} loading="lazy" alt="" className="menu-image--close" />
                 <div className="icon-2 w-icon-nav-menu"></div>
               </div>
             </div>
@@ -144,10 +295,10 @@ const Landing = () => {
         <div className="container-newsletter w-container">
           <div className="newsletter-div">
             <div className="newsletter-div-left">
-              <h1 className="newsletter-div-left-heading">Tu nuevo restaurante favorito a un click.</h1><img src="images/quote.png" loading="lazy" alt="" className="newsletter-div-left-img" />
+              <h1 className="newsletter-div-left-heading">Tu nuevo restaurante favorito a un click.</h1><img src={ImgQuote} loading="lazy" alt="" className="newsletter-div-left-img" />
               <blockquote className="block-quote"><em className="block-quote-quote">“Doss se paga solo cada mes y me ayuda a probar nuevos lugares increíbles de los que nunca habría oído hablar.”</em> <br /><strong className="block-quote-author">Alejandro G.</strong></blockquote>
             </div>
-            <div className="newsletter-div-right"><img src="images/una-mujer-en-un-restaurante.png" loading="lazy" alt="una mujer en un restaurante" className="newsletter-div-right-img" /></div>
+            <div className="newsletter-div-right"><img src={UnaEnUnRestaurante} loading="lazy" alt="una mujer en un restaurante" className="newsletter-div-right-img" /></div>
           </div>
         </div>
       </div>
@@ -197,70 +348,75 @@ const Landing = () => {
             </div>
           </div>
           <div className="collection-list-wrapper w-dyn-list">
-            <div id="cms-slider" role="list" className="slick-slider cms-slider w-dyn-items">
-              <div role="listitem" className="card-slider_item w-dyn-item">
-                <div className="offers-div">
-                  <div className="offers-div-offer-text">
-                    <div className="offers-div-title"></div>
-                    <div className="offers-div-sub-title"></div>
-                    <div className="offers-div-bestseller">Bestseller:</div>
-                    <div className="offers-div-bestseller-first-title"></div>
-                    <div className="offers-div-bestseller-first-description"></div>
-                    <div className="offers-div-bestseller-second-title"></div>
-                    <div className="offers-div-bestseller-second-description"></div>
-                  </div>
-                  <div className="offers-div-offer-block"><img src="" loading="lazy" alt="" className="offer-block-img" />
-                    <div className="offer-block-button hide">
-                      <div className="offer-block-currency-icon">
-                        <div className="currency-icon-text"></div>
-                      </div>
-                      <div className="currency-icon-value"></div>
-                    </div>
-                  </div>
-                  <a href="#" className="button w-button"></a>
-                  <a href="#" className="link-block w-inline-block">
-                    <div className="offer-block-button offer-block-button_responsive">
-                      <div className="offer-block-currency-icon">
-                        <div className="currency-icon-text"></div>
-                      </div>
-                      <div className="currency-icon-value"></div>
-                    </div>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div className="w-dyn-empty">
-              <div>No items found.</div>
-            </div>
+            <Slider {...settings} className="cms-slider w-dyn-items">
+              {offerImgList.map((list, index) => (
+                <OfferCarouselItem imageSrc={list} key={index} />
+              ))}
+
+            </Slider>
+            {/* <Splide className="section-blog-slider" hasTrack={false} options={option1}>
+              <SplideTrack className="w-dyn-list">
+                {offerImgList.map((list, index) => (
+                  <SplideSlide className="w-dyn-item">
+                    <OfferCarouselItem imageSrc={list} key={index} />
+                  </SplideSlide>
+                ))}
+
+              </SplideTrack>
+            </Splide> */}
+
           </div>
           <a href="#" className="offers-newsletter-button w-button">Ver ejemplo de newsletter</a>
         </div>
       </div>
       <div className="section-blog wf-section">
         <div className="section-blog-container">
-          <div className="section-blog-general"><img src="images/lable.png" loading="lazy" alt="BENEFICIOS lable" />
+          <div className="section-blog-general"><img src={ImgLable} loading="lazy" alt="BENEFICIOS lable" />
             <h3 className="heading-4 section-blog-heading">Ventajas exclusivas y eventos privados solo para miembros.</h3>
             <div className="text-block-4">Doss ademas de ser un club gastronomico también es un club social. Organizamos eventos privados para que nuestros miembros sociabilicen y compartan su aficion por lo culinario.</div>
           </div>
-          <div id="slider1" className="section-blog-slider splide">
-            <div className="splide__track w-dyn-list">
-              <div role="list" className="splide__list w-dyn-items">
-                <div role="listitem" className="splide__slide w-dyn-item">
-                  <div className="blog--post-content">
-                    <div className="blog--post-content-text">
-                      <div className="blog--post-title"></div>
-                      <div className="blog--post-subtitle"></div>
-                      <div className="blog--post-category"></div>
-                    </div>
-                    <div className="blog-post-content-image"><img src="" loading="lazy" alt="" className="image" /></div>
+          <Splide className="section-blog-slider" hasTrack={false} options={option1}>
+            <SplideTrack className="w-dyn-list">
+              <SplideSlide className="w-dyn-item">
+                <div className="blog--post-content">
+                  <div className="blog--post-content-text">
+                    <div className="blog--post-title">Pre-opening party Copy 3</div>
+                    <div className="blog--post-subtitle">Hopfly brewing</div>
+                    <div className="blog--post-category">Sunt Deleniti</div>
                   </div>
+                  <div className="blog-post-content-image">
+                    <img src={ImgSplideOne}
+                      loading="lazy" alt="Pre-opening party Copy 3"
+                      sizes="(max-width: 479px) 102.59375px, (max-width: 991px) 37vw, 327px"
+                      className="image" /></div>
                 </div>
-              </div>
-              <div className="w-dyn-empty">
-                <div>No items found.</div>
-              </div>
-            </div>
-          </div>
+              </SplideSlide>
+              <SplideSlide className="w-dyn-item">
+                <div className="blog--post-content">
+                  <div className="blog--post-content-text">
+                    <div className="blog--post-title">Pre-opening party Copy 3</div>
+                    <div className="blog--post-subtitle">Hopfly brewing</div>
+                    <div className="blog--post-category">Sunt Deleniti</div>
+                  </div>
+                  <div className="blog-post-content-image">
+                    <img src={ImgSplideThree}
+                      loading="lazy" alt="Pre-opening party Copy 3"
+                      sizes="(max-width: 479px) 102.59375px, (max-width: 991px) 37vw, 327px"
+                      className="image" /></div>
+                </div>
+              </SplideSlide>
+              <SplideSlide className="w-dyn-item">
+                <div className="blog--post-content">
+                  <div className="blog--post-content-text">
+                    <div className="blog--post-title">Pre-opening party Copy TEST TEST TEST TEST TEST TEST TEST</div>
+                    <div className="blog--post-subtitle">Hopfly brewing</div>
+                    <div className="blog--post-category">Sunt Deleniti</div>
+                  </div>
+                  <div className="blog-post-content-image"><img src={ImgSplideTwo} loading="lazy" alt="" className="image" /></div>
+                </div>
+              </SplideSlide>
+            </SplideTrack>
+          </Splide>
         </div>
       </div>
       <div className="section-subscription wf-section">
@@ -275,6 +431,49 @@ const Landing = () => {
           <div className="section-testimonials-header">Lo que nuestros miembros cuentan:</div>
           <div className="text-block-5">Ya somos más de 1000+ miembros en Madrid.</div>
         </div>
+        <Splide className="section-testimonials-slider" hasTrack={false} options={option1}>
+          <SplideTrack className="testimonials-splide__track">
+            <SplideSlide className="testimonials-splide__slider">
+              <div className="blog--post-content testimonials--post-content">
+                <div className="blog--post-content-text testimonials--post-content-text">
+                  <div className="testimonials-content--just-to-float">
+                    <div className="testimonials-content--header">”</div>
+                    <blockquote className="testimonials-content--quote">A good review should describe various aspects of the customer experience. Did the customer receive fantastic customer service? Was an employee particularly helpful, and did the customer leave the employee’s name. <br /><br />Responding to this type of review can be tough. Without details to go off of, it can be difficult to know how to respond. Start by asking if the reviewer could give more details about their experience, then switch to email or direct messaging to finish solving the issue.</blockquote>
+                  </div>
+                  <a href="#" className="testimonials-content--author w-inline-block"><img src={ImgAva} loading="lazy" sizes="(max-width: 991px) 34px, (max-width: 1279px) 3vw, (max-width: 1439px) 34px, (max-width: 1919px) 2vw, 34px" alt="" className="testimonials-content--author-photo" />
+                    <div className="testimonials-content--author-name">sara.indiana_92</div>
+                  </a>
+                </div>
+              </div>
+            </SplideSlide>
+            <SplideSlide className="testimonials-splide__slider">
+              <div className="blog--post-content testimonials--post-content">
+                <div className="blog--post-content-text testimonials--post-content-text">
+                  <div className="testimonials-content--just-to-float">
+                    <div className="testimonials-content--header">”</div>
+                    <blockquote className="testimonials-content--quote">A good review should describe various aspects of the customer experience. Did the customer receive fantastic customer service? Was an employee particularly helpful, and did the customer leave the employee’s name. <br /><br />Responding to this type of review can be tough. Without details to go off of, it can be difficult to know how to respond. Start by asking if the reviewer could give more details about their experience, then switch to email or direct messaging to finish solving the issue.</blockquote>
+                  </div>
+                  <a href="#" className="testimonials-content--author w-inline-block"><img src={ImgAva} loading="lazy" sizes="(max-width: 991px) 34px, (max-width: 1279px) 3vw, (max-width: 1439px) 34px, (max-width: 1919px) 2vw, 34px" alt="" className="testimonials-content--author-photo" />
+                    <div className="testimonials-content--author-name">sara.indiana_92</div>
+                  </a>
+                </div>
+              </div>
+            </SplideSlide>
+            <SplideSlide className="testimonials-splide__slider">
+              <div className="blog--post-content testimonials--post-content">
+                <div className="blog--post-content-text testimonials--post-content-text">
+                  <div className="testimonials-content--just-to-float">
+                    <div className="testimonials-content--header">”</div>
+                    <blockquote className="testimonials-content--quote">A good review should describe various aspects of the customer experience. Did the customer receive fantastic customer service? Was an employee particularly helpful, and did the customer leave the employee’s name. <br /><br />Responding to this type of review can be tough. Without details to go off of, it can be difficult to know how to respond. Start by asking if the reviewer could give more details about their experience, then switch to email or direct messaging to finish solving the issue.</blockquote>
+                  </div>
+                  <a href="#" className="testimonials-content--author w-inline-block"><img src={ImgAva} loading="lazy" sizes="(max-width: 991px) 34px, (max-width: 1279px) 3vw, (max-width: 1439px) 34px, (max-width: 1919px) 2vw, 34px" alt="" className="testimonials-content--author-photo" />
+                    <div className="testimonials-content--author-name">sara.indiana_92</div>
+                  </a>
+                </div>
+              </div>
+            </SplideSlide>
+          </SplideTrack>
+        </Splide>
         <div id="slider2" className="section-testimonials-slider splide">
           <div className="splide__track testimonials-splide__track">
             <div className="splide__list testimonials-splide__list">
@@ -285,7 +484,7 @@ const Landing = () => {
                       <div className="testimonials-content--header">”</div>
                       <blockquote className="testimonials-content--quote">A good review should describe various aspects of the customer experience. Did the customer receive fantastic customer service? Was an employee particularly helpful, and did the customer leave the employee’s name. <br /><br />Responding to this type of review can be tough. Without details to go off of, it can be difficult to know how to respond. Start by asking if the reviewer could give more details about their experience, then switch to email or direct messaging to finish solving the issue.</blockquote>
                     </div>
-                    <a href="#" className="testimonials-content--author w-inline-block"><img src="images/ava.jpg" loading="lazy" srcSet="images/ava-p-500.jpg 500w, images/ava.jpg 604w" sizes="(max-width: 991px) 34px, (max-width: 1279px) 3vw, (max-width: 1439px) 34px, (max-width: 1919px) 2vw, 34px" alt="" className="testimonials-content--author-photo" />
+                    <a href="#" className="testimonials-content--author w-inline-block"><img src={ImgAva} loading="lazy" sizes="(max-width: 991px) 34px, (max-width: 1279px) 3vw, (max-width: 1439px) 34px, (max-width: 1919px) 2vw, 34px" alt="" className="testimonials-content--author-photo" />
                       <div className="testimonials-content--author-name">sara.indiana_92</div>
                     </a>
                   </div>
@@ -298,7 +497,7 @@ const Landing = () => {
                       <div className="testimonials-content--header">”</div>
                       <blockquote className="testimonials-content--quote">A good review should describe various aspects of the customer experience. Did the customer receive fantastic customer service? Was an employee particularly helpful, and did the customer leave the employee’s name. <br /><br />Responding to this type of review can be tough. Without details to go off of, it can be difficult to know how to respond. </blockquote>
                     </div>
-                    <a href="#" className="testimonials-content--author w-inline-block"><img src="images/ava.jpg" loading="lazy" srcSet="images/ava-p-500.jpg 500w, images/ava.jpg 604w" sizes="(max-width: 991px) 34px, (max-width: 1279px) 3vw, (max-width: 1439px) 34px, (max-width: 1919px) 2vw, 34px" alt="" className="testimonials-content--author-photo" />
+                    <a href="#" className="testimonials-content--author w-inline-block"><img src={ImgAva} loading="lazy" srcSet="images/ava-p-500.jpg 500w, images/ava.jpg 604w" sizes="(max-width: 991px) 34px, (max-width: 1279px) 3vw, (max-width: 1439px) 34px, (max-width: 1919px) 2vw, 34px" alt="" className="testimonials-content--author-photo" />
                       <div className="testimonials-content--author-name">sara.indiana_92</div>
                     </a>
                   </div>
@@ -311,7 +510,7 @@ const Landing = () => {
                       <div className="testimonials-content--header">”</div>
                       <blockquote className="testimonials-content--quote">A good review should describe various aspects of the customer experience. <br /><br />Start by asking if the reviewer could give more details about their experience, then switch to email or direct messaging to finish solving the issue.</blockquote>
                     </div>
-                    <a href="#" className="testimonials-content--author w-inline-block"><img src="images/ava.jpg" loading="lazy" srcSet="images/ava-p-500.jpg 500w, images/ava.jpg 604w" sizes="(max-width: 991px) 34px, (max-width: 1279px) 3vw, (max-width: 1439px) 34px, (max-width: 1919px) 2vw, 34px" alt="" className="testimonials-content--author-photo" />
+                    <a href="#" className="testimonials-content--author w-inline-block"><img src={ImgAva} loading="lazy" srcSet="images/ava-p-500.jpg 500w, images/ava.jpg 604w" sizes="(max-width: 991px) 34px, (max-width: 1279px) 3vw, (max-width: 1439px) 34px, (max-width: 1919px) 2vw, 34px" alt="" className="testimonials-content--author-photo" />
                       <div className="testimonials-content--author-name">sara.indiana_92</div>
                     </a>
                   </div>
@@ -324,7 +523,7 @@ const Landing = () => {
                       <div className="testimonials-content--header">”</div>
                       <blockquote className="testimonials-content--quote">A good review should describe various aspects of the customer experience. Did the customer receive fantastic customer service? Was an employee particularly helpful, and did the customer leave the employee’s name. <br /><br />Responding to this type of review can be tough. Without details to go off of, it can be difficult to know how to respond. Start by asking if the reviewer could give more details about their experience, then switch to email or direct messaging to finish solving the issue.</blockquote>
                     </div>
-                    <a href="#" className="testimonials-content--author w-inline-block"><img src="images/ava.jpg" loading="lazy" srcSet="images/ava-p-500.jpg 500w, images/ava.jpg 604w" sizes="(max-width: 991px) 34px, (max-width: 1279px) 3vw, (max-width: 1439px) 34px, (max-width: 1919px) 2vw, 34px" alt="" className="testimonials-content--author-photo" />
+                    <a href="#" className="testimonials-content--author w-inline-block"><img src={ImgAva} loading="lazy" srcSet="images/ava-p-500.jpg 500w, images/ava.jpg 604w" sizes="(max-width: 991px) 34px, (max-width: 1279px) 3vw, (max-width: 1439px) 34px, (max-width: 1919px) 2vw, 34px" alt="" className="testimonials-content--author-photo" />
                       <div className="testimonials-content--author-name">sara.indiana_92</div>
                     </a>
                   </div>
@@ -353,7 +552,7 @@ const Landing = () => {
         <div className="container-4">
           <div className="footer-wrapper">
             <a href="index.html" aria-current="page" className="footer-brand w-inline-block w--current">
-              <img src="images/logo-white.svg" loading="lazy" alt="DOSS Gastro Club logo" className="doss-logo-white" /></a>
+              <img src={LogoWhite} loading="lazy" alt="DOSS Gastro Club logo" className="doss-logo-white" /></a>
             <div className="footer-content">
               <div id="w-node-_40d1f75c-f822-0cf1-6381-e0425a24704d-51b98b83" className="footer-block">
                 <div className="title-small">Company</div>

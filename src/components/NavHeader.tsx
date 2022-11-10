@@ -6,7 +6,7 @@ const NavHeader = () => {
       <div data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" className="navbar-container w-nav">
         <div className="container-regular">
           <div className="navbar-wrapper">
-            <a href="../index.html" className="navbar-brand w-nav-brand">
+            <a href="/" className="navbar-brand w-nav-brand">
               <img src={LogoBlack} loading="lazy" alt="" className="doss-logo-black" />
             </a>
             <div className="menu-button w-nav-button">

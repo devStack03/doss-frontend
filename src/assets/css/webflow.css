@@ -302,6 +302,19 @@ button,
   cursor: pointer;
   -webkit-appearance: button;
 }
+.splide__arrow {
+  width: 68px;
+  height: 68px;
+  border: 2px solid white;
+  background: rgba(255, 255, 255, 0);
+}
+
+.splide__arrow--prev-custom {
+  background: white;
+}
+.splide__arrow--next-custom {
+  background: white;
+}
 .w-form {
   margin: 0 0 15px;
 }
