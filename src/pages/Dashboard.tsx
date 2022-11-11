@@ -60,9 +60,19 @@ const Dashboard = () => {
     arrowNextElements[1]?.classList.add("splide__arrow--next-custom");
   });
 
-  const handleMenuInviteClick = (e: any) => {
-
-    setActiveSectionIndex(SECTION_INDEX.INVITE);
+  const handleMenuInviteClick = (index: SECTION_INDEX) => {
+    const menuItemInvitar = document.getElementById('menu-item--Invitar')!;
+    const itemImageInvitar = document.getElementById('item--image-Invitar')! as HTMLImageElement;
+    const itemTextInvitar = document.getElementById('item--text-Invitar')!;
+    const menuBlockInvitar = document.getElementById('menu-block--Invitar')!;
+    const menuItemOfertas = document.getElementById('menu-item--Ofertas')!;
+    const itemImageOfertas = document.getElementById('item--image-Ofertas')! as HTMLImageElement;
+    const itemTextOfertas = document.getElementById('item--text-Ofertas')!;
+    const menuBlockOfertas = document.getElementById('menu-block--Ofertas')!;
+    const menuItemEventos = document.getElementById('menu-item--Eventos'!);
+    const itemImageEventos = document.getElementById('menu--image-Eventos')! as HTMLImageElement;
+    const itemTextEventos = document.getElementById('menu--text-Eventos')!;
+    const menuBlockEventos = document.getElementById('menu-block--Eventos')!;
     const invitarDashImg = document.getElementById('invitar--dash--img')! as HTMLImageElement;
     const invitarDashText = document.getElementById('invitar--dash--text')!;
     const ofertasDashImg = document.getElementById('ofertas--dash--img')! as HTMLImageElement;
@@ -79,83 +89,136 @@ const Dashboard = () => {
     const menuListMobile = document.getElementById('menu-list--mobile')!;
     const menuIconMobileOpen = document.getElementById('menu-icon--mobile__open')!;
     const menuIconMobileClose = document.getElementById('menu-icon--mobile__close')!;
-    invitarMenuBlock.style.display = "block";
-    ofertasMenuBlock.style.display = "none";
-    eventosMenuBlock.style.display = "none";
-    invitarDashImg.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/635e82977080456d2f4f0811_emoji_people-24px--yellow.svg';
-    invitarDashText.style.color = '#FAC945';
-    ofertasDashImg.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/635e829770804577074f0810_baseline-style-24px--gray.svg';
-    ofertasDashText.style.color = '#9aa6ad';
-    eventosDashImg.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/6354254205de39185f0f5757_baseline-store_mall_directory-24px.svg';
-    eventosDashText.style.color = '#9aa6ad';
-    menuListMobile.style.display = "none";
-    menuIconMobileOpen.style.display = "block";
-    menuIconMobileClose.style.display = "none";
-    document.body.style.overflow = "scroll";
+
+    switch (index) {
+      case SECTION_INDEX.INVITE:
+        {
+          itemImageInvitar.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/63550ddec396ae10fd47b70a_emoji_people-24px--yellow.png';
+          itemTextInvitar.style.color = '#FAC945';
+          menuBlockInvitar.style.display = 'block';
+          menuBlockOfertas.style.display = 'none';
+          menuBlockEventos.style.display = 'none';
+          itemImageOfertas.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/63550dde4d0d411a15a00a1f_baseline-style-24px--gray.png';
+          itemTextOfertas.style.color = '#9aa6ad';
+          itemImageEventos.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/63550dded13ee9a996533727_baseline-store_mall_directory-24px--gray.png';
+          itemTextEventos.style.color = '#9aa6ad';
+
+          setActiveSectionIndex(SECTION_INDEX.INVITE);
+
+          invitarMenuBlock.style.display = "block";
+          ofertasMenuBlock.style.display = "none";
+          eventosMenuBlock.style.display = "none";
+          invitarDashImg.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/635e82977080456d2f4f0811_emoji_people-24px--yellow.svg';
+          invitarDashText.style.color = '#FAC945';
+          ofertasDashImg.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/635e829770804577074f0810_baseline-style-24px--gray.svg';
+          ofertasDashText.style.color = '#9aa6ad';
+          eventosDashImg.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/6354254205de39185f0f5757_baseline-store_mall_directory-24px.svg';
+          eventosDashText.style.color = '#9aa6ad';
+          menuListMobile.style.display = "none";
+          menuIconMobileOpen.style.display = "block";
+          menuIconMobileClose.style.display = "none";
+          document.body.style.overflow = "scroll";
+        }
+
+        break;
+      case SECTION_INDEX.OFFER:
+        {
+          itemImageOfertas.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/63550dde7e62507a04037713_baseline-style-24px--yellow.png';
+          itemTextOfertas.style.color = '#FAC945';
+          menuBlockInvitar.style.display = 'none';
+          menuBlockOfertas.style.display = 'block';
+          menuBlockEventos.style.display = 'none';
+          itemImageInvitar.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/63550dde13ceda566c9e0afa_emoji_people-24px--gray.png';
+          itemTextInvitar.style.color = '#9aa6ad';
+          itemImageEventos.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/63550dded13ee9a996533727_baseline-store_mall_directory-24px--gray.png';
+          itemTextEventos.style.color = '#9aa6ad';
+          setActiveSectionIndex(SECTION_INDEX.OFFER);
+          const invitarDashImg = document.getElementById('invitar--dash--img')! as HTMLImageElement;
+          const invitarDashText = document.getElementById('invitar--dash--text')!;
+          const ofertasDashImg = document.getElementById('ofertas--dash--img')! as HTMLImageElement;
+          const ofertasDashText = document.getElementById('ofertas--dash--text')!;
+          const eventosDashImg = document.getElementById('eventos--dash--img')! as HTMLImageElement;
+          const eventosDashText = document.getElementById('eventos--dash--text')!;
+          const invitarMenuBlock = document.getElementById('menu-block--Invitar')!;
+          const ofertasMenuBlock = document.getElementById('menu-block--Ofertas')!;
+          const eventosMenuBlock = document.getElementById('menu-block--Eventos')!;
+          const itemInvita = document.getElementById('menu-block--item--Invitar')!;
+          const itemOfertas = document.getElementById('menu-block--item--Ofertas')!;
+          const itemEventos = document.getElementById('menu-block--item--Eventos')!;
+          /* const menuIconMobile = document.getElementById('menu-icon--mobile'); */
+          const menuListMobile = document.getElementById('menu-list--mobile')!;
+          const menuIconMobileOpen = document.getElementById('menu-icon--mobile__open')!;
+          const menuIconMobileClose = document.getElementById('menu-icon--mobile__close')!;
+          invitarMenuBlock.style.display = "none";
+          ofertasMenuBlock.style.display = "block";
+          eventosMenuBlock.style.display = "none";
+          invitarDashImg.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/6354248d738f5f425b5ce1dc_emoji_people-24px.svg';
+          invitarDashText.style.color = '#9aa6ad';
+          ofertasDashImg.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/635e829798d20bbdaf5298ac_baseline-style-24px--yellow.svg';
+          ofertasDashText.style.color = '#FAC945';
+          eventosDashImg.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/6354254205de39185f0f5757_baseline-store_mall_directory-24px.svg';
+          eventosDashText.style.color = '#9aa6ad';
+          menuListMobile.style.display = "none";
+          menuIconMobileOpen.style.display = "block";
+          menuIconMobileClose.style.display = "none";
+          document.body.style.overflow = "scroll";
+        }
+        break;
+      case SECTION_INDEX.EVENT:
+        {
+          itemImageEventos.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/63550dde71b74a0ea5ff4229_baseline-store_mall_directory-24px--yellow.png';
+          itemTextEventos.style.color = '#FAC945';
+          menuBlockInvitar.style.display = 'none';
+          menuBlockOfertas.style.display = 'none';
+          menuBlockEventos.style.display = 'block';
+          itemImageInvitar.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/63550dde13ceda566c9e0afa_emoji_people-24px--gray.png';
+          itemTextInvitar.style.color = '#9aa6ad';
+          itemImageOfertas.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/63550dde4d0d411a15a00a1f_baseline-style-24px--gray.png';
+          itemTextOfertas.style.color = '#9aa6ad';
+          setActiveSectionIndex(SECTION_INDEX.EVENT);
+          const invitarDashImg = document.getElementById('invitar--dash--img')! as HTMLImageElement;
+          const invitarDashText = document.getElementById('invitar--dash--text')!;
+          const ofertasDashImg = document.getElementById('ofertas--dash--img')! as HTMLImageElement;
+          const ofertasDashText = document.getElementById('ofertas--dash--text')!;
+          const eventosDashImg = document.getElementById('eventos--dash--img')! as HTMLImageElement;
+          const eventosDashText = document.getElementById('eventos--dash--text')!;
+          const invitarMenuBlock = document.getElementById('menu-block--Invitar')!;
+          const ofertasMenuBlock = document.getElementById('menu-block--Ofertas')!;
+          const eventosMenuBlock = document.getElementById('menu-block--Eventos')!;
+          const itemInvita = document.getElementById('menu-block--item--Invitar')!;
+          const itemOfertas = document.getElementById('menu-block--item--Ofertas')!;
+          const itemEventos = document.getElementById('menu-block--item--Eventos')!;
+          /* const menuIconMobile = document.getElementById('menu-icon--mobile'); */
+          const menuListMobile = document.getElementById('menu-list--mobile')!;
+          const menuIconMobileOpen = document.getElementById('menu-icon--mobile__open')!;
+          const menuIconMobileClose = document.getElementById('menu-icon--mobile__close')!;
+          invitarMenuBlock.style.display = "none";
+          ofertasMenuBlock.style.display = "none";
+          eventosMenuBlock.style.display = "block";
+          invitarDashImg.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/6354248d738f5f425b5ce1dc_emoji_people-24px.svg';
+          invitarDashText.style.color = '#9aa6ad';
+          ofertasDashImg.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/635e829770804577074f0810_baseline-style-24px--gray.svg';
+          ofertasDashText.style.color = '#9aa6ad';
+          eventosDashImg.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/635e8297f514273be58da596_baseline-store_mall_directory-24px--yellow.svg';
+          eventosDashText.style.color = '#FAC945';
+          menuListMobile.style.display = "none";
+          menuIconMobileOpen.style.display = "block";
+          menuIconMobileClose.style.display = "none";
+          document.body.style.overflow = "scroll";
+        }
+        break;
+      default:
+        break;
+    }
+
+
   }
   const handleMenuOfferClick = (e: any) => {
-    setActiveSectionIndex(SECTION_INDEX.OFFER);
-    const invitarDashImg = document.getElementById('invitar--dash--img')! as HTMLImageElement;
-    const invitarDashText = document.getElementById('invitar--dash--text')!;
-    const ofertasDashImg = document.getElementById('ofertas--dash--img')! as HTMLImageElement;
-    const ofertasDashText = document.getElementById('ofertas--dash--text')!;
-    const eventosDashImg = document.getElementById('eventos--dash--img')! as HTMLImageElement;
-    const eventosDashText = document.getElementById('eventos--dash--text')!;
-    const invitarMenuBlock = document.getElementById('menu-block--Invitar')!;
-    const ofertasMenuBlock = document.getElementById('menu-block--Ofertas')!;
-    const eventosMenuBlock = document.getElementById('menu-block--Eventos')!;
-    const itemInvita = document.getElementById('menu-block--item--Invitar')!;
-    const itemOfertas = document.getElementById('menu-block--item--Ofertas')!;
-    const itemEventos = document.getElementById('menu-block--item--Eventos')!;
-    /* const menuIconMobile = document.getElementById('menu-icon--mobile'); */
-    const menuListMobile = document.getElementById('menu-list--mobile')!;
-    const menuIconMobileOpen = document.getElementById('menu-icon--mobile__open')!;
-    const menuIconMobileClose = document.getElementById('menu-icon--mobile__close')!;
-    invitarMenuBlock.style.display = "none";
-    ofertasMenuBlock.style.display = "block";
-    eventosMenuBlock.style.display = "none";
-    invitarDashImg.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/6354248d738f5f425b5ce1dc_emoji_people-24px.svg';
-    invitarDashText.style.color = '#9aa6ad';
-    ofertasDashImg.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/635e829798d20bbdaf5298ac_baseline-style-24px--yellow.svg';
-    ofertasDashText.style.color = '#FAC945';
-    eventosDashImg.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/6354254205de39185f0f5757_baseline-store_mall_directory-24px.svg';
-    eventosDashText.style.color = '#9aa6ad';
-    menuListMobile.style.display = "none";
-    menuIconMobileOpen.style.display = "block";
-    menuIconMobileClose.style.display = "none";
-    document.body.style.overflow = "scroll";
+
   }
   const handleMenuEventClick = (e: any) => {
     setActiveSectionIndex(SECTION_INDEX.EVENT);
-    const invitarDashImg = document.getElementById('invitar--dash--img')! as HTMLImageElement;
-    const invitarDashText = document.getElementById('invitar--dash--text')!;
-    const ofertasDashImg = document.getElementById('ofertas--dash--img')! as HTMLImageElement;
-    const ofertasDashText = document.getElementById('ofertas--dash--text')!;
-    const eventosDashImg = document.getElementById('eventos--dash--img')! as HTMLImageElement;
-    const eventosDashText = document.getElementById('eventos--dash--text')!;
-    const invitarMenuBlock = document.getElementById('menu-block--Invitar')!;
-    const ofertasMenuBlock = document.getElementById('menu-block--Ofertas')!;
-    const eventosMenuBlock = document.getElementById('menu-block--Eventos')!;
-    const itemInvita = document.getElementById('menu-block--item--Invitar')!;
-    const itemOfertas = document.getElementById('menu-block--item--Ofertas')!;
-    const itemEventos = document.getElementById('menu-block--item--Eventos')!;
-    /* const menuIconMobile = document.getElementById('menu-icon--mobile'); */
-    const menuListMobile = document.getElementById('menu-list--mobile')!;
-    const menuIconMobileOpen = document.getElementById('menu-icon--mobile__open')!;
-    const menuIconMobileClose = document.getElementById('menu-icon--mobile__close')!;
-    invitarMenuBlock.style.display = "none";
-    ofertasMenuBlock.style.display = "none";
-    eventosMenuBlock.style.display = "block";
-    invitarDashImg.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/6354248d738f5f425b5ce1dc_emoji_people-24px.svg';
-    invitarDashText.style.color = '#9aa6ad';
-    ofertasDashImg.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/635e829770804577074f0810_baseline-style-24px--gray.svg';
-    ofertasDashText.style.color = '#9aa6ad';
-    eventosDashImg.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/635e8297f514273be58da596_baseline-store_mall_directory-24px--yellow.svg';
-    eventosDashText.style.color = '#FAC945';
-    menuListMobile.style.display = "none";
-    menuIconMobileOpen.style.display = "block";
-    menuIconMobileClose.style.display = "none";
-    document.body.style.overflow = "scroll";
+
   }
 
   const handleMobileIconOpenClick = () => {
@@ -182,9 +245,9 @@ const Dashboard = () => {
     <>
       <div className="navigation-mobile--dashboard">
         <div className="navigation-mobile--head hide">
-          <a href="../index.html" className="w-inline-block">
+          <Link to={`/`} replace className="w-inline-block">
             <img src={SvgLogoBlack} loading="lazy" alt="" className="logo" />
-          </a>
+          </Link>
           <div id="menu-icon--mobile" className="nav-mobile--icon-block" >
             <img src={ImgUnionOne} loading="lazy" id="menu-icon--mobile__open" alt="" className=' tw-cursor-pointer' onClick={handleMobileIconOpenClick} />
             <img src={ImgUnionTwo} loading="lazy" id="menu-icon--mobile__close" alt="" className="image-6 tw-cursor-pointer" onClick={handleMobileIconCloseClick} />
@@ -197,15 +260,15 @@ const Dashboard = () => {
             </div>
             <div>Username</div>
           </div>
-          <div id="menu-block--item--Invitar" className="menu-item--invitar--dash tw-cursor-pointer" onClick={handleMenuInviteClick}>
+          <div id="menu-block--item--Invitar" className="menu-item--invitar--dash tw-cursor-pointer" onClick={() => handleMenuInviteClick(SECTION_INDEX.INVITE)}>
             <img src={SvgEmojiPeopleGray} loading="lazy" id="invitar--dash--img" alt="" />
             <div id="invitar--dash--text">Invitar un amigo</div>
           </div>
-          <div id="menu-block--item--Ofertas" className="menu-item--ofertas--dash tw-cursor-pointer" onClick={handleMenuOfferClick}>
+          <div id="menu-block--item--Ofertas" className="menu-item--ofertas--dash tw-cursor-pointer" onClick={() => handleMenuInviteClick(SECTION_INDEX.OFFER)}>
             <img src={SvgBaseLineStyleYellow} loading="lazy" id="ofertas--dash--img" alt="" />
             <div id="ofertas--dash--text" className="text-block-14">Ofertas</div>
           </div>
-          <div id="menu-block--item--Eventos" className="menu-item--eventos--dash tw-cursor-pointer" onClick={handleMenuEventClick}>
+          <div id="menu-block--item--Eventos" className="menu-item--eventos--dash tw-cursor-pointer" onClick={() => handleMenuInviteClick(SECTION_INDEX.EVENT)}>
             <img src={SvgBaseLineStoreMallDirectoryGray} loading="lazy" id="eventos--dash--img" alt="" />
             <div id="eventos--dash--text">Eventos</div>
           </div>
@@ -277,19 +340,19 @@ const Dashboard = () => {
             <div className="user-icon--name">Alejandro L.</div>
           </div>
           <div className="dashbourd-menu">
-            <div id="menu-item--Invitar" className="dashboard-menu-item menu-item--invitar dashboard--pc-menu" onClick={handleMenuInviteClick}>
+            <div id="menu-item--Invitar" className="dashboard-menu-item menu-item--invitar dashboard--pc-menu" onClick={() => handleMenuInviteClick(SECTION_INDEX.INVITE)}>
               <img
                 src={SvgEmojiPeopleGray} loading="lazy" id="item--image-Invitar" alt=""
                 className="menu-item--image item--image-invitar" />
               <div id="item--text-Invitar" className="menu-item--text item--text-invitar">Invitar un amigo</div>
             </div>
-            <div id="menu-item--Ofertas" className="dashboard-menu-item menu-item--ofertas" onClick={handleMenuOfferClick}>
+            <div id="menu-item--Ofertas" className="dashboard-menu-item menu-item--ofertas" onClick={() => handleMenuInviteClick(SECTION_INDEX.OFFER)}>
               <img
                 src={SvgBaseLineStyleYellow} loading="lazy" id="item--image-Ofertas" alt=""
                 className="menu-item--image item--image-ofertas" />
               <div id="item--text-Ofertas" className="menu-item--text item--text-ofertas">Ofertas</div>
             </div>
-            <div id="menu-item--Eventos" className="dashboard-menu-item menu-item--eventos" onClick={handleMenuEventClick}>
+            <div id="menu-item--Eventos" className="dashboard-menu-item menu-item--eventos" onClick={() => handleMenuInviteClick(SECTION_INDEX.EVENT)}>
               <img
                 src={SvgBaseLineStoreMallDirectoryGray} loading="lazy" id="menu--image-Eventos" alt=""
                 className="menu-item--image menu--image-eventos" />

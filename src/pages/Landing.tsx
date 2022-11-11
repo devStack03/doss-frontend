@@ -233,7 +233,9 @@ const Landing = () => {
         <div data-w-id="22adec4b-42aa-64b1-612e-23065a88637c" data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" className="navbar-container w-nav">
           <div className="container-regular">
             <div className="navbar-wrapper navbar--homepage">
-              <a href="index.html" aria-current="page" className="navbar-brand w-nav-brand w--current"><img src={LogoBlack} loading="lazy" alt="" className="doss-logo-black" /></a>
+              <a href="index.html" aria-current="page" className="navbar-brand w-nav-brand w--current">
+                <img src={LogoBlack} loading="lazy" alt="" className="doss-logo-black" />
+              </a>
               <nav role="navigation" className="nav-menu-wrapper w-nav-menu">
                 <ul data-w-id="22adec4b-42aa-64b1-612e-23065a886382" role="list" className="nav-menu w-list-unstyled">
                   <li className="list-item">
