@@ -22,6 +22,10 @@ class UserService {
     createSubscription(data: any) {
         return Http.post<any>(this.apiUrl + '/create-subscription', data);
     }
+
+    createCustomerPortal(data: any) {
+        return Http.post<any>(this.apiUrl + '/create-customer-portal-session', data);
+    }
 }
 
 export default new UserService();

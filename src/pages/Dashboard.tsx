@@ -20,6 +20,7 @@ import ImgUnionTwo from '../assets/images/Union-2.png';
 import './dashboard.css';
 import { Elements, useStripe } from '@stripe/react-stripe-js';
 import { Appearance, loadStripe } from '@stripe/stripe-js';
+import userService from '../services/user.service';
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || '');
 
 export enum SECTION_INDEX {
@@ -59,6 +60,23 @@ const Dashboard = () => {
     arrowNextElements[0]?.classList.add("splide__arrow--next-custom");
     arrowNextElements[1]?.classList.add("splide__arrow--next-custom");
   });
+
+  const handleOpenStripeCustomerPortal = () => {
+    userService.createCustomerPortal({
+      customerId: 'cus_MllSYNZyYjWko8'
+      // customerId: 'cus_MlPq3FRioFLnMo'
+    }).then((res) => {
+      console.log(res);
+      if (res.data.session){
+        const openGoogleStoreUrl = () => {
+          window.open(res.data.session.url, '_blank', 'noopener,noreferrer')?.focus();
+          // const newWindow = window.open('url', '_blank', 'noopener,noreferrer')
+          // if (newWindow) newWindow.opener = null
+        }
+      }
+      
+    })
+  }
 
   const handleMenuInviteClick = (index: SECTION_INDEX) => {
     const menuItemInvitar = document.getElementById('menu-item--Invitar')!;
@@ -337,7 +355,7 @@ const Dashboard = () => {
             <div className="user-icon">
               <div className="user-icon--text">S</div>
             </div>
-            <div className="user-icon--name">Alejandro L.</div>
+            <div className="user-icon--name tw-cursor-pointer" onClick={handleOpenStripeCustomerPortal}>Alejandro L.</div>
           </div>
           <div className="dashbourd-menu">
             <div id="menu-item--Invitar" className="dashboard-menu-item menu-item--invitar dashboard--pc-menu" onClick={() => handleMenuInviteClick(SECTION_INDEX.INVITE)}>
