@@ -160,7 +160,55 @@ const Landing = () => {
     arrowPrevElements[1]?.classList.add("splide__arrow--prev-custom");
     var arrowNextElements = document.getElementsByClassName("splide__arrow--next");
     arrowNextElements[1]?.classList.add("splide__arrow--next-custom");
-  })
+
+    // document.addEventListener('DOMContentLoaded', function () {
+
+    //   homeMenuIconMobileOpen?.addEventListener('click', function () {
+    //     homeMenuListMobile!.style.display = "flex";
+    //     homeMenuIconMobileOpen!.style.display = "none";
+    //     homeMenuIconMobileClose!.style.display = "block";
+    //     document.body.style.overflow = "hidden";
+    //     homeMenuBlock!.style.backgroundColor = "white";
+    //     homeMenuBlock!.style.marginBottom = "0px";
+    //   });
+    //   homeMenuIconMobileClose!.addEventListener('click', function () {
+    //     homeMenuListMobile!.style.display = "none";
+    //     homeMenuIconMobileOpen!.style.display = "block";
+    //     homeMenuIconMobileClose!.style.display = "none";
+    //     document.body.style.overflow = "scroll";
+    //     homeMenuBlock!.style.backgroundColor = "transparent";
+    //     homeMenuBlock!.style.marginBottom = "-144px";
+    //   });
+    // });
+  });
+
+  const handleClickMobileMenuOpen = () => {
+    const homeMenuListMobile = document.getElementById('home-menu-list--mobile');
+    const homeMenuIconMobileOpen = document.getElementById('home-menu-icon--mobile__open');
+    const homeMenuIconMobileClose = document.getElementById('home-menu-icon--mobile__close');
+    const homeMenuBlock = document.getElementById('home-menu__block');
+
+    homeMenuListMobile!.style.display = "flex";
+    homeMenuIconMobileOpen!.style.display = "none";
+    homeMenuIconMobileClose!.style.display = "block";
+    document.body.style.overflow = "hidden";
+    homeMenuBlock!.style.backgroundColor = "white";
+    homeMenuBlock!.style.marginBottom = "0px";
+  }
+
+  const handleClickMobileMenuClose = () => {
+    const homeMenuListMobile = document.getElementById('home-menu-list--mobile');
+    const homeMenuIconMobileOpen = document.getElementById('home-menu-icon--mobile__open');
+    const homeMenuIconMobileClose = document.getElementById('home-menu-icon--mobile__close');
+    const homeMenuBlock = document.getElementById('home-menu__block');
+
+    homeMenuListMobile!.style.display = "none";
+    homeMenuIconMobileOpen!.style.display = "block";
+    homeMenuIconMobileClose!.style.display = "none";
+    document.body.style.overflow = "scroll";
+    homeMenuBlock!.style.backgroundColor = "transparent";
+    homeMenuBlock!.style.marginBottom = "-144px";
+  }
 
   return (
     <>
@@ -174,8 +222,8 @@ const Landing = () => {
             <Link to="/login" className="menu-list__button--light w-button">Iniciar Sesión</Link>
           </div>
           <div id="home-menu-icon--mobile" className="home-nav-mobile--icon-block">
-            <img src={Union1} loading="lazy" id="home-menu-icon--mobile__open" alt="" />
-            <img src={Union2} loading="lazy" id="home-menu-icon--mobile__close" alt="" className="image-7" />
+            <img src={Union1} loading="lazy" id="home-menu-icon--mobile__open" alt="" onClick={handleClickMobileMenuOpen} className=" tw-cursor-pointer" />
+            <img src={Union2} loading="lazy" id="home-menu-icon--mobile__close" alt="" className="image-7 tw-cursor-pointer" onClick={handleClickMobileMenuClose} />
           </div>
         </div>
       </div>
