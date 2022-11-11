@@ -412,7 +412,7 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <Splide className="slider-blovk--basic oferta--splide" hasTrack={false} options={option1}>
+            <Splide id="slider1" className="slider-blovk--basic oferta--splide" hasTrack={false} options={option1}>
               <div className="splide__arrows">
                 <button className="splide__arrow splide__arrow--prev">Prev</button>
                 <button className="splide__arrow splide__arrow--next">Next</button>
@@ -455,7 +455,7 @@ const Dashboard = () => {
                 <div className="slider-block--text">Tus ofertas</div>
               </div>
             </div>
-            <Splide className="slider-blovk--basic oferta--splide" hasTrack={false} options={option1}>
+            <Splide id="slider2" className="slider-blovk--basic oferta--splide" hasTrack={false} options={option1}>
               <div className="splide__arrows">
                 <button className="splide__arrow splide__arrow--prev">Prev</button>
                 <button className="splide__arrow splide__arrow--next">Next</button>
