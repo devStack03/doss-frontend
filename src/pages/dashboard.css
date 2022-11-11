@@ -1,0 +1,61 @@
+.w-input,
+.w-select {
+  font-size: 16px !important;
+}
+#slider1 {
+  overflow: hidden;
+  height: 100vh;
+}
+
+#slider2 {
+  overflow: hidden;
+  height: 100vh;
+}
+</style > <style > .splide__arrows--ltr-custom {
+  margin-bottom: 26px;
+}
+
+.splide__arrow--prev-custom svg {
+  height: 1.2em;
+  width: 1.2em;
+}
+
+.splide__arrow--next-custom svg {
+  height: 1.2em;
+  width: 1.2em;
+}
+
+.splide__arrow--prev-custom:hover {
+  background: #9aa6ad;
+}
+
+.splide__arrow--next-custom:hover {
+  background: #9aa6ad;
+}
+
+.splide__arrow--prev-custom {
+  margin-right: 18px;
+  transform: rotate(180deg);
+  background-color: white;
+  border-radius: 8px;
+  width: 75px;
+  padding-top: 15px;
+  padding-bottom: 10px;
+}
+
+.splide__arrow--next-custom {
+  background-color: white;
+  border-radius: 8px;
+  width: 75px;
+  padding-top: 15px;
+  padding-bottom: 10px;
+}
+
+.splide__track {
+  overflow: visible !important;
+}
+
+.splide__slide.w-dyn-item {
+  background: white;
+  padding: 30px;
+}

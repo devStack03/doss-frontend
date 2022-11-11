@@ -161,6 +161,8 @@ const Landing = () => {
     var arrowNextElements = document.getElementsByClassName("splide__arrow--next");
     arrowNextElements[1]?.classList.add("splide__arrow--next-custom");
 
+    
+
     // document.addEventListener('DOMContentLoaded', function () {
 
     //   homeMenuIconMobileOpen?.addEventListener('click', function () {
