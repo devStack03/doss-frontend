@@ -37,7 +37,7 @@ const Login = () => {
           // } else if (res.data.status === -5) {
           setCodeInvalid(true);
         } else {
-          dispatch(userLoggedin());
+          dispatch(userLoggedin(res.data.user));
           navigate('/dashboard', { replace: true });
         }
       }).catch((err) => {

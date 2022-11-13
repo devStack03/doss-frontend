@@ -13,6 +13,13 @@ export type ResponseDataType = {
   translate: string
 }
 
+export type UserDataType = {
+  id: string,
+  email: string,
+  phoneNumber: string,
+  fullName: string
+}
+
 const blankData = [{
   text: '',
   translate: ''
@@ -23,12 +30,14 @@ interface AuthSliceState {
   registered: boolean,
   loggedin: boolean,
   data: Array<any>,
+  user: UserDataType | null
 }
 const initialState: AuthSliceState = {
   isLoading: false,
   registered: false,
   loggedin: false,
-  data: blankData
+  data: blankData,
+  user: null
 }
 
 export function fetchDataList() {
@@ -69,8 +78,9 @@ export const apiSlice = createSlice({
     userRegistered: (state) => {
       state.registered = true;
     },
-    userLoggedin: (state) => {
+    userLoggedin: (state, payload) => {
       state.loggedin = true;
+      state.user = payload.payload;
     }
   },
   extraReducers: (builder) => {

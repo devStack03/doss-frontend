@@ -11,8 +11,11 @@ import InviteSection from '../components/dashboard/InviteSection';
 import { Splide, SplideSlide, SplideTrack } from '@splidejs/react-splide';
 import ImgSuffolkPunchFull from '../assets/images/suffolk-punch-FULL-p-500.png';
 import SvgEmojiPeopleGray from '../assets/images/emoji_people-24px--gray.svg';
+import SvgEmojiPeopleYellow from '../assets/images/emoji_people-24px--yellow.svg';
 import SvgBaseLineStyleYellow from '../assets/images/baseline-style-24px--yellow.svg';
+import SvgBaseLineStyleGray from '../assets/images/baseline-style-24px--gray.svg';
 import SvgBaseLineStoreMallDirectoryGray from '../assets/images/baseline-store_mall_directory-24px--gray.svg';
+import SvgBaseLineStoreMallDirectoryYellow from '../assets/images/baseline-store_mall_directory-24px--yellow.svg';
 
 import SvgLogoBlack from '../assets/images/logo-black.svg';
 import ImgUnionOne from '../assets/images/Union-1.png';
@@ -21,6 +24,7 @@ import './dashboard.css';
 import { Elements, useStripe } from '@stripe/react-stripe-js';
 import { Appearance, loadStripe } from '@stripe/stripe-js';
 import userService from '../services/user.service';
+import { useTypedSelector } from '../store/store';
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || '');
 
 export enum SECTION_INDEX {
@@ -32,11 +36,22 @@ export enum SECTION_INDEX {
 const option1 = {
   type: 'loop',
   perPage: 5,
+  arrows: true,
   fixedWidth: '327px',
   gap: '22px',
   arrowPath: 'm15.5 0.932-4.3 4.38 14.5 14.6-14.5 14.5 4.3 4.4 14.6-14.6 4.4-4.3-4.4-4.4-14.6-14.6z',
   breakpoints: {
-    478: {
+    1440: {
+      fixedWidth: '311px',
+      gap: '22px',
+      perPage: 1
+    },
+    900: {
+      fixedWidth: '311px',
+      gap: '22px',
+      perPage: 1
+    },
+    690: {
       direction: 'ttb',
       height: '300px',
       autoHeight: true,
@@ -49,6 +64,9 @@ const option1 = {
 const Dashboard = () => {
 
   const [activeSectionIndex, setActiveSectionIndex] = useState<SECTION_INDEX>(SECTION_INDEX.INVITE);
+
+  const { user } = useTypedSelector(state => state.api);
+
   useEffect(() => {
     var arrowsBlockElement = document.getElementsByClassName("splide__arrows--ltr");
     arrowsBlockElement[0]?.classList.add("splide__arrows--ltr-custom");
@@ -111,14 +129,14 @@ const Dashboard = () => {
     switch (index) {
       case SECTION_INDEX.INVITE:
         {
-          itemImageInvitar.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/63550ddec396ae10fd47b70a_emoji_people-24px--yellow.png';
+          itemImageInvitar.src = SvgEmojiPeopleYellow;
           itemTextInvitar.style.color = '#FAC945';
           menuBlockInvitar.style.display = 'block';
           menuBlockOfertas.style.display = 'none';
           menuBlockEventos.style.display = 'none';
-          itemImageOfertas.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/63550dde4d0d411a15a00a1f_baseline-style-24px--gray.png';
+          itemImageOfertas.src = SvgBaseLineStyleGray;
           itemTextOfertas.style.color = '#9aa6ad';
-          itemImageEventos.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/63550dded13ee9a996533727_baseline-store_mall_directory-24px--gray.png';
+          itemImageEventos.src = SvgBaseLineStoreMallDirectoryGray;
           itemTextEventos.style.color = '#9aa6ad';
 
           setActiveSectionIndex(SECTION_INDEX.INVITE);
@@ -126,11 +144,11 @@ const Dashboard = () => {
           invitarMenuBlock.style.display = "block";
           ofertasMenuBlock.style.display = "none";
           eventosMenuBlock.style.display = "none";
-          invitarDashImg.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/635e82977080456d2f4f0811_emoji_people-24px--yellow.svg';
+          invitarDashImg.src = SvgEmojiPeopleYellow;
           invitarDashText.style.color = '#FAC945';
-          ofertasDashImg.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/635e829770804577074f0810_baseline-style-24px--gray.svg';
+          ofertasDashImg.src = SvgBaseLineStyleGray;
           ofertasDashText.style.color = '#9aa6ad';
-          eventosDashImg.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/6354254205de39185f0f5757_baseline-store_mall_directory-24px.svg';
+          eventosDashImg.src = SvgBaseLineStoreMallDirectoryGray;
           eventosDashText.style.color = '#9aa6ad';
           menuListMobile.style.display = "none";
           menuIconMobileOpen.style.display = "block";
@@ -141,14 +159,14 @@ const Dashboard = () => {
         break;
       case SECTION_INDEX.OFFER:
         {
-          itemImageOfertas.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/63550dde7e62507a04037713_baseline-style-24px--yellow.png';
+          itemImageOfertas.src = SvgBaseLineStyleYellow;
           itemTextOfertas.style.color = '#FAC945';
           menuBlockInvitar.style.display = 'none';
           menuBlockOfertas.style.display = 'block';
           menuBlockEventos.style.display = 'none';
-          itemImageInvitar.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/63550dde13ceda566c9e0afa_emoji_people-24px--gray.png';
+          itemImageInvitar.src = SvgEmojiPeopleGray;
           itemTextInvitar.style.color = '#9aa6ad';
-          itemImageEventos.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/63550dded13ee9a996533727_baseline-store_mall_directory-24px--gray.png';
+          itemImageEventos.src = SvgBaseLineStoreMallDirectoryGray;
           itemTextEventos.style.color = '#9aa6ad';
           setActiveSectionIndex(SECTION_INDEX.OFFER);
           const invitarDashImg = document.getElementById('invitar--dash--img')! as HTMLImageElement;
@@ -170,11 +188,11 @@ const Dashboard = () => {
           invitarMenuBlock.style.display = "none";
           ofertasMenuBlock.style.display = "block";
           eventosMenuBlock.style.display = "none";
-          invitarDashImg.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/6354248d738f5f425b5ce1dc_emoji_people-24px.svg';
+          invitarDashImg.src = SvgEmojiPeopleGray;
           invitarDashText.style.color = '#9aa6ad';
-          ofertasDashImg.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/635e829798d20bbdaf5298ac_baseline-style-24px--yellow.svg';
+          ofertasDashImg.src = SvgBaseLineStyleYellow;
           ofertasDashText.style.color = '#FAC945';
-          eventosDashImg.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/6354254205de39185f0f5757_baseline-store_mall_directory-24px.svg';
+          eventosDashImg.src = SvgBaseLineStoreMallDirectoryGray;
           eventosDashText.style.color = '#9aa6ad';
           menuListMobile.style.display = "none";
           menuIconMobileOpen.style.display = "block";
@@ -184,14 +202,14 @@ const Dashboard = () => {
         break;
       case SECTION_INDEX.EVENT:
         {
-          itemImageEventos.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/63550dde71b74a0ea5ff4229_baseline-store_mall_directory-24px--yellow.png';
+          itemImageEventos.src = SvgBaseLineStoreMallDirectoryYellow;
           itemTextEventos.style.color = '#FAC945';
           menuBlockInvitar.style.display = 'none';
           menuBlockOfertas.style.display = 'none';
           menuBlockEventos.style.display = 'block';
-          itemImageInvitar.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/63550dde13ceda566c9e0afa_emoji_people-24px--gray.png';
+          itemImageInvitar.src = SvgEmojiPeopleGray;
           itemTextInvitar.style.color = '#9aa6ad';
-          itemImageOfertas.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/63550dde4d0d411a15a00a1f_baseline-style-24px--gray.png';
+          itemImageOfertas.src = SvgBaseLineStyleGray;
           itemTextOfertas.style.color = '#9aa6ad';
           setActiveSectionIndex(SECTION_INDEX.EVENT);
           const invitarDashImg = document.getElementById('invitar--dash--img')! as HTMLImageElement;
@@ -213,11 +231,11 @@ const Dashboard = () => {
           invitarMenuBlock.style.display = "none";
           ofertasMenuBlock.style.display = "none";
           eventosMenuBlock.style.display = "block";
-          invitarDashImg.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/6354248d738f5f425b5ce1dc_emoji_people-24px.svg';
+          invitarDashImg.src = SvgEmojiPeopleGray;
           invitarDashText.style.color = '#9aa6ad';
-          ofertasDashImg.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/635e829770804577074f0810_baseline-style-24px--gray.svg';
+          ofertasDashImg.src = SvgBaseLineStyleGray;
           ofertasDashText.style.color = '#9aa6ad';
-          eventosDashImg.src = 'https://uploads-ssl.webflow.com/634d116b2d6ff751bfb98b82/635e8297f514273be58da596_baseline-store_mall_directory-24px--yellow.svg';
+          eventosDashImg.src = SvgBaseLineStoreMallDirectoryYellow;
           eventosDashText.style.color = '#FAC945';
           menuListMobile.style.display = "none";
           menuIconMobileOpen.style.display = "block";
@@ -276,7 +294,7 @@ const Dashboard = () => {
             <div className="user-icon user-icon--doss">
               <div className="user-icon--text">S</div>
             </div>
-            <div>Username</div>
+            <div>{user?.fullName}</div>
           </div>
           <div id="menu-block--item--Invitar" className="menu-item--invitar--dash tw-cursor-pointer" onClick={() => handleMenuInviteClick(SECTION_INDEX.INVITE)}>
             <img src={SvgEmojiPeopleGray} loading="lazy" id="invitar--dash--img" alt="" />
@@ -355,7 +373,7 @@ const Dashboard = () => {
             <div className="user-icon">
               <div className="user-icon--text">S</div>
             </div>
-            <div className="user-icon--name tw-cursor-pointer" onClick={handleOpenStripeCustomerPortal}>Alejandro L.</div>
+            <div className="user-icon--name tw-cursor-pointer" onClick={handleOpenStripeCustomerPortal}>{user?.fullName}</div>
           </div>
           <div className="dashbourd-menu">
             <div id="menu-item--Invitar" className="dashboard-menu-item menu-item--invitar dashboard--pc-menu" onClick={() => handleMenuInviteClick(SECTION_INDEX.INVITE)}>
@@ -422,8 +440,8 @@ const Dashboard = () => {
           </div>
           <div id="menu-block--Eventos" className="menu-block--eventos">
             <div className="block-head">
-              <h2 className="dashboard--heading">Heading</h2>
-              <div className="dashboard--title">This is some text inside of a div block.</div>
+              <h2 className="dashboard--heading">Hola {user?.fullName} ❤️</h2>
+              <div className="dashboard--title">Overview</div>
               <div className="slider--block--header">
                 <div className="slider-block--emoji">💃</div>
                 <div className="slider-block--text">Eventos</div>
@@ -435,8 +453,8 @@ const Dashboard = () => {
                 <button className="splide__arrow splide__arrow--prev">Prev</button>
                 <button className="splide__arrow splide__arrow--next">Next</button>
               </div>
-              <SplideTrack className="ofertas--track w-dyn-list">
-                <SplideSlide className="w-dyn-item tw-rounded-3xl">
+              <SplideTrack className="ofertas--track w-dyn-list w-max-w-[650px] lg:tw-max-w-[660px] xl:tw-max-w-[999px] 2xl:tw-max-w-[1380px]">
+                <SplideSlide className="wl-dyn-item tw-rounded-3xl">
                   <div className="ofertas--content-block">
                     <div className="ofertas--content-text">
                       <div className="ofertas-header">
@@ -466,8 +484,8 @@ const Dashboard = () => {
           </div>
           <div id="menu-block--Ofertas" className="menu-block--ofertas">
             <div className="block-head">
-              <h2 className="dashboard--heading">Heading</h2>
-              <div className="dashboard--title">This is some text inside of a div block.</div>
+              <h2 className="dashboard--heading">Hola {user?.fullName} ❤️</h2>
+              <div className="dashboard--title">Overview</div>
               <div className="slider--block--header">
                 <div className="slider-block--emoji">💸</div>
                 <div className="slider-block--text">Tus ofertas</div>
@@ -478,8 +496,8 @@ const Dashboard = () => {
                 <button className="splide__arrow splide__arrow--prev">Prev</button>
                 <button className="splide__arrow splide__arrow--next">Next</button>
               </div>
-              <SplideTrack className="ofertas--track w-dyn-list">
-                <SplideSlide className="w-dyn-item tw-rounded-3xl">
+              <SplideTrack className="ofertas--track w-dyn-list tw-max-w-[650px] lg:tw-max-w-[660px] xl:tw-max-w-[999px] 2xl:tw-max-w-[1380px]">
+                <SplideSlide className="wl-dyn-item tw-rounded-3xl">
                   <div className="ofertas--content-block"><div className="ofertas--content-text"><div className="ofertas-header"><div className="ofertas--title-and-timer"><div className="ofertas--title">Suffolk punch Copy 10</div><div className="ofertas--timer ofertas--timer-emoji">⏳</div><div className="ofertas--timer">October 30, 2022</div><div className="ofertas--timer ofertas--timer-post w-condition-invisible">left</div></div><div className="ofertas--subtitle">culinary cafe + taphouse in South End</div></div></div><a href="/offers/suffolk-punch-copy-10" className="link-block link-block--ofertas w-inline-block"><div className="offer-block-button offer-block-button_responsive"><div className="offer-block-currency-icon"><div className="currency-icon-text">€</div></div><div className="currency-icon-value">15€ Para Gastar</div></div><div className="w-embed"></div></a></div>
                   <div className="ofertas--image-block">
                     <img src={ImgSuffolkPunchFull} loading="lazy" alt="Suffolk punch Copy 10" sizes="(max-width: 1919px) 175.00001525878906px, 9vw" className="ofertas--image" /></div>

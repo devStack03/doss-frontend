@@ -1334,7 +1334,7 @@ h1 {
 }
 
 .splide__track.ofertas--track {
-  max-width: none;
+  /* max-width: none; */
 }
 
 .splide__list {

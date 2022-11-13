@@ -526,79 +526,7 @@ const Landing = () => {
             </SplideSlide>
           </SplideTrack>
         </Splide>
-        <div id="slider2" className="section-testimonials-slider splide">
-          <div className="splide__track testimonials-splide__track">
-            <div className="splide__list testimonials-splide__list">
-              <div className="splide__slide testimonials-splide__slider">
-                <div className="blog--post-content testimonials--post-content">
-                  <div className="blog--post-content-text testimonials--post-content-text">
-                    <div className="testimonials-content--just-to-float">
-                      <div className="testimonials-content--header">”</div>
-                      <blockquote className="testimonials-content--quote">A good review should describe various aspects of the customer experience. Did the customer receive fantastic customer service? Was an employee particularly helpful, and did the customer leave the employee’s name. <br /><br />Responding to this type of review can be tough. Without details to go off of, it can be difficult to know how to respond. Start by asking if the reviewer could give more details about their experience, then switch to email or direct messaging to finish solving the issue.</blockquote>
-                    </div>
-                    <a href="#" className="testimonials-content--author w-inline-block"><img src={ImgAva} loading="lazy" sizes="(max-width: 991px) 34px, (max-width: 1279px) 3vw, (max-width: 1439px) 34px, (max-width: 1919px) 2vw, 34px" alt="" className="testimonials-content--author-photo" />
-                      <div className="testimonials-content--author-name">sara.indiana_92</div>
-                    </a>
-                  </div>
-                </div>
-              </div>
-              <div className="splide__slide testimonials-splide__slider">
-                <div className="blog--post-content testimonials--post-content">
-                  <div className="blog--post-content-text testimonials--post-content-text">
-                    <div className="testimonials-content--just-to-float">
-                      <div className="testimonials-content--header">”</div>
-                      <blockquote className="testimonials-content--quote">A good review should describe various aspects of the customer experience. Did the customer receive fantastic customer service? Was an employee particularly helpful, and did the customer leave the employee’s name. <br /><br />Responding to this type of review can be tough. Without details to go off of, it can be difficult to know how to respond. </blockquote>
-                    </div>
-                    <a href="#" className="testimonials-content--author w-inline-block"><img src={ImgAva} loading="lazy" srcSet="images/ava-p-500.jpg 500w, images/ava.jpg 604w" sizes="(max-width: 991px) 34px, (max-width: 1279px) 3vw, (max-width: 1439px) 34px, (max-width: 1919px) 2vw, 34px" alt="" className="testimonials-content--author-photo" />
-                      <div className="testimonials-content--author-name">sara.indiana_92</div>
-                    </a>
-                  </div>
-                </div>
-              </div>
-              <div className="splide__slide testimonials-splide__slider">
-                <div className="blog--post-content testimonials--post-content">
-                  <div className="blog--post-content-text testimonials--post-content-text">
-                    <div className="testimonials-content--just-to-float">
-                      <div className="testimonials-content--header">”</div>
-                      <blockquote className="testimonials-content--quote">A good review should describe various aspects of the customer experience. <br /><br />Start by asking if the reviewer could give more details about their experience, then switch to email or direct messaging to finish solving the issue.</blockquote>
-                    </div>
-                    <a href="#" className="testimonials-content--author w-inline-block"><img src={ImgAva} loading="lazy" srcSet="images/ava-p-500.jpg 500w, images/ava.jpg 604w" sizes="(max-width: 991px) 34px, (max-width: 1279px) 3vw, (max-width: 1439px) 34px, (max-width: 1919px) 2vw, 34px" alt="" className="testimonials-content--author-photo" />
-                      <div className="testimonials-content--author-name">sara.indiana_92</div>
-                    </a>
-                  </div>
-                </div>
-              </div>
-              <div className="splide__slide testimonials-splide__slider">
-                <div className="blog--post-content testimonials--post-content">
-                  <div className="blog--post-content-text testimonials--post-content-text">
-                    <div className="testimonials-content--just-to-float">
-                      <div className="testimonials-content--header">”</div>
-                      <blockquote className="testimonials-content--quote">A good review should describe various aspects of the customer experience. Did the customer receive fantastic customer service? Was an employee particularly helpful, and did the customer leave the employee’s name. <br /><br />Responding to this type of review can be tough. Without details to go off of, it can be difficult to know how to respond. Start by asking if the reviewer could give more details about their experience, then switch to email or direct messaging to finish solving the issue.</blockquote>
-                    </div>
-                    <a href="#" className="testimonials-content--author w-inline-block"><img src={ImgAva} loading="lazy" srcSet="images/ava-p-500.jpg 500w, images/ava.jpg 604w" sizes="(max-width: 991px) 34px, (max-width: 1279px) 3vw, (max-width: 1439px) 34px, (max-width: 1919px) 2vw, 34px" alt="" className="testimonials-content--author-photo" />
-                      <div className="testimonials-content--author-name">sara.indiana_92</div>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="splide__track hide w-dyn-list">
-            <div role="list" className="splide__list w-dyn-items">
-              <div role="listitem" className="splide__slide w-dyn-item">
-                <div className="blog--post-content">
-                  <div className="blog--post-content-text">
-                    <div className="blog--post-title testimonials--head">”</div>”<div className="blog--post-category"></div>
-                  </div>
-                  <div className="blog-post-content-image"><img src="" loading="lazy" alt="" className="image" /></div>
-                </div>
-              </div>
-            </div>
-            <div className="w-dyn-empty">
-              <div>No items found.</div>
-            </div>
-          </div>
-        </div>
+        
       </div>
       <section className="footer wf-section">
         <div className="container-4">
@@ -639,25 +567,6 @@ const Landing = () => {
         <div className="section-testimonials-content">
           <div className="section-testimonials-header">Lo que nuestros miembros cuentan:</div>
           <div className="text-block-5">Ya somos más de 1000+ miembros en Madrid.</div>
-        </div>
-        <div id="slider2" className="section-testimonials-slider splide">
-          <div className="splide__track w-dyn-list">
-            <div role="list" className="splide__list w-dyn-items">
-              <div role="listitem" className="splide__slide w-dyn-item">
-                <div className="blog--post-content">
-                  <div className="blog--post-content-text">
-                    <div className="blog--post-title testimonials--head">”</div>
-                    <div className="blog--post-subtitle"></div>
-                    <div className="blog--post-category"></div>
-                  </div>
-                  <div className="blog-post-content-image"><img src="" loading="lazy" alt="" className="image" /></div>
-                </div>
-              </div>
-            </div>
-            <div className="w-dyn-empty">
-              <div>No items found.</div>
-            </div>
-          </div>
         </div>
       </div>
     </>

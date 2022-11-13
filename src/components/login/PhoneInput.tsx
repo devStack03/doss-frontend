@@ -33,7 +33,8 @@ const PhoneInput = ({ handleAfterSubmit }: { handleAfterSubmit: (bool: boolean, 
     }
 
     dispatch(fetchStarted());
-
+    // handleAfterSubmit(true, phoneNumber);
+    // return;
     authService.sendVerificationCode({
       phoneNumber
     }).then((res) => {
