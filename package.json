@@ -29,6 +29,8 @@
     "react-draft-wysiwyg": "^1.15.0",
     "react-input-verification-code": "^1.0.2",
     "react-loader-spinner": "^5.3.4",
+    "react-preload-image": "^1.0.7",
+    "react-preload-media": "^0.1.2",
     "react-quill": "^2.0.0",
     "react-redux": "^8.0.4",
     "react-router-dom": "^6.4.3",
