@@ -24,8 +24,9 @@ import './dashboard.css';
 import { Elements, useStripe } from '@stripe/react-stripe-js';
 import { Appearance, loadStripe } from '@stripe/stripe-js';
 import userService from '../services/user.service';
-import { useTypedSelector } from '../store/store';
+import { useDispatch, useTypedSelector } from '../store/store';
 import LoadingScreen from '../components/LoadingScreen';
+import { fetchStarted, resultLoaded } from '../store/slices/api.slice';
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || '');
 
 export enum SECTION_INDEX {
@@ -81,9 +82,9 @@ const Dashboard = () => {
 
   const [activeSectionIndex, setActiveSectionIndex] = useState<SECTION_INDEX>(SECTION_INDEX.INVITE);
   const [isLoaded, loaded] = useReducer(() => true, false);
-
-  const { user } = useTypedSelector(state => state.api);
-
+  const [customerPortalSessionUrl, setCustomerPortalSessionUrl] = useState(null);
+  const { user } = useTypedSelector(state => state.auth);
+  const dispatch = useDispatch();
   useEffect(() => {
     var arrowsBlockElement = document.getElementsByClassName("splide__arrows--ltr");
     arrowsBlockElement[0]?.classList.add("splide__arrows--ltr-custom");
@@ -105,21 +106,33 @@ const Dashboard = () => {
     };
   }, []);
 
-  const handleOpenStripeCustomerPortal = () => {
-    userService.createCustomerPortal({
-      customerId: 'cus_Mkq5WZyM2uVrUl'
-      // customerId: 'cus_MlPq3FRioFLnMo'
-    }).then((res) => {
-      console.log(res);
-      if (res.data.session) {
-        const openGoogleStoreUrl = () => {
-          window.open(res.data.session.url, '_blank', 'noopener,noreferrer')?.focus();
-          // const newWindow = window.open('url', '_blank', 'noopener,noreferrer')
-          // if (newWindow) newWindow.opener = null
-        }
-      }
+  useEffect(() => {
+    handleOpenStripeCustomerPortal();
+  }, []);
 
-    })
+  const handleOpenStripeCustomerPortal = () => {
+    if (user?.stripeCustomerId) {
+      dispatch(fetchStarted());
+      userService.createCustomerPortal({
+        customerId: user?.stripeCustomerId
+        // customerId: 'cus_MlPq3FRioFLnMo'
+      }).then((res) => {
+        console.log(res);
+        if (res.data.session) {
+          setCustomerPortalSessionUrl(res.data.session.url);
+        }
+
+      }).catch((err) => {
+
+      }).finally(() => {
+        dispatch(resultLoaded());
+      })
+    }
+  }
+
+  const openGoogleStoreUrl = () => {
+    if (customerPortalSessionUrl)
+      window.open(customerPortalSessionUrl, '_blank', 'noopener,noreferrer')?.focus();
   }
 
   const handleMenuInviteClick = (index: SECTION_INDEX) => {
@@ -325,7 +338,7 @@ const Dashboard = () => {
               </div>
             </div>
             <div id="menu-list--mobile" className="navigation-mobile--menu-list hide">
-              <div className="menu-item--user--dash tw-cursor-pointer" onClick={handleOpenStripeCustomerPortal}>
+              <div className="menu-item--user--dash tw-cursor-pointer" onClick={openGoogleStoreUrl}>
                 <div className="user-icon user-icon--doss">
                   <div className="user-icon--text">S</div>
                 </div>
@@ -404,7 +417,7 @@ const Dashboard = () => {
                 <img src={SvgLogoBlack} loading="lazy" alt="" />
               </Link>
 
-              <div className="user-block tw-cursor-pointer" onClick={handleOpenStripeCustomerPortal}>
+              <div className="user-block tw-cursor-pointer" onClick={openGoogleStoreUrl}>
                 <div className="user-icon">
                   <div className="user-icon--text">S</div>
                 </div>

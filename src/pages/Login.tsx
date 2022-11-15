@@ -10,7 +10,7 @@ import { useDispatch, useTypedSelector } from '../store/store';
 
 const Login = () => {
   const navigate = useNavigate();
-  const isLoading = useTypedSelector(state => state.api.isLoading);
+  const isLoading = useTypedSelector(state => state.auth.isLoading);
   const dispatch = useDispatch();
   const [phoneNumberSubmitted, setPhoneNumberSubmitted] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -37,7 +37,12 @@ const Login = () => {
           // } else if (res.data.status === -5) {
           setCodeInvalid(true);
         } else {
-          dispatch(userLoggedin(res.data.user));
+          const { user, accessToken, refreshToken, ...rest } = res.data;
+          dispatch(userLoggedin({
+            ...user,
+            accessToken,
+            refreshToken
+          }));
           navigate('/dashboard', { replace: true });
         }
       }).catch((err) => {

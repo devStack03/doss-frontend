@@ -12,7 +12,7 @@ import { useTypedSelector } from '../store/store';
 
 const Signup = ({ option }: { option: string }) => {
   const [activeSection, setActiveSection] = useState(1);
-  const isLoading = useTypedSelector(state => state.api.isLoading);
+  const isLoading = useTypedSelector(state => state.auth.isLoading);
   const changeActiveSection = (index: number) => {
     setActiveSection(index);
   }

@@ -15,7 +15,7 @@ import { useTypedSelector } from './store/store';
 import Landing from './pages/Landing';
 
 export const RequireAuth = ({ children, redirectTo }: { children: JSX.Element, redirectTo?: string }) => {
-  let { registered, loggedin } = useTypedSelector(state => state.api);
+  let { registered, loggedin } = useTypedSelector(state => state.auth);
   let location = useLocation();
   if (!loggedin) {
     return <Navigate to="/login" state={{ from: location }} replace />;
@@ -24,7 +24,7 @@ export const RequireAuth = ({ children, redirectTo }: { children: JSX.Element, r
 };
 
 export const RequireSignup = ({ children, redirectTo }: { children: JSX.Element, redirectTo?: string }) => {
-  let { registered } = useTypedSelector(state => state.api);
+  let { registered } = useTypedSelector(state => state.auth);
   let location = useLocation();
   if (!registered) {
     return <Navigate to="/login" state={{ from: location }} replace />;

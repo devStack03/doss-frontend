@@ -32,7 +32,7 @@ import ImgSuffolkPunchFull from '../assets/images/suffolk-punch-FULL-p-500.png';
 import ImgSplideOne from '../assets/images/635132af0c9e8e141b8db4e4_2a1f1649ea15fec3ca9c52d3da69d91e.png';
 import ImgSplideTwo from '../assets/images/634e80e11c2d3c43e986b207_a245b1fb535200c4dad10e7baccc9975.png';
 import ImgSplideThree from '../assets/images/6351329d6de2a5c9c782e52a_dac68f2397d62fdb22114ea36ecdda27.png';
-import ImgAva from '../assets/images/ava.jpg';
+import ImgAva from '../assets/images/webclip.png';
 import LogoWhite from '../assets/images/logo-white.svg';
 import UnaEnUnRestaurante from '../assets/images/una-mujer-en-un-restaurante.png';
 import OfferCarouselItem from '../components/landing/OfferCarouselItem';
@@ -240,14 +240,12 @@ const Landing = () => {
 
   return (
     <>
-      <PreloadMedia media={media} onFinished={() => loaded()}>
+      {/* <PreloadMedia media={media} onFinished={() => loaded()}>
         <div className="preloading-container">
-        {!isLoaded &&
-          <LoadingScreen />
-        }
+        
         </div>
       </PreloadMedia>
-      {isLoaded ? (
+      {isLoaded ? ( */}
         <>
           <div id="home-menu__block" className="homepage-menu__main wf-section">
             <div className="menu-main__container">
@@ -605,9 +603,9 @@ const Landing = () => {
             </div>
           </div>
         </>
-      ) : (
+      {/* ) : (
         <></>
-      )}
+      )} */}
 
     </>
 

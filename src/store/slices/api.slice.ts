@@ -17,7 +17,12 @@ export type UserDataType = {
   id: string,
   email: string,
   phoneNumber: string,
-  fullName: string
+  fullName: string,
+  accessToken?: string,
+  refreshToken?: string,
+  stripeCustomerId?: string,
+  subscriptionPlan?: string,
+  subscriptionStart?: string
 }
 
 const blankData = [{
