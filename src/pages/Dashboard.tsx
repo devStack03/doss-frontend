@@ -19,15 +19,17 @@ import SvgBaseLineStoreMallDirectoryYellow from '../assets/images/baseline-store
 import SvgLogoBlack from '../assets/images/logo-black.svg';
 import ImgUnionOne from '../assets/images/Union-1.png';
 import ImgUnionTwo from '../assets/images/Union-2.png';
+import SvgBlackCheckmarkOferta from '../assets/svgs/black-checkmark-oferta.svg';
+import SvgGreenCheckmarkEvent from '../assets/svgs/green-checkmark-event.svg';
 
 import './dashboard.css';
-import { Elements, useStripe } from '@stripe/react-stripe-js';
-import { Appearance, loadStripe } from '@stripe/stripe-js';
 import userService from '../services/user.service';
 import { useDispatch, useTypedSelector } from '../store/store';
 import LoadingScreen from '../components/LoadingScreen';
 import { fetchStarted, resultLoaded } from '../store/slices/api.slice';
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || '');
+import { isValidToken, setSession } from '../utils/jwt';
+import eventService from '../services/event.service';
+import restaurantService from '../services/restaurant.service';
 
 export enum SECTION_INDEX {
   INVITE,
@@ -36,8 +38,10 @@ export enum SECTION_INDEX {
 }
 
 const option1 = {
-  type: 'loop',
-  perPage: 5,
+  type: 'slide',
+  rewind: true,
+  // perPage: 5,
+  perPage: 3,
   arrows: true,
   fixedWidth: '327px',
   gap: '22px',
@@ -85,6 +89,10 @@ const Dashboard = () => {
   const [customerPortalSessionUrl, setCustomerPortalSessionUrl] = useState(null);
   const { user } = useTypedSelector(state => state.auth);
   const dispatch = useDispatch();
+  const [events, setEvents] = useState<any[]>(Array());
+  const [restaurants, setRestaurants] = useState<any[]>(Array());
+
+
   useEffect(() => {
     var arrowsBlockElement = document.getElementsByClassName("splide__arrows--ltr");
     arrowsBlockElement[0]?.classList.add("splide__arrows--ltr-custom");
@@ -96,7 +104,6 @@ const Dashboard = () => {
     arrowNextElements[0]?.classList.add("splide__arrow--next-custom");
     arrowNextElements[1]?.classList.add("splide__arrow--next-custom");
     document.body.style.overflow = "scroll";
-
   });
 
   useEffect(() => {
@@ -110,22 +117,106 @@ const Dashboard = () => {
     handleOpenStripeCustomerPortal();
   }, []);
 
+  useEffect(() => {
+    getAllEvents();
+    getAllRestaurants();
+  }, [])
+
+  const getAllEvents = async () => {
+    setSession(user?.accessToken!);
+    eventService.getAll().then((res) => {
+      if (res.data.data) {
+        console.log(res.data.data);
+        setEvents(sortEvents(res.data.data));
+      }
+    })
+  }
+
+  const getAllRestaurants = async () => {
+    setSession(user?.accessToken!);
+    restaurantService.getAll().then((res) => {
+      if (res.data.data) {
+        console.log(res.data.data);
+        setRestaurants(sortRestaurants(res.data.data));
+      }
+    })
+  }
+
+  const sortRestaurants = (array: any[]) => {
+    return array.sort((a, b) => {
+      return a.status - b.status;
+    })
+  }
+
+  const sortEvents = (array: any[]) => {
+    return array.sort((a, b) => {
+      return b.attended - a.attended;
+    })
+  }
+
   const handleOpenStripeCustomerPortal = () => {
     if (user?.stripeCustomerId) {
       dispatch(fetchStarted());
-      userService.createCustomerPortal({
-        customerId: user?.stripeCustomerId
-        // customerId: 'cus_MlPq3FRioFLnMo'
-      }).then((res) => {
+      if (isValidToken(user.accessToken!)) {
+        setSession(user.accessToken!)
+        userService.createCustomerPortal({
+          customerId: user?.stripeCustomerId
+          // customerId: 'cus_MlPq3FRioFLnMo'
+        }).then((res) => {
+          console.log(res);
+          if (res.data.session) {
+            setCustomerPortalSessionUrl(res.data.session.url);
+          }
+
+        }).catch((err) => {
+
+        }).finally(() => {
+          dispatch(resultLoaded());
+        })
+      }
+
+    }
+  }
+
+  const handleClickOffer = (restaurant: any) => {
+    if (restaurant.status) {
+      setSession(user?.accessToken!);
+      restaurantService.activate({}, restaurant.id).then((res) => {
         console.log(res);
-        if (res.data.session) {
-          setCustomerPortalSessionUrl(res.data.session.url);
+        if (res.data.status) {
+          const index = restaurants.indexOf(restaurant);
+          console.log(index);
+          const temp = [...restaurants];
+          temp[index] = res.data.data;
+          setRestaurants(sortRestaurants([...temp]));
         }
+      })
+    }
+  }
 
-      }).catch((err) => {
+  const handleClickEvent = (event: any) => {
+    if (event.available && !event.attended) {
+      setSession(user?.accessToken!);
+      eventService.attend({ state: 1 }, event.id).then((res) => {
+        console.log(res);
+        if (res.data.status) {
+          // const index = events.indexOf(event);
+          // console.log(index);
+          // const temp = [...events];
+          // temp[index] = res.data.data;
+          // setEvents(sortEvents([...temp]));
+          getAllEvents();
+        }
+      });
+    }
+  }
 
-      }).finally(() => {
-        dispatch(resultLoaded());
+  const handleClickCancelEvent = (event: any) => {
+    if (event.attended) {
+      setSession(user?.accessToken!);
+      eventService.cancelAttend(event.attendId).then((res) => {
+        console.log(res);
+        getAllEvents();
       })
     }
   }
@@ -502,31 +593,58 @@ const Dashboard = () => {
                     <button className="splide__arrow splide__arrow--next">Next</button>
                   </div>
                   <SplideTrack className="ofertas--track w-dyn-list w-max-w-[650px] lg:tw-max-w-[660px] xl:tw-max-w-[999px] 2xl:tw-max-w-[1380px]">
-                    <SplideSlide className="wl-dyn-item tw-rounded-3xl">
-                      <div className="ofertas--content-block">
-                        <div className="ofertas--content-text">
-                          <div className="ofertas-header">
-                            <div className="ofertas--title-and-timer">
-                              <div className="ofertas--title">Suffolk punch Copy 2</div>
-                              <div className="ofertas--timer ofertas--timer-emoji"></div>
-                              <div className="ofertas--timer">October 31, 2022</div>
-                              <div className="ofertas--timer ofertas--timer-post">left</div>
+                    {events.map((e, index) => (
+                      <SplideSlide className="wl-dyn-item tw-rounded-3xl" key={index}>
+                        <div className="ofertas--content-block">
+                          <div className="ofertas--content-text">
+                            <div className="ofertas-header">
+                              <div className="ofertas--title-and-timer">
+                                <div className="ofertas--title">{e.name}</div>
+                                <div className="ofertas--timer ofertas--timer-emoji"></div>
+                                <div className="ofertas--timer">October 31, 2022</div>
+                                <div className="ofertas--timer ofertas--timer-post">left</div>
+                              </div>
+                              <div className="ofertas--subtitle">{e.description}</div>
                             </div>
-                            <div className="ofertas--subtitle">culinary cafe + taphouse in South End</div>
                           </div>
+                          <a className="link-block link-block--ofertas w-inline-block" onClick={() => handleClickEvent(e)}>
+                            <div className="offer-block-button offer-block-button_responsive offer-block-button--status-asistir">
+                              {e.attended === 1 &&
+                                <div className="offer-block-currency-icon">
+                                  <div className="currency-icon-text">
+
+                                    <><img src={SvgGreenCheckmarkEvent} /></>
+
+                                  </div>
+                                </div>
+                              }
+
+                              <div className="currency-icon-value">
+                                {e.attended === 1 &&
+                                  <>Confirmado</>
+                                }
+                                {e.attended === 0 &&
+                                  <>Asistir</>
+                                }
+                                {e.attended === -1 &&
+                                  <>Cancelado</>
+                                }
+                              </div>
+                            </div>
+                          </a>
                         </div>
-                        <a href="/events/suffolk-punch-copy-2" className="link-block link-block--ofertas w-inline-block">
-                          <div className="offer-block-button offer-block-button_responsive offer-block-button--status-asistir">
-                            <div className="currency-icon-value">
-                              Asistir
-                            </div>
+                        <div className={e.attended ? "event--image-block" : `ofertas--image-block`}>
+                          <img src={ImgSuffolkPunchFull} loading="lazy" alt="Suffolk punch Copy 2" className="ofertas--image" />
+                        </div>
+                        {e.attended === 1 &&
+                          <div className="tw-m-auto -tw-mb-3 tw-text-[red] tw-text-[14px]">
+                            <button className="tw-mt-2" onClick={() => handleClickCancelEvent(e)}>Cancelar</button>
                           </div>
-                        </a>
-                      </div>
-                      <div className="ofertas--image-block">
-                        <img src={ImgSuffolkPunchFull} loading="lazy" alt="Suffolk punch Copy 2" className="ofertas--image" />
-                      </div>
-                    </SplideSlide>
+                        }
+
+                      </SplideSlide>
+                    ))}
+
                   </SplideTrack>
                 </Splide>
               </div>
@@ -545,11 +663,53 @@ const Dashboard = () => {
                     <button className="splide__arrow splide__arrow--next">Next</button>
                   </div>
                   <SplideTrack className="ofertas--track w-dyn-list tw-max-w-[650px] lg:tw-max-w-[660px] xl:tw-max-w-[999px] 2xl:tw-max-w-[1380px]">
-                    <SplideSlide className="wl-dyn-item tw-rounded-3xl">
-                      <div className="ofertas--content-block"><div className="ofertas--content-text"><div className="ofertas-header"><div className="ofertas--title-and-timer"><div className="ofertas--title">Suffolk punch Copy 10</div><div className="ofertas--timer ofertas--timer-emoji">⏳</div><div className="ofertas--timer">October 30, 2022</div><div className="ofertas--timer ofertas--timer-post w-condition-invisible">left</div></div><div className="ofertas--subtitle">culinary cafe + taphouse in South End</div></div></div><a href="/offers/suffolk-punch-copy-10" className="link-block link-block--ofertas w-inline-block"><div className="offer-block-button offer-block-button_responsive"><div className="offer-block-currency-icon"><div className="currency-icon-text">€</div></div><div className="currency-icon-value">15€ Para Gastar</div></div><div className="w-embed"></div></a></div>
-                      <div className="ofertas--image-block">
-                        <img src={ImgSuffolkPunchFull} loading="lazy" alt="Suffolk punch Copy 10" sizes="(max-width: 1919px) 175.00001525878906px, 9vw" className="ofertas--image" /></div>
-                    </SplideSlide>
+                    {restaurants.map((restaurant, index) => (
+                      <SplideSlide className="wl-dyn-item tw-rounded-3xl" key={index}>
+                        <div className="ofertas--content-block">
+                          <div className="ofertas--content-text">
+                            <div className="ofertas-header">
+                              <div className="ofertas--title-and-timer">
+                                <div className="ofertas--title">{restaurant.name}</div>
+                                <div className="ofertas--timer ofertas--timer-emoji">⏳</div>
+                                <div className="ofertas--timer">October 30, 2022</div>
+                                <div className="ofertas--timer ofertas--timer-post w-condition-invisible">left</div>
+                              </div>
+                              <div className="ofertas--subtitle">{restaurant.description}</div>
+                            </div>
+                          </div>
+                          <a className="link-block link-block--ofertas w-inline-block" onClick={() => handleClickOffer(restaurant)}>
+                            <div className={restaurant.status ? "offer-block-button offer-block-button_responsive" : `offer-block-button offer-block-button_responsive active`}>
+                              <div className="offer-block-currency-icon">
+                                <div className="currency-icon-text">
+
+                                  {restaurant.status === 1 &&
+                                    <>€</>
+                                  }
+                                  {restaurant.status === 0 &&
+                                    <><img src={SvgBlackCheckmarkOferta} /></>
+                                  }
+                                </div>
+                              </div>
+                              <div className="currency-icon-value">
+                                {restaurant.status === 1 &&
+                                  <>Activar</>
+                                }
+                                {restaurant.status === 0 &&
+                                  <>Oferta Activada</>
+                                }
+                                {restaurant.status === -1 &&
+                                  <></>
+                                }
+                              </div>
+                            </div>
+                            <div className="w-embed"></div>
+                          </a>
+                        </div>
+                        <div className="ofertas--image-block">
+                          <img src={ImgSuffolkPunchFull} loading="lazy" alt="Suffolk punch Copy 10" sizes="(max-width: 1919px) 175.00001525878906px, 9vw" className="ofertas--image" /></div>
+                      </SplideSlide>
+                    ))}
+
                   </SplideTrack>
                 </Splide>
 

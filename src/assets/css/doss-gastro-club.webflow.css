@@ -752,6 +752,9 @@ h1 {
   line-height: 19px;
 }
 
+.offer-block-button.active {
+  background-color: #000000;
+}
 .offer-block-button.hide {
   display: none;
 }
@@ -2663,6 +2666,30 @@ h1 {
   line-height: 26px;
 }
 
+.event--image-block {
+  overflow: hidden;
+  margin-top: auto;
+  margin-right: -30px;
+  margin-left: -30px;
+  /* margin-bottom: -30px; */
+  margin-bottom: 0;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-justify-content: space-around;
+  -ms-flex-pack: distribute;
+  justify-content: space-around;
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 auto;
+  -ms-flex: 0 auto;
+  flex: 0 auto;
+  border-radius: 22px;
+  background-image: url("https://d3e54v103j8qbb.cloudfront.net/img/background-image.svg");
+  background-position: 0px 0px;
+  background-size: auto;
+}
 .ofertas--image-block {
   overflow: hidden;
   margin-top: auto;
