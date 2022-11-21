@@ -30,6 +30,10 @@ class UserService {
     getCustomerDetail() {
         return Http.get<any>(this.apiUrl + `/subscription-detail`);
     }
+
+    renewSubscription() {
+        return Http.post<any>(this.apiUrl + `/subscription/renew`);
+    }
 }
 
 export default new UserService();

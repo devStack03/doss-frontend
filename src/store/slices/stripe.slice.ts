@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import stripeService from '../../services/stripe.service';
 import userService from '../../services/user.service';
-import { setSession } from '../../utils';
+import { isValidToken, setSession } from '../../utils';
 import httpService from '../../utils/axios';
 
 export interface StripeCustomerType {
@@ -34,13 +34,14 @@ export interface StripeCustomerType {
 export type StripeState = {
   data: StripeCustomerType,
   loading: boolean,
+  status: string,
 
 }
 
 const initialState: StripeState = {
   data: {
     id: null,
-    status: '',
+    status: 'active',
     customer: null,
     current_period_end: 0,
     current_period_start: 0,
@@ -49,18 +50,22 @@ const initialState: StripeState = {
     cancel_at_period_end: false,
     canceled_at: 0
   },
+  status: 'active',
   loading: false,
 }
 
 export function fetchStripeCustomerInfo() {
-  const token = localStorage.getItem('accessToken');
-  setSession(token);
-  return userService.getCustomerDetail();
+  const token = localStorage.getItem('accessToken') ? localStorage.getItem('accessToken') : '';
+  if (isValidToken(token!)) {
+    setSession(token);
+    return userService.getCustomerDetail();
+  }
+  return null;
 }
 
 export const getStripeCustomerDetailAsync = createAsyncThunk('stripe/customer', async () => {
   const response = await fetchStripeCustomerInfo();
-  if (response.data.status === 1) {
+  if (response && response.data.status === 1) {
     return response.data.data;
   }
   return initialState;
@@ -77,12 +82,12 @@ export const stripeSlice = createSlice({
       state.data = action.payload;
       state.loading = false;
     })
-    .addCase(getStripeCustomerDetailAsync.pending, (state) => {
-      state.loading = true;
-    })
-    .addCase(getStripeCustomerDetailAsync.rejected, (state) => {
-      state.loading = false;
-    })
+      .addCase(getStripeCustomerDetailAsync.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getStripeCustomerDetailAsync.rejected, (state) => {
+        state.loading = false;
+      })
   },
 });
 

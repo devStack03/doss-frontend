@@ -32,6 +32,7 @@ import eventService from '../services/event.service';
 import restaurantService from '../services/restaurant.service';
 import { humanizeFutureToNow } from '../utils';
 import { getStripeCustomerDetailAsync } from '../store/slices/stripe.slice';
+import Renew from './Renew';
 
 export enum SECTION_INDEX {
   INVITE,
@@ -90,10 +91,11 @@ const Dashboard = () => {
   const [isLoaded, loaded] = useReducer(() => true, false);
   const [customerPortalSessionUrl, setCustomerPortalSessionUrl] = useState(null);
   const { user } = useTypedSelector(state => state.auth);
-  const stripeCustomerInfo  = useTypedSelector(state => state.stripe.data);
+  const stripeCustomerInfo = useTypedSelector(state => state.stripe.data);
   const dispatch = useDispatch();
   const [events, setEvents] = useState<any[]>(Array());
   const [restaurants, setRestaurants] = useState<any[]>(Array());
+  const [subscriptionCanceled, setSubscriptionCanceled] = useState(false);
 
   useEffect(() => {
     var arrowsBlockElement = document.getElementsByClassName("splide__arrows--ltr");
@@ -122,6 +124,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     let interval = setInterval(() => {
+      dispatch(getStripeCustomerDetailAsync());
       checkCustomerInfo();
     }, 10000);
 
@@ -131,7 +134,8 @@ const Dashboard = () => {
   const checkCustomerInfo = () => {
     console.log(stripeCustomerInfo.status);
     if (stripeCustomerInfo.status !== 'active') {
-      alert('check payment');
+      // alert('check payment');
+      setSubscriptionCanceled(true);
     }
   }
 
@@ -428,47 +432,53 @@ const Dashboard = () => {
 
   return (
     <>
-      <PreloadMedia media={media} onFinished={() => loaded()}>
-        <div className="preloading-container">
-          {!isLoaded &&
-            <LoadingScreen />
-          }
-        </div>
-      </PreloadMedia>
-      {isLoaded ? (
+      {subscriptionCanceled ? (
         <>
-          <div className="navigation-mobile--dashboard">
-            <div className="navigation-mobile--head hide">
-              <Link to={`/`} replace className="w-inline-block">
-                <img src={SvgLogoBlack} loading="lazy" alt="" className="logo" />
-              </Link>
-              <div id="menu-icon--mobile" className="nav-mobile--icon-block" >
-                <img src={ImgUnionOne} loading="lazy" id="menu-icon--mobile__open" alt="" className=' tw-cursor-pointer' onClick={handleMobileIconOpenClick} />
-                <img src={ImgUnionTwo} loading="lazy" id="menu-icon--mobile__close" alt="" className="image-6 tw-cursor-pointer" onClick={handleMobileIconCloseClick} />
-              </div>
+        <Renew />
+        </>
+      ) : (
+        <>
+          <PreloadMedia media={media} onFinished={() => loaded()}>
+            <div className="preloading-container">
+              {!isLoaded &&
+                <LoadingScreen />
+              }
             </div>
-            <div id="menu-list--mobile" className="navigation-mobile--menu-list hide">
-              <div className="menu-item--user--dash tw-cursor-pointer" onClick={openGoogleStoreUrl}>
-                <div className="user-icon user-icon--doss">
-                  <div className="user-icon--text">S</div>
+          </PreloadMedia>
+          {isLoaded ? (
+            <>
+              <div className="navigation-mobile--dashboard">
+                <div className="navigation-mobile--head hide">
+                  <Link to={`/`} replace className="w-inline-block">
+                    <img src={SvgLogoBlack} loading="lazy" alt="" className="logo" />
+                  </Link>
+                  <div id="menu-icon--mobile" className="nav-mobile--icon-block" >
+                    <img src={ImgUnionOne} loading="lazy" id="menu-icon--mobile__open" alt="" className=' tw-cursor-pointer' onClick={handleMobileIconOpenClick} />
+                    <img src={ImgUnionTwo} loading="lazy" id="menu-icon--mobile__close" alt="" className="image-6 tw-cursor-pointer" onClick={handleMobileIconCloseClick} />
+                  </div>
                 </div>
-                <div>{user?.fullName}</div>
+                <div id="menu-list--mobile" className="navigation-mobile--menu-list hide">
+                  <div className="menu-item--user--dash tw-cursor-pointer" onClick={openGoogleStoreUrl}>
+                    <div className="user-icon user-icon--doss">
+                      <div className="user-icon--text">S</div>
+                    </div>
+                    <div>{user?.fullName}</div>
+                  </div>
+                  <div id="menu-block--item--Invitar" className="menu-item--invitar--dash tw-cursor-pointer" onClick={() => handleMenuInviteClick(SECTION_INDEX.INVITE)}>
+                    <img src={SvgEmojiPeopleGray} loading="lazy" id="invitar--dash--img" alt="" />
+                    <div id="invitar--dash--text">Invitar un amigo</div>
+                  </div>
+                  <div id="menu-block--item--Ofertas" className="menu-item--ofertas--dash tw-cursor-pointer" onClick={() => handleMenuInviteClick(SECTION_INDEX.OFFER)}>
+                    <img src={SvgBaseLineStyleYellow} loading="lazy" id="ofertas--dash--img" alt="" />
+                    <div id="ofertas--dash--text" className="text-block-14">Ofertas</div>
+                  </div>
+                  <div id="menu-block--item--Eventos" className="menu-item--eventos--dash tw-cursor-pointer" onClick={() => handleMenuInviteClick(SECTION_INDEX.EVENT)}>
+                    <img src={SvgBaseLineStoreMallDirectoryGray} loading="lazy" id="eventos--dash--img" alt="" />
+                    <div id="eventos--dash--text">Eventos</div>
+                  </div>
+                </div>
               </div>
-              <div id="menu-block--item--Invitar" className="menu-item--invitar--dash tw-cursor-pointer" onClick={() => handleMenuInviteClick(SECTION_INDEX.INVITE)}>
-                <img src={SvgEmojiPeopleGray} loading="lazy" id="invitar--dash--img" alt="" />
-                <div id="invitar--dash--text">Invitar un amigo</div>
-              </div>
-              <div id="menu-block--item--Ofertas" className="menu-item--ofertas--dash tw-cursor-pointer" onClick={() => handleMenuInviteClick(SECTION_INDEX.OFFER)}>
-                <img src={SvgBaseLineStyleYellow} loading="lazy" id="ofertas--dash--img" alt="" />
-                <div id="ofertas--dash--text" className="text-block-14">Ofertas</div>
-              </div>
-              <div id="menu-block--item--Eventos" className="menu-item--eventos--dash tw-cursor-pointer" onClick={() => handleMenuInviteClick(SECTION_INDEX.EVENT)}>
-                <img src={SvgBaseLineStoreMallDirectoryGray} loading="lazy" id="eventos--dash--img" alt="" />
-                <div id="eventos--dash--text">Eventos</div>
-              </div>
-            </div>
-          </div>
-          {/* <div className="navbar navbar--dashboard wf-section">
+              {/* <div className="navbar navbar--dashboard wf-section">
           <div data-w-id="f1d4d938-1203-c02d-dd1a-080da9721921" data-animation="default" data-collapse="medium"
             data-duration="400" data-easing="ease" data-easing2="ease" role="banner" className="navbar-container w-nav">
             <div className="container-regular">
@@ -521,224 +531,226 @@ const Dashboard = () => {
             </div>
           </div>
         </div> */}
-          <div className="section-fullscreen--dashboard">
-            <div className="dashboard--leftside">
-              <Link to={`/`} replace className="logo-block w-inline-block">
-                <img src={SvgLogoBlack} loading="lazy" alt="" />
-              </Link>
+              <div className="section-fullscreen--dashboard">
+                <div className="dashboard--leftside">
+                  <Link to={`/`} replace className="logo-block w-inline-block">
+                    <img src={SvgLogoBlack} loading="lazy" alt="" />
+                  </Link>
 
-              <div className="user-block tw-cursor-pointer" onClick={openGoogleStoreUrl}>
-                <div className="user-icon">
-                  <div className="user-icon--text">S</div>
-                </div>
-                <div className="user-icon--name">{user?.fullName}</div>
-              </div>
-              <div className="dashbourd-menu">
-                <div id="menu-item--Invitar" className="dashboard-menu-item menu-item--invitar dashboard--pc-menu" onClick={() => handleMenuInviteClick(SECTION_INDEX.INVITE)}>
-                  <img
-                    src={SvgEmojiPeopleGray} loading="lazy" id="item--image-Invitar" alt=""
-                    className="menu-item--image item--image-invitar" />
-                  <div id="item--text-Invitar" className="menu-item--text item--text-invitar">Invitar un amigo</div>
-                </div>
-                <div id="menu-item--Ofertas" className="dashboard-menu-item menu-item--ofertas" onClick={() => handleMenuInviteClick(SECTION_INDEX.OFFER)}>
-                  <img
-                    src={SvgBaseLineStyleYellow} loading="lazy" id="item--image-Ofertas" alt=""
-                    className="menu-item--image item--image-ofertas" />
-                  <div id="item--text-Ofertas" className="menu-item--text item--text-ofertas">Ofertas</div>
-                </div>
-                <div id="menu-item--Eventos" className="dashboard-menu-item menu-item--eventos" onClick={() => handleMenuInviteClick(SECTION_INDEX.EVENT)}>
-                  <img
-                    src={SvgBaseLineStoreMallDirectoryGray} loading="lazy" id="menu--image-Eventos" alt=""
-                    className="menu-item--image menu--image-eventos" />
-                  <div id="menu--text-Eventos" className="menu-item--text menu--text-eventos">Eventos</div>
-                </div>
-              </div>
-              <div className="w-embed"></div>
-            </div>
-            <div className="dashboard--rightside">
-              <div id="menu-block--Invitar" className="menu-block--invitar">
-                <div className="block-head">
-                  <h2 className="dashboard--heading">Invite a friend</h2>
-                  <div className="dashboard--title">Provide info bla bla bla</div>
-                </div>
-                <div className="block--invitar-form">
-                  <div className="text-block-12">We value friendship. <br />At exactly $20</div>
-                  <div className="text-block-13">You and your frind get <strong>FREE </strong>rind</div>
-                  <img
-                    src={ImgFrame}
-                    loading="lazy"
-                    sizes="100vw"
-                    alt=""
-                    className="image-4" />
-                  <div className="form-block w-form">
-                    <form id="email-form" name="email-form" data-name="Email Form" method="get" className="form-2">
-                      <input
-                        type="email"
-                        className="invitar-form--email w-input"
-                        autoFocus maxLength={256}
-                        name="email"
-                        data-name="Email"
-                        placeholder="Email"
-                        id="email"
-                        required />
-                      <input
-                        type="submit"
-                        value="Mandar invitación"
-                        data-wait="Please wait..."
-                        className="submit-button-2 w-button" />
-                    </form>
-                    <div className="w-form-done">
-                      <div>Thank you! Your submission has been received!</div>
+                  <div className="user-block tw-cursor-pointer" onClick={openGoogleStoreUrl}>
+                    <div className="user-icon">
+                      <div className="user-icon--text">S</div>
                     </div>
-                    <div className="w-form-fail">
-                      <div>Oops! Something went wrong while submitting the form.</div>
+                    <div className="user-icon--name">{user?.fullName}</div>
+                  </div>
+                  <div className="dashbourd-menu">
+                    <div id="menu-item--Invitar" className="dashboard-menu-item menu-item--invitar dashboard--pc-menu" onClick={() => handleMenuInviteClick(SECTION_INDEX.INVITE)}>
+                      <img
+                        src={SvgEmojiPeopleGray} loading="lazy" id="item--image-Invitar" alt=""
+                        className="menu-item--image item--image-invitar" />
+                      <div id="item--text-Invitar" className="menu-item--text item--text-invitar">Invitar un amigo</div>
+                    </div>
+                    <div id="menu-item--Ofertas" className="dashboard-menu-item menu-item--ofertas" onClick={() => handleMenuInviteClick(SECTION_INDEX.OFFER)}>
+                      <img
+                        src={SvgBaseLineStyleYellow} loading="lazy" id="item--image-Ofertas" alt=""
+                        className="menu-item--image item--image-ofertas" />
+                      <div id="item--text-Ofertas" className="menu-item--text item--text-ofertas">Ofertas</div>
+                    </div>
+                    <div id="menu-item--Eventos" className="dashboard-menu-item menu-item--eventos" onClick={() => handleMenuInviteClick(SECTION_INDEX.EVENT)}>
+                      <img
+                        src={SvgBaseLineStoreMallDirectoryGray} loading="lazy" id="menu--image-Eventos" alt=""
+                        className="menu-item--image menu--image-eventos" />
+                      <div id="menu--text-Eventos" className="menu-item--text menu--text-eventos">Eventos</div>
                     </div>
                   </div>
+                  <div className="w-embed"></div>
                 </div>
-              </div>
-              <div id="menu-block--Eventos" className="menu-block--eventos">
-                <div className="block-head">
-                  <h2 className="dashboard--heading">Hola {user?.fullName} ❤️</h2>
-                  <div className="dashboard--title">Overview</div>
-                  <div className="slider--block--header">
-                    <div className="slider-block--emoji">💃</div>
-                    <div className="slider-block--text">Eventos</div>
+                <div className="dashboard--rightside">
+                  <div id="menu-block--Invitar" className="menu-block--invitar">
+                    <div className="block-head">
+                      <h2 className="dashboard--heading">Invite a friend</h2>
+                      <div className="dashboard--title">Provide info bla bla bla</div>
+                    </div>
+                    <div className="block--invitar-form">
+                      <div className="text-block-12">We value friendship. <br />At exactly $20</div>
+                      <div className="text-block-13">You and your frind get <strong>FREE </strong>rind</div>
+                      <img
+                        src={ImgFrame}
+                        loading="lazy"
+                        sizes="100vw"
+                        alt=""
+                        className="image-4" />
+                      <div className="form-block w-form">
+                        <form id="email-form" name="email-form" data-name="Email Form" method="get" className="form-2">
+                          <input
+                            type="email"
+                            className="invitar-form--email w-input"
+                            autoFocus maxLength={256}
+                            name="email"
+                            data-name="Email"
+                            placeholder="Email"
+                            id="email"
+                            required />
+                          <input
+                            type="submit"
+                            value="Mandar invitación"
+                            data-wait="Please wait..."
+                            className="submit-button-2 w-button" />
+                        </form>
+                        <div className="w-form-done">
+                          <div>Thank you! Your submission has been received!</div>
+                        </div>
+                        <div className="w-form-fail">
+                          <div>Oops! Something went wrong while submitting the form.</div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                  <div id="menu-block--Eventos" className="menu-block--eventos">
+                    <div className="block-head">
+                      <h2 className="dashboard--heading">Hola {user?.fullName} ❤️</h2>
+                      <div className="dashboard--title">Overview</div>
+                      <div className="slider--block--header">
+                        <div className="slider-block--emoji">💃</div>
+                        <div className="slider-block--text">Eventos</div>
+                      </div>
+                    </div>
 
-                <Splide id="slider1" className="slider-blovk--basic oferta--splide" hasTrack={false} options={option1}>
-                  <div className="splide__arrows">
-                    <button className="splide__arrow splide__arrow--prev">Prev</button>
-                    <button className="splide__arrow splide__arrow--next">Next</button>
-                  </div>
-                  <SplideTrack className="ofertas--track w-dyn-list w-max-w-[650px] lg:tw-max-w-[660px] xl:tw-max-w-[999px] 2xl:tw-max-w-[1380px]">
-                    {events.map((e, index) => (
-                      <SplideSlide className="wl-dyn-item tw-rounded-3xl" key={index}>
-                        <div className="ofertas--content-block">
-                          <div className="ofertas--content-text">
-                            <div className="ofertas-header">
-                              <div className="ofertas--title-and-timer">
-                                <div className="ofertas--title">{e.name}</div>
-                                <div className="ofertas--timer ofertas--timer-emoji"></div>
-                                <div className="ofertas--timer">{humanizeFutureToNow(e.eventDate)}</div>
-                                <div className="ofertas--timer ofertas--timer-post">left</div>
+                    <Splide id="slider1" className="slider-blovk--basic oferta--splide" hasTrack={false} options={option1}>
+                      <div className="splide__arrows">
+                        <button className="splide__arrow splide__arrow--prev">Prev</button>
+                        <button className="splide__arrow splide__arrow--next">Next</button>
+                      </div>
+                      <SplideTrack className="ofertas--track w-dyn-list w-max-w-[650px] lg:tw-max-w-[660px] xl:tw-max-w-[999px] 2xl:tw-max-w-[1380px]">
+                        {events.map((e, index) => (
+                          <SplideSlide className="wl-dyn-item tw-rounded-3xl" key={index}>
+                            <div className="ofertas--content-block">
+                              <div className="ofertas--content-text">
+                                <div className="ofertas-header">
+                                  <div className="ofertas--title-and-timer">
+                                    <div className="ofertas--title">{e.name}</div>
+                                    <div className="ofertas--timer ofertas--timer-emoji"></div>
+                                    <div className="ofertas--timer">{humanizeFutureToNow(e.eventDate)}</div>
+                                    <div className="ofertas--timer ofertas--timer-post">left</div>
+                                  </div>
+                                  <div className="ofertas--subtitle">{e.description}</div>
+                                </div>
                               </div>
-                              <div className="ofertas--subtitle">{e.description}</div>
-                            </div>
-                          </div>
-                          <a className="link-block link-block--ofertas w-inline-block" onClick={() => handleClickEvent(e)}>
-                            <div className="offer-block-button offer-block-button_responsive offer-block-button--status-asistir">
-                              {e.attended === 1 &&
-                                <div className="offer-block-currency-icon">
-                                  <div className="currency-icon-text">
+                              <a className="link-block link-block--ofertas w-inline-block" onClick={() => handleClickEvent(e)}>
+                                <div className="offer-block-button offer-block-button_responsive offer-block-button--status-asistir">
+                                  {e.attended === 1 &&
+                                    <div className="offer-block-currency-icon">
+                                      <div className="currency-icon-text">
 
-                                    <><img src={SvgGreenCheckmarkEvent} /></>
+                                        <><img src={SvgGreenCheckmarkEvent} /></>
 
+                                      </div>
+                                    </div>
+                                  }
+
+                                  <div className="currency-icon-value">
+                                    {e.attended === 1 &&
+                                      <>Confirmado</>
+                                    }
+                                    {e.attended === 0 &&
+                                      <>Asistir</>
+                                    }
+                                    {e.attended === -1 &&
+                                      <>Has cancelado tu asistencia</>
+                                    }
                                   </div>
                                 </div>
-                              }
-
-                              <div className="currency-icon-value">
-                                {e.attended === 1 &&
-                                  <>Confirmado</>
-                                }
-                                {e.attended === 0 &&
-                                  <>Asistir</>
-                                }
-                                {e.attended === -1 &&
-                                  <>Cancelado</>
-                                }
-                              </div>
+                              </a>
                             </div>
-                          </a>
-                        </div>
-                        <div className={e.attended ? "event--image-block" : `ofertas--image-block`}>
-                          <img src={ImgSuffolkPunchFull} loading="lazy" alt="Suffolk punch Copy 2" className="ofertas--image" />
-                        </div>
-                        {e.attended === 1 &&
-                          <div className="tw-m-auto -tw-mb-3 tw-text-[red] tw-text-[14px]">
-                            <button className="tw-mt-2" onClick={() => handleClickCancelEvent(e)}>Cancelar</button>
-                          </div>
-                        }
-
-                      </SplideSlide>
-                    ))}
-
-                  </SplideTrack>
-                </Splide>
-              </div>
-              <div id="menu-block--Ofertas" className="menu-block--ofertas">
-                <div className="block-head">
-                  <h2 className="dashboard--heading">Hola {user?.fullName} ❤️</h2>
-                  <div className="dashboard--title">Overview</div>
-                  <div className="slider--block--header">
-                    <div className="slider-block--emoji">💸</div>
-                    <div className="slider-block--text">Tus ofertas</div>
-                  </div>
-                </div>
-                <Splide id="slider2" className="slider-blovk--basic oferta--splide" hasTrack={false} options={option1}>
-                  <div className="splide__arrows">
-                    <button className="splide__arrow splide__arrow--prev">Prev</button>
-                    <button className="splide__arrow splide__arrow--next">Next</button>
-                  </div>
-                  <SplideTrack className="ofertas--track w-dyn-list tw-max-w-[650px] lg:tw-max-w-[660px] xl:tw-max-w-[999px] 2xl:tw-max-w-[1380px]">
-                    {restaurants.map((restaurant, index) => (
-                      <SplideSlide className="wl-dyn-item tw-rounded-3xl" key={index}>
-                        <div className="ofertas--content-block">
-                          <div className="ofertas--content-text">
-                            <div className="ofertas-header">
-                              <div className="ofertas--title-and-timer">
-                                <div className="ofertas--title">{restaurant.name}</div>
-                                <div className="ofertas--timer ofertas--timer-emoji">⏳</div>
-                                <div className="ofertas--timer">October 30, 2022</div>
-                                <div className="ofertas--timer ofertas--timer-post w-condition-invisible">left</div>
-                              </div>
-                              <div className="ofertas--subtitle">{restaurant.description}</div>
+                            <div className={e.attended ? "event--image-block" : `ofertas--image-block`}>
+                              <img src={ImgSuffolkPunchFull} loading="lazy" alt="Suffolk punch Copy 2" className="ofertas--image" />
                             </div>
-                          </div>
-                          <a className="link-block link-block--ofertas w-inline-block" onClick={() => handleClickOffer(restaurant)}>
-                            <div className={restaurant.status ? "offer-block-button offer-block-button_responsive" : `offer-block-button offer-block-button_responsive active`}>
-                              <div className="offer-block-currency-icon">
-                                <div className="currency-icon-text">
+                            {e.attended === 1 &&
+                              <div className="tw-m-auto -tw-mb-3 tw-text-[red] tw-text-[14px]">
+                                <button className="tw-mt-2" onClick={() => handleClickCancelEvent(e)}>Cancelar</button>
+                              </div>
+                            }
 
-                                  {restaurant.status === 1 &&
-                                    <>€</>
-                                  }
-                                  {restaurant.status === 0 &&
-                                    <><img src={SvgBlackCheckmarkOferta} /></>
-                                  }
+                          </SplideSlide>
+                        ))}
+
+                      </SplideTrack>
+                    </Splide>
+                  </div>
+                  <div id="menu-block--Ofertas" className="menu-block--ofertas">
+                    <div className="block-head">
+                      <h2 className="dashboard--heading">Hola {user?.fullName} ❤️</h2>
+                      <div className="dashboard--title">Overview</div>
+                      <div className="slider--block--header">
+                        <div className="slider-block--emoji">💸</div>
+                        <div className="slider-block--text">Tus ofertas</div>
+                      </div>
+                    </div>
+                    <Splide id="slider2" className="slider-blovk--basic oferta--splide" hasTrack={false} options={option1}>
+                      <div className="splide__arrows">
+                        <button className="splide__arrow splide__arrow--prev">Prev</button>
+                        <button className="splide__arrow splide__arrow--next">Next</button>
+                      </div>
+                      <SplideTrack className="ofertas--track w-dyn-list tw-max-w-[650px] lg:tw-max-w-[660px] xl:tw-max-w-[999px] 2xl:tw-max-w-[1380px]">
+                        {restaurants.map((restaurant, index) => (
+                          <SplideSlide className="wl-dyn-item tw-rounded-3xl" key={index}>
+                            <div className="ofertas--content-block">
+                              <div className="ofertas--content-text">
+                                <div className="ofertas-header">
+                                  <div className="ofertas--title-and-timer">
+                                    <div className="ofertas--title">{restaurant.name}</div>
+                                    <div className="ofertas--timer ofertas--timer-emoji">⏳</div>
+                                    <div className="ofertas--timer">October 30, 2022</div>
+                                    <div className="ofertas--timer ofertas--timer-post w-condition-invisible">left</div>
+                                  </div>
+                                  <div className="ofertas--subtitle">{restaurant.description}</div>
                                 </div>
                               </div>
-                              <div className="currency-icon-value">
-                                {restaurant.status === 1 &&
-                                  <>Activar</>
-                                }
-                                {restaurant.status === 0 &&
-                                  <>Oferta Activada</>
-                                }
-                                {restaurant.status === -1 &&
-                                  <></>
-                                }
-                              </div>
+                              <a className="link-block link-block--ofertas w-inline-block" onClick={() => handleClickOffer(restaurant)}>
+                                <div className={restaurant.status ? "offer-block-button offer-block-button_responsive" : `offer-block-button offer-block-button_responsive active`}>
+                                  <div className="offer-block-currency-icon">
+                                    <div className="currency-icon-text">
+
+                                      {restaurant.status === 1 &&
+                                        <>€</>
+                                      }
+                                      {restaurant.status === 0 &&
+                                        <><img src={SvgBlackCheckmarkOferta} /></>
+                                      }
+                                    </div>
+                                  </div>
+                                  <div className="currency-icon-value">
+                                    {restaurant.status === 1 &&
+                                      <>Activar</>
+                                    }
+                                    {restaurant.status === 0 &&
+                                      <>Oferta Activada</>
+                                    }
+                                    {restaurant.status === -1 &&
+                                      <></>
+                                    }
+                                  </div>
+                                </div>
+                                <div className="w-embed"></div>
+                              </a>
                             </div>
-                            <div className="w-embed"></div>
-                          </a>
-                        </div>
-                        <div className="ofertas--image-block">
-                          <img src={ImgSuffolkPunchFull} loading="lazy" alt="Suffolk punch Copy 10" sizes="(max-width: 1919px) 175.00001525878906px, 9vw" className="ofertas--image" /></div>
-                      </SplideSlide>
-                    ))}
+                            <div className="ofertas--image-block">
+                              <img src={ImgSuffolkPunchFull} loading="lazy" alt="Suffolk punch Copy 10" sizes="(max-width: 1919px) 175.00001525878906px, 9vw" className="ofertas--image" /></div>
+                          </SplideSlide>
+                        ))}
 
-                  </SplideTrack>
-                </Splide>
+                      </SplideTrack>
+                    </Splide>
 
+                  </div>
+
+                </div>
               </div>
-
-            </div>
-          </div>
+            </>
+          ) : (
+            <></>
+          )}
         </>
-      ) : (
-        <></>
       )}
     </>
   )
