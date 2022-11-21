@@ -30,6 +30,8 @@ import { fetchStarted, resultLoaded } from '../store/slices/api.slice';
 import { isValidToken, setSession } from '../utils/jwt';
 import eventService from '../services/event.service';
 import restaurantService from '../services/restaurant.service';
+import { humanizeFutureToNow } from '../utils';
+import { getStripeCustomerDetailAsync } from '../store/slices/stripe.slice';
 
 export enum SECTION_INDEX {
   INVITE,
@@ -88,10 +90,10 @@ const Dashboard = () => {
   const [isLoaded, loaded] = useReducer(() => true, false);
   const [customerPortalSessionUrl, setCustomerPortalSessionUrl] = useState(null);
   const { user } = useTypedSelector(state => state.auth);
+  const stripeCustomerInfo  = useTypedSelector(state => state.stripe.data);
   const dispatch = useDispatch();
   const [events, setEvents] = useState<any[]>(Array());
   const [restaurants, setRestaurants] = useState<any[]>(Array());
-
 
   useEffect(() => {
     var arrowsBlockElement = document.getElementsByClassName("splide__arrows--ltr");
@@ -114,8 +116,24 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
+    dispatch(getStripeCustomerDetailAsync());
     handleOpenStripeCustomerPortal();
   }, []);
+
+  useEffect(() => {
+    let interval = setInterval(() => {
+      checkCustomerInfo();
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const checkCustomerInfo = () => {
+    console.log(stripeCustomerInfo.status);
+    if (stripeCustomerInfo.status !== 'active') {
+      alert('check payment');
+    }
+  }
 
   useEffect(() => {
     getAllEvents();
@@ -165,6 +183,7 @@ const Dashboard = () => {
         }).then((res) => {
           console.log(res);
           if (res.data.session) {
+            console.log(res.data.session);
             setCustomerPortalSessionUrl(res.data.session.url);
           }
 
@@ -601,7 +620,7 @@ const Dashboard = () => {
                               <div className="ofertas--title-and-timer">
                                 <div className="ofertas--title">{e.name}</div>
                                 <div className="ofertas--timer ofertas--timer-emoji"></div>
-                                <div className="ofertas--timer">October 31, 2022</div>
+                                <div className="ofertas--timer">{humanizeFutureToNow(e.eventDate)}</div>
                                 <div className="ofertas--timer ofertas--timer-post">left</div>
                               </div>
                               <div className="ofertas--subtitle">{e.description}</div>

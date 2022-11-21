@@ -26,6 +26,10 @@ class UserService {
     createCustomerPortal(data: any) {
         return Http.post<any>(this.apiUrl + '/create-customer-portal-session', data);
     }
+
+    getCustomerDetail() {
+        return Http.get<any>(this.apiUrl + `/subscription-detail`);
+    }
 }
 
 export default new UserService();

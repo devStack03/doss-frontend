@@ -37,7 +37,8 @@ import LogoWhite from '../assets/images/logo-white.svg';
 import UnaEnUnRestaurante from '../assets/images/una-mujer-en-un-restaurante.png';
 import OfferCarouselItem from '../components/landing/OfferCarouselItem';
 import LoadingScreen from '../components/LoadingScreen';
-import { useTypedSelector } from '../store/store';
+import { useDispatch, useTypedSelector } from '../store/store';
+import { signout } from '../store/slices/api.slice';
 
 const media = [
   { type: MediaType.Image, url: LogoBlack },
@@ -56,6 +57,7 @@ const media = [
 
 const Landing = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { user, loggedin } = useTypedSelector(state => state.auth)
   const [isLoaded, loaded] = useReducer(() => true, false);
   const offerImgList = [
@@ -240,7 +242,7 @@ const Landing = () => {
     homeMenuBlock!.style.marginBottom = "-144px";
   }
   const handleSignout = () => {
-
+    dispatch(signout());
   }
   
   return (

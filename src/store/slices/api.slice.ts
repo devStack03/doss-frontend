@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { tickets } from './actions';
 import httpService from '../../utils/axios';
 
 export type PostDataType = {
@@ -35,14 +34,16 @@ interface AuthSliceState {
   registered: boolean,
   loggedin: boolean,
   data: Array<any>,
-  user: UserDataType | null
+  user: UserDataType | null,
+  stripeCustomerInfo?: any
 }
 const initialState: AuthSliceState = {
   isLoading: false,
   registered: false,
   loggedin: false,
   data: blankData,
-  user: null
+  user: null,
+  stripeCustomerInfo: null,
 }
 
 export function fetchDataList() {
@@ -86,6 +87,13 @@ export const apiSlice = createSlice({
     userLoggedin: (state, payload) => {
       state.loggedin = true;
       state.user = payload.payload;
+      localStorage.setItem('doss_token', payload.payload.accessToken);
+    },
+    signout: (state) => {
+      state.loggedin = false;
+      state.user = null;
+      localStorage.removeItem('doss_token');
+      localStorage.removeItem('accessToken');
     }
   },
   extraReducers: (builder) => {
@@ -113,6 +121,6 @@ export const apiSlice = createSlice({
   },
 });
 
-export const { resultLoaded, fetchStarted, userRegistered, userLoggedin } = apiSlice.actions
+export const { resultLoaded, fetchStarted, userRegistered, userLoggedin, signout } = apiSlice.actions
 
 export default apiSlice.reducer;

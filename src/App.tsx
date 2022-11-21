@@ -13,6 +13,7 @@ import Signup from './pages/Signup';
 import PaymentSuccess from './pages/PaymentSuccess';
 import { useTypedSelector } from './store/store';
 import Landing from './pages/Landing';
+import Profile from './pages/Profile';
 
 export const RequireAuth = ({ children, redirectTo }: { children: JSX.Element, redirectTo?: string }) => {
   let { registered, loggedin } = useTypedSelector(state => state.auth);
@@ -39,13 +40,20 @@ function App() {
         <Routes>
           {/* <Route path='/' element={<Navigate to="/login" replace />} /> */}
           <Route path='/' element={<Landing />} />
-          <Route path='login' element={<Login />} />
+          <Route path='login' element={
+            <Login />
+            } />
           <Route path='dashboard' element={
             <RequireAuth>
               <Dashboard />
             </RequireAuth>
           } />
           <Route path='signup' element={<Signup option='' />} />
+          <Route path='profile' element={
+            <RequireAuth>
+              <Profile />
+            </RequireAuth>
+          } />
 
           <Route path='payment-success' element={
             <RequireSignup>

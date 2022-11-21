@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import PhoneInput from "../components/login/PhoneInput";
 import VerificationCodeInput from "../components/login/VerificationCodeInput";
 import NavHeader from "../components/NavHeader";
@@ -10,7 +10,7 @@ import { useDispatch, useTypedSelector } from '../store/store';
 
 const Login = () => {
   const navigate = useNavigate();
-  const isLoading = useTypedSelector(state => state.auth.isLoading);
+  const { isLoading, user } = useTypedSelector(state => state.auth);
   const dispatch = useDispatch();
   const [phoneNumberSubmitted, setPhoneNumberSubmitted] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -57,14 +57,20 @@ const Login = () => {
   return (
     <>
       <NavHeader />
-      {!phoneNumberSubmitted ? (
-        <PhoneInput handleAfterSubmit={handleSubmit} />
+      {!user?.accessToken ? (
+        <>
+          {!phoneNumberSubmitted ? (
+            <PhoneInput handleAfterSubmit={handleSubmit} />
+          ) : (
+            <VerificationCodeInput handleAfterSubmit={handleSubmit} codeInValid={codeInvalid} phoneNumber={phoneNumber} />
+          )}
+          {isLoading &&
+            <LoadingScreen />
+          }
+        </>
       ) : (
-        <VerificationCodeInput handleAfterSubmit={handleSubmit} codeInValid={codeInvalid} phoneNumber={phoneNumber} />
+        <Navigate to={`/dashboard`} replace />
       )}
-      {isLoading &&
-        <LoadingScreen />
-      }
     </>
   )
 }
