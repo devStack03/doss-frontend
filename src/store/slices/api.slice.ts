@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import userService from '../../services/user.service';
 import httpService from '../../utils/axios';
 
 export type PostDataType = {
@@ -46,16 +47,17 @@ const initialState: AuthSliceState = {
   stripeCustomerInfo: null,
 }
 
-export function fetchDataList() {
-  return httpService.get(`/data`);
+export function fetchUserData() {
+  return userService.get();
 }
 
 export function addData(data: PostDataType) {
   return httpService.post(`/add`, data);
 }
 
-export const getDataListAsync = createAsyncThunk('data/fetch', async () => {
-  const response: any = await fetchDataList();
+export const getUserDataAsync = createAsyncThunk('data/fetch', async () => {
+
+  const response: any = await fetchUserData();
   console.log(`response fetched: ${response.data}`);
   if (response.data.status === 1 && response.data.data.length > 0) {
     return (response.data.data).concat(blankData);
@@ -86,7 +88,10 @@ export const apiSlice = createSlice({
     },
     userLoggedin: (state, payload) => {
       state.loggedin = true;
-      state.user = payload.payload;
+      state.user = {
+        ...payload.payload,
+        ...state.user
+      };
       localStorage.setItem('doss_token', payload.payload.accessToken);
     },
     signout: (state) => {
@@ -94,17 +99,20 @@ export const apiSlice = createSlice({
       state.user = null;
       localStorage.removeItem('doss_token');
       localStorage.removeItem('accessToken');
+    },
+    getUser: (state) => {
+      return state;
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(getDataListAsync.pending, (state) => {
+    builder.addCase(getUserDataAsync.pending, (state) => {
       state.isLoading = true;
     })
-      .addCase(getDataListAsync.fulfilled, (state, action) => {
+      .addCase(getUserDataAsync.fulfilled, (state, action) => {
         state.isLoading = false;
         state.data = action.payload;
       })
-      .addCase(getDataListAsync.rejected, (state) => {
+      .addCase(getUserDataAsync.rejected, (state) => {
         state.isLoading = false;
       })
 

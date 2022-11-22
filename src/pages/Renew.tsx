@@ -4,8 +4,9 @@ import { fetchStarted, resultLoaded } from '../store/slices/api.slice';
 import { useDispatch, useTypedSelector } from '../store/store';
 import { format } from 'date-fns';
 import SignupThree from '../components/signup/SignupThree';
+import RenewCard from '../components/payment/RenewCard';
 
-const Renew = () => {
+const Renew = ({ handleSubscriptionRenewed }: { handleSubscriptionRenewed: () => void }) => {
   const dispatch = useDispatch();
   const { user } = useTypedSelector(state => state.auth);
   const { data } = useTypedSelector(state => state.stripe);
@@ -91,6 +92,14 @@ const Renew = () => {
     })
   }
 
+  const handleActiveSectionChange = (index: number) => {
+    if (index) {
+      handleSubscriptionRenewed();
+    } else {
+
+    }
+  }
+
   return (
     <>
       <div className="section-fullscreen wf-section">
@@ -111,7 +120,7 @@ const Renew = () => {
           <>
             {subscriptionCreated ? (
               <>
-                <SignupThree handleActiveSectionChange={() => {}} option="renew"/>
+                <RenewCard handleActiveSectionChange={handleActiveSectionChange} option="renew" customerData={customerData} />
               </>
             ) : (
               <div className="section-fullscreen-container">

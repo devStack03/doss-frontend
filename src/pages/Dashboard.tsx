@@ -26,11 +26,11 @@ import './dashboard.css';
 import userService from '../services/user.service';
 import { useDispatch, useTypedSelector } from '../store/store';
 import LoadingScreen from '../components/LoadingScreen';
-import { fetchStarted, resultLoaded } from '../store/slices/api.slice';
+import { fetchStarted, resultLoaded, userLoggedin } from '../store/slices/api.slice';
 import { isValidToken, setSession } from '../utils/jwt';
 import eventService from '../services/event.service';
 import restaurantService from '../services/restaurant.service';
-import { humanizeFutureToNow } from '../utils';
+import { formatDate, humanizeFutureToNow } from '../utils';
 import { getStripeCustomerDetailAsync, setCustomerDetail } from '../store/slices/stripe.slice';
 import Renew from './Renew';
 
@@ -128,7 +128,8 @@ const Dashboard = () => {
         try {
           const {data} = await userService.getCustomerDetail().then((res) => res.data);
           if (data.status === 'active') {
-            setSubscriptionCanceled(true);
+            console.log('inactive');
+            setSubscriptionCanceled(false);
           }
           dispatch(setCustomerDetail(data));
           handleOpenStripeCustomerPortal();
@@ -452,11 +453,21 @@ const Dashboard = () => {
     document.body.style.overflow = "scroll";
   }
 
+  const handleSubscriptionRenewed = () => {
+    setSubscriptionCanceled(false);
+    userService.getById(user?.id!).then((res) => {
+      const data = res.data;
+      dispatch(userLoggedin({
+        ...data,
+      }));
+    })
+  }
+
   return (
     <>
       {subscriptionCanceled ? (
         <>
-        <Renew />
+        <Renew handleSubscriptionRenewed={handleSubscriptionRenewed}/>
         </>
       ) : (
         <>
@@ -652,8 +663,8 @@ const Dashboard = () => {
                                   <div className="ofertas--title-and-timer">
                                     <div className="ofertas--title">{e.name}</div>
                                     <div className="ofertas--timer ofertas--timer-emoji"></div>
-                                    <div className="ofertas--timer">{humanizeFutureToNow(e.eventDate)}</div>
-                                    <div className="ofertas--timer ofertas--timer-post">left</div>
+                                    <div className="ofertas--timer">{formatDate(e.eventDate)}</div>
+                                    <div className="ofertas--timer ofertas--timer-post"></div>
                                   </div>
                                   <div className="ofertas--subtitle">{e.description}</div>
                                 </div>

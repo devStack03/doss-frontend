@@ -1,8 +1,6 @@
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { GeneralFuctionType } from '../../@types/props.types';
-import useAuth from '../../hooks/useAuth';
-import authService from '../../services/auth.service';
 import PaymentForm from '../payment';
 import { Elements } from '@stripe/react-stripe-js';
 import { Appearance, loadStripe } from '@stripe/stripe-js';
@@ -13,12 +11,11 @@ import { isValidToken } from '../../utils';
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || '');
 
-const SignupThree = ({ handleActiveSectionChange, option, customerData }: { handleActiveSectionChange: GeneralFuctionType, option: string, customerData?: any }) => {
+const RenewCard = ({ handleActiveSectionChange, option, customerData }: { handleActiveSectionChange: GeneralFuctionType, option: string, customerData?: any }) => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useTypedSelector(state => state.auth);
-  const { userSignupData } = useAuth();
   const [errorMessage, setErrorMessage] = useState('');
   const appearance = {
     theme: 'stripe'
@@ -26,7 +23,7 @@ const SignupThree = ({ handleActiveSectionChange, option, customerData }: { hand
 
   const options = {
     // passing the client secret obtained in step 3
-    clientSecret: customerData? customerData.stripeClientSecret : userSignupData.stripeClientSecret,
+    clientSecret: customerData ? customerData.stripeClientSecret : '',
     // Fully customizable with appearance API.
     appearance,
     layout: {
@@ -63,31 +60,13 @@ const SignupThree = ({ handleActiveSectionChange, option, customerData }: { hand
             if (res.data.status === 1) {
               handleActiveSectionChange(1);
             }
-          })
+          }).finally(() => {
+            dispatch(resultLoaded());
+          });
         }
-        
-      } else {
-        authService.create({
-          ...userSignupData,
-          lastPaymentStatus: paymentIntent.status
-        }).then((res) => {
-          console.log(res.data);
-          if (res.data.status === -1) {
-            setErrorMessage(res.data.error.message);
-          } else {
-            dispatch(userRegistered());
-            navigate('/payment-success');
-          }
-        }).catch((err) => {
-          setErrorMessage(err.message);
-          console.log(err);
-        }).finally(() => {
-          dispatch(resultLoaded());
-        })
-      }
-      
-    }
 
+      }
+    }
   }
 
   return (
@@ -106,7 +85,7 @@ const SignupThree = ({ handleActiveSectionChange, option, customerData }: { hand
               <div className="plan-header">
                 <div className="plan-placeholder--name">Plan</div>
                 <div className="plan-placeholder--cost-and-currency">
-                  <div className="plan-placeholder--cost">{userSignupData.subscriptionPlan === 'year' ? `109,99` : `12,99`}</div>
+                  <div className="plan-placeholder--cost">{customerData.subscriptionPlan === 'year' ? `109,99` : `12,99`}</div>
                   <div className="plan-placeholder--currency">€</div>
                 </div>
               </div>
@@ -122,7 +101,7 @@ const SignupThree = ({ handleActiveSectionChange, option, customerData }: { hand
 
               <div className="payment-summary">
                 <div className="payment-summary--title">Se le cobrarán </div>
-                <div id="plan-placeholder" className="plan-placeholder--cost plan-placeholder--cost-custom">{userSignupData.subscriptionPlan === 'year' ? `109,99` : `12,99`}</div>
+                <div id="plan-placeholder" className="plan-placeholder--cost plan-placeholder--cost-custom">{customerData.subscriptionPlan === 'year' ? `109,99` : `12,99`}</div>
                 <div className="payment-summary--title">€</div>
               </div>
               <div className="w-embed w-script">
@@ -148,4 +127,4 @@ const SignupThree = ({ handleActiveSectionChange, option, customerData }: { hand
   )
 }
 
-export default SignupThree;
+export default RenewCard;

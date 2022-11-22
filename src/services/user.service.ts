@@ -15,8 +15,8 @@ class UserService {
         return Http.get<any>(this.apiUrl + `/${id}`);
     }
 
-    get(data: any) {
-      return Http.post<any>('/', data)
+    get() {
+      return Http.get<any>('/')
     }
 
     createSubscription(data: any) {
@@ -37,6 +37,10 @@ class UserService {
 
     priceList() {
         return Http.get<any>(this.apiUrl + `/price-list`);
+    }
+
+    update(data: any) {
+        return Http.patch<any>(this.apiUrl + `/update`, data);
     }
 }
 
