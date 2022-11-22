@@ -34,6 +34,10 @@ class UserService {
     renewSubscription() {
         return Http.post<any>(this.apiUrl + `/subscription/renew`);
     }
+
+    priceList() {
+        return Http.get<any>(this.apiUrl + `/price-list`);
+    }
 }
 
 export default new UserService();

@@ -75,7 +75,9 @@ export const stripeSlice = createSlice({
   name: 'stripeSlice',
   initialState,
   reducers: {
-
+    setCustomerDetail: (state, action) => {
+      state.data = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(getStripeCustomerDetailAsync.fulfilled, (state, action) => {
@@ -90,5 +92,7 @@ export const stripeSlice = createSlice({
       })
   },
 });
+
+export const { setCustomerDetail }  = stripeSlice.actions;
 
 export default stripeSlice.reducer; 

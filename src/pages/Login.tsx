@@ -7,6 +7,8 @@ import authService from '../services/auth.service';
 import LoadingScreen from '../components/LoadingScreen';
 import { fetchStarted, resultLoaded, userLoggedin } from '../store/slices/api.slice';
 import { useDispatch, useTypedSelector } from '../store/store';
+import { setSession } from '../utils';
+import userService from '../services/user.service';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -38,6 +40,10 @@ const Login = () => {
           setCodeInvalid(true);
         } else {
           const { user, accessToken, refreshToken, ...rest } = res.data;
+          setSession(accessToken);
+          // userService.getCustomerDetail().then((res) =>{
+
+          // })
           dispatch(userLoggedin({
             ...user,
             accessToken,

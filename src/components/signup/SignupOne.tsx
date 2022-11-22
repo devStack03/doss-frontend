@@ -195,8 +195,9 @@ const SignupOne = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
                   className="form-field--field w-input no-spin"
                   maxLength={9}
                   name="phoneNumber"
+                  pattern="\d*"
                   data-name="your-telephone"
-                  placeholder="Tu teléfono"
+                  placeholder="666 123 456"
                   id="your-telephone"
                   data-ms-member="telefono"
                   required

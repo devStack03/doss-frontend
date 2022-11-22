@@ -23,13 +23,16 @@ const SignupTwo = ({ handleActiveSectionChange }: { handleActiveSectionChange: G
   const [selectedPriceId, setSelectedPriceId] = useState<string | null>(null);
   // const [subscriptionData, setSubscriptionData] = useState(null);
 
+
+
   const createSubscription = async (priceId: string) => {
     setErrorMessage('');
     dispatch(fetchStarted());
     try {
       const { subscriptionId, invoiceData } = await userService.createSubscription({
         customerId: stripeCumtomerInfo?.customer.id,
-        priceId
+        priceId,
+        email: userSignupData.email
       }).then((r) => (r.data));
       console.log({ subscriptionId, invoiceData });
       setUserSignupData({

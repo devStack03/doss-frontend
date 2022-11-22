@@ -31,7 +31,7 @@ import { isValidToken, setSession } from '../utils/jwt';
 import eventService from '../services/event.service';
 import restaurantService from '../services/restaurant.service';
 import { humanizeFutureToNow } from '../utils';
-import { getStripeCustomerDetailAsync } from '../store/slices/stripe.slice';
+import { getStripeCustomerDetailAsync, setCustomerDetail } from '../store/slices/stripe.slice';
 import Renew from './Renew';
 
 export enum SECTION_INDEX {
@@ -118,13 +118,35 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    dispatch(getStripeCustomerDetailAsync());
-    handleOpenStripeCustomerPortal();
-  }, []);
+    
+    const makeRequests = async () => {
+      
+      dispatch(fetchStarted());
+      if (user?.accessToken && isValidToken(user?.accessToken)) {
+        setSession(user?.accessToken!);
+        // dispatch(getStripeCustomerDetailAsync());
+        try {
+          const {data} = await userService.getCustomerDetail().then((res) => res.data);
+          if (data.status === 'active') {
+            setSubscriptionCanceled(true);
+          }
+          dispatch(setCustomerDetail(data));
+          handleOpenStripeCustomerPortal();
+          
+        } catch (error) {
+          
+        } finally {
+          dispatch(resultLoaded());
+        }
+      }
+    }
+
+    makeRequests();
+  }, [user?.accessToken]);
 
   useEffect(() => {
     let interval = setInterval(() => {
-      dispatch(getStripeCustomerDetailAsync());
+      // dispatch(getStripeCustomerDetailAsync());
       checkCustomerInfo();
     }, 10000);
 
@@ -135,7 +157,7 @@ const Dashboard = () => {
     console.log(stripeCustomerInfo.status);
     if (stripeCustomerInfo.status !== 'active') {
       // alert('check payment');
-      setSubscriptionCanceled(true);
+      // setSubscriptionCanceled(true);
     }
   }
 

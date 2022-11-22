@@ -11,7 +11,7 @@ import { useDispatch } from '../../store/store';
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || '');
 
-const SignupThree = ({ handleActiveSectionChange, option }: { handleActiveSectionChange: GeneralFuctionType, option: string }) => {
+const SignupThree = ({ handleActiveSectionChange, option, customerData }: { handleActiveSectionChange: GeneralFuctionType, option: string, customerData?: any }) => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ const SignupThree = ({ handleActiveSectionChange, option }: { handleActiveSectio
 
   const options = {
     // passing the client secret obtained in step 3
-    clientSecret: userSignupData.stripeClientSecret,
+    clientSecret: customerData? customerData.stripeClientSecret : userSignupData.stripeClientSecret,
     // Fully customizable with appearance API.
     appearance,
     layout: {
@@ -51,23 +51,28 @@ const SignupThree = ({ handleActiveSectionChange, option }: { handleActiveSectio
       setErrorMessage('Wrong Card!')
       dispatch(resultLoaded());
     } else {
-      authService.create({
-        ...userSignupData,
-        lastPaymentStatus: paymentIntent.status
-      }).then((res) => {
-        console.log(res.data);
-        if (res.data.status === -1) {
-          setErrorMessage(res.data.error.message);
-        } else {
-          dispatch(userRegistered());
-          navigate('/payment-success');
-        }
-      }).catch((err) => {
-        setErrorMessage(err.message);
-        console.log(err);
-      }).finally(() => {
-        dispatch(resultLoaded());
-      })
+      if (option === 'renew') {
+
+      } else {
+        authService.create({
+          ...userSignupData,
+          lastPaymentStatus: paymentIntent.status
+        }).then((res) => {
+          console.log(res.data);
+          if (res.data.status === -1) {
+            setErrorMessage(res.data.error.message);
+          } else {
+            dispatch(userRegistered());
+            navigate('/payment-success');
+          }
+        }).catch((err) => {
+          setErrorMessage(err.message);
+          console.log(err);
+        }).finally(() => {
+          dispatch(resultLoaded());
+        })
+      }
+      
     }
 
   }

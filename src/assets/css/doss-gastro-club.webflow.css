@@ -3878,6 +3878,7 @@ h1 {
 .custom-styles {
   --ReactInputVerificationCode-itemWidth: 2.5rem;
   --ReactInputVerificationCode-itemHeight: 3.5rem;
+  justify-content: center;
 }
 
 .custom-styles .ReactInputVerificationCode__item {
@@ -3909,3 +3910,40 @@ h1 {
   justify-content: space-between;
   align-items: center;
 }
+
+.code-input {
+  width: 100% !important;
+}
+.code-input div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.code-input div input {
+  width: 50px !important;
+  height: 68px !important;
+  margin-bottom: 0px;
+  border: 1px none #000;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+  font-family: Matter, sans-serif;
+  color: #000;
+  font-weight: 600;
+  text-align: center;
+  padding: 8px 12px;
+  font-size: 14px;
+  box-shadow: none;
+}
+
+
+.code-input div input:last-child {
+  border-right: solid 0px #ffc700;
+}
+
+.code-input div input:focus {
+  border-style: solid;
+  border-color: #ffc700;
+  box-shadow: none;
+  border-width: 1px;
+}
+

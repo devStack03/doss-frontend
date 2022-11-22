@@ -17,7 +17,8 @@ const VerificationCodeInput = (
 
   useEffect(() => {
     const element: HTMLInputElement = document.querySelector('#one-time-code') as HTMLInputElement;
-    console.log(element);
+    element?.classList.add('autofocus');
+    // console.log(element);
     element?.focus();
   }, [])
 
@@ -29,7 +30,6 @@ const VerificationCodeInput = (
 
     return () => clearTimeout(timer)
   });
-
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -95,6 +95,7 @@ const VerificationCodeInput = (
                   onChange={setValue}
                   onCompleted={handleVerifyCode}
                 />
+                {/* <ReactCodeInput type="number" className="code-input" autoFocus onComplete={handleVerifyCode}/> */}
               </div>
               <input type="submit" data-wait="Cargando" value={ count > 0 ? `Reenviar en ${count} segundos`: `Reenviar SMS`} disabled={count > 0 ? true : false} className={count === 0 ? "submit-button-3 w-button tw-bg-[#ffc700]" : "submit-button-3 w-button"} />
               {codeInValid &&
