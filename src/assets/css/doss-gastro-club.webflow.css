@@ -3971,7 +3971,7 @@ h1 {
   box-shadow: none;
 }
 .character--selected {
-  outline: 1px solid #ffc700; 
+  outline: 0 solid #ffc700; 
   border-style: solid;
   border-color: #ffc700;
   box-shadow: none;
