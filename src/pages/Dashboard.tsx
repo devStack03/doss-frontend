@@ -472,6 +472,7 @@ const Dashboard = () => {
     <>
       {subscriptionCanceled ? (
         <>
+          <NavHeader />
           <Renew handleSubscriptionRenewed={handleSubscriptionRenewed} />
         </>
       ) : (
