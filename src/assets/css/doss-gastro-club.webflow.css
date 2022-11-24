@@ -766,10 +766,11 @@ h1 {
   padding-left: 10px;
   -webkit-transition: all 200ms ease;
   transition: all 200ms ease;
+  cursor: pointer;
 }
 
 .offer-block-button.offer-block-button_responsive:hover {
-  background-color: #ca3a3a;
+  /* background-color: #ca3a3a; */
 }
 
 .offer-block-button.offer-block-button_responsive.offer-block-button--status-asistir {
@@ -3947,3 +3948,31 @@ h1 {
   border-width: 1px;
 }
 
+.pin-container {
+  width: 100%;
+  gap: 14px;
+}
+
+.character {
+  width: 50px;
+  height: 68px;
+  margin-bottom: 0px;
+  border: 1px none #000;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+  font-family: Matter, sans-serif;
+  color: #000;
+  font-weight: 600;
+  text-align: center;
+  display: block;
+  padding: 8px 12px;
+  font-size: 14px;
+  vertical-align: middle;
+  box-shadow: none;
+}
+.character--selected {
+  outline: 1px solid #ffc700; 
+  border-style: solid;
+  border-color: #ffc700;
+  box-shadow: none;
+}

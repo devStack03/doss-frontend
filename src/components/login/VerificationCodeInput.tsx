@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import { validatePhoneField } from "../../utils/validation";
-import ReactCodeInput from 'react-verification-code-input';
 import ReactInputVerificationCode from "react-input-verification-code";
 import { Link } from "react-router-dom";
 import authService from "../../services/auth.service";
+import VerificationInput from "react-verification-input";
 
 const VerificationCodeInput = (
   { handleAfterSubmit, codeInValid, phoneNumber }: {
@@ -74,7 +73,15 @@ const VerificationCodeInput = (
         setCount((count) => count - 1);
     }, 1000);
   }
-  
+
+  const onChangeValue = (_value: string) => {
+    // -- I also tried without this part below
+    if (_value.length === 6) {
+      handleAfterSubmit(true, '', _value);
+    }
+    // --  still doesn't work for me
+  };
+
 
   return (
     <div className="section-fullscreen wf-section">
@@ -87,17 +94,35 @@ const VerificationCodeInput = (
           <div className="w-form">
             <form id="wf-form-Registration-form---SMS-code" name="wf-form-Registration-form---SMS-code" data-name="Registration form - SMS code" onSubmit={handleSubmit}>
               <div className="custom-styles div-block-2">
-                <ReactInputVerificationCode
+                <VerificationInput
+                  // value={value}
+                  classNames={{
+                    container: "pin-container",
+                    character: "character",
+                    characterInactive: "character--inactive",
+                    characterSelected: "character--selected",
+                  }}
+                  onChange={onChangeValue}
+                  onFocus={() => {
+
+                  }}
+                  placeholder=""
+                  validChars="0-9"
+                  inputProps={{ autoComplete: "one-time-code", type: 'tel' }}
+                  // removeDefaultStyles
+                  autoFocus
+                />
+                {/* <ReactInputVerificationCode
                   autoFocus
                   placeholder=""
                   length={6}
                   value={value}
                   onChange={setValue}
                   onCompleted={handleVerifyCode}
-                />
+                /> */}
                 {/* <ReactCodeInput type="number" className="code-input" autoFocus onComplete={handleVerifyCode}/> */}
               </div>
-              <input type="submit" data-wait="Cargando" value={ count > 0 ? `Reenviar en ${count} segundos`: `Reenviar SMS`} disabled={count > 0 ? true : false} className={count === 0 ? "submit-button-3 w-button tw-bg-[#ffc700]" : "submit-button-3 w-button"} />
+              <input type="submit" data-wait="Cargando" value={count > 0 ? `Reenviar en ${count} segundos` : `Reenviar SMS`} disabled={count > 0 ? true : false} className={count === 0 ? "submit-button-3 w-button tw-bg-[#ffc700]" : "submit-button-3 w-button"} />
               {codeInValid &&
                 <span className='wf-error-msg'>{`Invalid code`}</span>
               }

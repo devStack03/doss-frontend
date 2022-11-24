@@ -243,6 +243,7 @@ const Landing = () => {
   }
   const handleSignout = () => {
     dispatch(signout());
+    handleClickMobileMenuClose();
   }
   
   return (
@@ -263,7 +264,7 @@ const Landing = () => {
               {loggedin ? (
                 <>
                   <Link to="/dashboard" className="menu-list__button--dark w-button">{`Panel`}</Link>
-                  <Link to="/login" onClick={handleSignout} className="menu-list__button--light w-button">{`Salir`}</Link>
+                  <Link to="/" onClick={handleSignout} className="menu-list__button--light w-button">{`Salir`}</Link>
                 </>
               ) : (
                 <>

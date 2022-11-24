@@ -8,11 +8,12 @@ import { UserContext } from '../contexts/UserContext';
 import { UserContextType } from '../@types/user';
 import LoadingScreen from '../components/LoadingScreen';
 import { useTypedSelector } from '../store/store';
+import { Navigate } from 'react-router-dom';
 
 
 const Signup = ({ option }: { option: string }) => {
   const [activeSection, setActiveSection] = useState(1);
-  const isLoading = useTypedSelector(state => state.auth.isLoading);
+  const { isLoading, user } = useTypedSelector(state => state.auth);
   const changeActiveSection = (index: number) => {
     setActiveSection(index);
   }
@@ -33,6 +34,7 @@ const Signup = ({ option }: { option: string }) => {
   return (
     <>
       <NavHeader />
+      {!user?.accessToken ? (
       <UserContext.Provider value={{ userSignupData, setUserSignupData: handleUserSignupData, stripeCumtomerInfo, setStripeInfo: handleChangeUserStripeCustomerInfo }}>
         {activeSection === 1 &&
           <SignupOne handleActiveSectionChange={changeActiveSection} />
@@ -47,7 +49,9 @@ const Signup = ({ option }: { option: string }) => {
           <LoadingScreen />
         }
       </UserContext.Provider>
-
+      ): (
+        <Navigate to={`/dashboard`} replace />
+      )}
     </>
   )
 }

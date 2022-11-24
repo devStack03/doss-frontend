@@ -20,7 +20,7 @@ class RestaurantService {
     }
 
     activate(data: any, id: string) {
-      return Http.patch<any>(`${this.apiUrl }/${id}/activate`, data);
+      return Http.post<any>(`${this.apiUrl }/${id}/activate`, data);
     }
 }
 

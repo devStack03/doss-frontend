@@ -7,6 +7,7 @@ import OfferSection from '../components/dashboard/OfferSection';
 import InviteSection from '../components/dashboard/InviteSection';
 import { Splide, SplideSlide, SplideTrack } from '@splidejs/react-splide';
 import { PreloadMedia, MediaType } from 'react-preload-media';
+import Countdown from "react-countdown";
 
 import ImgFrame from '../assets/images/Frame.png';
 import ImgSuffolkPunchFull from '../assets/images/suffolk-punch-FULL-p-500.png';
@@ -33,6 +34,7 @@ import restaurantService from '../services/restaurant.service';
 import { formatDate, humanizeFutureToNow } from '../utils';
 import { getStripeCustomerDetailAsync, setCustomerDetail } from '../store/slices/stripe.slice';
 import Renew from './Renew';
+import CountdownRenderer from '../components/dashboard/CountdownRenderer';
 
 export enum SECTION_INDEX {
   INVITE,
@@ -118,24 +120,27 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    
+
     const makeRequests = async () => {
-      
+
       dispatch(fetchStarted());
       if (user?.accessToken && isValidToken(user?.accessToken)) {
         setSession(user?.accessToken!);
         // dispatch(getStripeCustomerDetailAsync());
         try {
-          const {data} = await userService.getCustomerDetail().then((res) => res.data);
+          const { data } = await userService.getCustomerDetail().then((res) => res.data);
           if (data.status === 'active') {
-            console.log('inactive');
+            console.log('active');
             setSubscriptionCanceled(false);
+          } else if (data.status === 'canceled') {
+            console.log('inactive');
+            setSubscriptionCanceled(true);
           }
           dispatch(setCustomerDetail(data));
           handleOpenStripeCustomerPortal();
-          
+
         } catch (error) {
-          
+
         } finally {
           dispatch(resultLoaded());
         }
@@ -155,7 +160,7 @@ const Dashboard = () => {
   }, []);
 
   const checkCustomerInfo = () => {
-    console.log(stripeCustomerInfo.status);
+    console.log(stripeCustomerInfo);
     if (stripeCustomerInfo.status !== 'active') {
       // alert('check payment');
       // setSubscriptionCanceled(true);
@@ -189,7 +194,7 @@ const Dashboard = () => {
 
   const sortRestaurants = (array: any[]) => {
     return array.sort((a, b) => {
-      return a.status - b.status;
+      return b.status - a.status;
     })
   }
 
@@ -201,7 +206,7 @@ const Dashboard = () => {
 
   const handleOpenStripeCustomerPortal = () => {
     if (user?.stripeCustomerId) {
-      dispatch(fetchStarted());
+      // dispatch(fetchStarted());
       if (isValidToken(user.accessToken!)) {
         setSession(user.accessToken!)
         userService.createCustomerPortal({
@@ -217,7 +222,7 @@ const Dashboard = () => {
         }).catch((err) => {
 
         }).finally(() => {
-          dispatch(resultLoaded());
+          // dispatch(resultLoaded());
         })
       }
 
@@ -225,7 +230,7 @@ const Dashboard = () => {
   }
 
   const handleClickOffer = (restaurant: any) => {
-    if (restaurant.status) {
+    if (!restaurant.status && restaurant.available) {
       setSession(user?.accessToken!);
       restaurantService.activate({}, restaurant.id).then((res) => {
         console.log(res);
@@ -467,7 +472,7 @@ const Dashboard = () => {
     <>
       {subscriptionCanceled ? (
         <>
-        <Renew handleSubscriptionRenewed={handleSubscriptionRenewed}/>
+          <Renew handleSubscriptionRenewed={handleSubscriptionRenewed} />
         </>
       ) : (
         <>
@@ -733,30 +738,39 @@ const Dashboard = () => {
                                   <div className="ofertas--title-and-timer">
                                     <div className="ofertas--title">{restaurant.name}</div>
                                     <div className="ofertas--timer ofertas--timer-emoji">⏳</div>
-                                    <div className="ofertas--timer">October 30, 2022</div>
+                                    <div className="ofertas--timer">
+                                      <Countdown
+                                        date={
+                                          new Date(
+                                            restaurant.expireDate
+                                          )
+                                        }
+                                        renderer={CountdownRenderer}
+                                      />
+                                    </div>
                                     <div className="ofertas--timer ofertas--timer-post w-condition-invisible">left</div>
                                   </div>
                                   <div className="ofertas--subtitle">{restaurant.description}</div>
                                 </div>
                               </div>
                               <a className="link-block link-block--ofertas w-inline-block" onClick={() => handleClickOffer(restaurant)}>
-                                <div className={restaurant.status ? "offer-block-button offer-block-button_responsive" : `offer-block-button offer-block-button_responsive active`}>
+                                <div className={!restaurant.status ? "offer-block-button offer-block-button_responsive" : `offer-block-button offer-block-button_responsive active`}>
                                   <div className="offer-block-currency-icon">
                                     <div className="currency-icon-text">
 
-                                      {restaurant.status === 1 &&
+                                      {restaurant.status === 0 &&
                                         <>€</>
                                       }
-                                      {restaurant.status === 0 &&
+                                      {restaurant.status === 1 &&
                                         <><img src={SvgBlackCheckmarkOferta} /></>
                                       }
                                     </div>
                                   </div>
                                   <div className="currency-icon-value">
-                                    {restaurant.status === 1 &&
+                                    {restaurant.status === 0 &&
                                       <>Activar</>
                                     }
-                                    {restaurant.status === 0 &&
+                                    {restaurant.status === 1 &&
                                       <>Oferta Activada</>
                                     }
                                     {restaurant.status === -1 &&
