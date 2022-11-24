@@ -243,7 +243,7 @@ const Landing = () => {
   }
   const handleSignout = () => {
     dispatch(signout());
-    handleClickMobileMenuClose();
+    // handleClickMobileMenuClose();
   }
   
   return (

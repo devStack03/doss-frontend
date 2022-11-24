@@ -93,7 +93,7 @@ const VerificationCodeInput = (
         <div className="telephone-form">
           <div className="w-form">
             <form id="wf-form-Registration-form---SMS-code" name="wf-form-Registration-form---SMS-code" data-name="Registration form - SMS code" onSubmit={handleSubmit}>
-              <div className="custom-styles div-block-2">
+              <div className="custom-styles div-block-2 tw-mb-14">
                 <VerificationInput
                   // value={value}
                   classNames={{

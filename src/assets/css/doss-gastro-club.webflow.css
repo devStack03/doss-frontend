@@ -3976,3 +3976,7 @@ h1 {
   border-color: #ffc700;
   box-shadow: none;
 }
+
+.vi__wrapper {
+  width: 100%;
+}
