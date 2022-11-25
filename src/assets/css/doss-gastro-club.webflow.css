@@ -3912,6 +3912,10 @@ h1 {
   align-items: center;
 }
 
+.ReactInputVerificationCode-container {
+  
+}
+
 .code-input {
   width: 100% !important;
 }
