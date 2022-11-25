@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import ReactInputVerificationCode from "react-input-verification-code";
+// import ReactInputVerificationCode from "react-input-verification-code";
+import ReactInputVerificationCode from "./VerifyCodeInput";
 import { Link } from "react-router-dom";
 import authService from "../../services/auth.service";
-import VerificationInput from "react-verification-input";
+// import VerificationInput from "react-verification-input";
 
 const VerificationCodeInput = (
   { handleAfterSubmit, codeInValid, phoneNumber }: {
@@ -94,7 +95,7 @@ const VerificationCodeInput = (
           <div className="w-form">
             <form id="wf-form-Registration-form---SMS-code" name="wf-form-Registration-form---SMS-code" data-name="Registration form - SMS code" onSubmit={handleSubmit}>
               <div className="custom-styles div-block-2 tw-mb-14">
-                <VerificationInput
+                {/* <VerificationInput
                   // value={value}
                   classNames={{
                     container: "pin-container",
@@ -111,15 +112,14 @@ const VerificationCodeInput = (
                   inputProps={{ autoComplete: "one-time-code", type: 'tel' }}
                   // removeDefaultStyles
                   autoFocus
-                />
-                {/* <ReactInputVerificationCode
-                  autoFocus
+                /> */}
+                <ReactInputVerificationCode
                   placeholder=""
                   length={6}
                   value={value}
                   onChange={setValue}
                   onCompleted={handleVerifyCode}
-                /> */}
+                />
                 {/* <ReactCodeInput type="number" className="code-input" autoFocus onComplete={handleVerifyCode}/> */}
               </div>
               <input type="submit" data-wait="Cargando" value={count > 0 ? `Reenviar en ${count} segundos` : `Reenviar SMS`} disabled={count > 0 ? true : false} className={count === 0 ? "submit-button-3 w-button tw-bg-[#ffc700]" : "submit-button-3 w-button"} />

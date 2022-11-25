@@ -65,7 +65,7 @@ const Login = () => {
       <NavHeader />
       {!user?.accessToken ? (
         <>
-          {!phoneNumberSubmitted ? (
+          {phoneNumberSubmitted ? (
             <PhoneInput handleAfterSubmit={handleSubmit} />
           ) : (
             <VerificationCodeInput handleAfterSubmit={handleSubmit} codeInValid={codeInvalid} phoneNumber={phoneNumber} />
