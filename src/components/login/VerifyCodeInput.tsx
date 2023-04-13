@@ -233,6 +233,12 @@ const ReactInputVerificationCode = ({
     }
   }, [autoFocus, focusInput, inputsRefs]);
 
+  useEffect(() => {
+    if (autoFocus) {
+      focusInput(0);
+    }
+  })
+
   return (
     <div className='ReactInputVerificationCode-container'>
       {inputsRefs.map((ref, i) => (
@@ -247,7 +253,9 @@ const ReactInputVerificationCode = ({
           placeholder={placeholder}
           ref={ref}
           value={values[i]}
-          autoFocus
+          pattern="[0-9]*" 
+          inputMode="numeric"
+          // autoFocus
           {...inputProps}
         />
       ))}

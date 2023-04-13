@@ -117,6 +117,8 @@ const VerificationCodeInput = (
                   placeholder=""
                   length={6}
                   value={value}
+                  type="number"
+                  autoFocus={true}
                   onChange={setValue}
                   onCompleted={handleVerifyCode}
                 />
